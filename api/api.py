@@ -377,6 +377,37 @@ async def share_second_me(instance_id: str):
 
 
 # ──────────────────────────────────────────────
+# 种子数据 & 场景模板
+# ──────────────────────────────────────────────
+
+@app.post("/api/v2/seed")
+async def run_seed(data: dict = None):
+    """加载种子数据（创建预设讨论和分身）"""
+    data = data or {}
+    from seeds.loader import seed_platform
+    result = seed_platform(
+        twin_engine,
+        discussion_hub,
+        max_topics=data.get("max_topics", 3),
+    )
+    return result
+
+
+@app.get("/api/v2/scenarios")
+async def list_scenarios():
+    """获取讨论场景模板"""
+    from seeds.loader import get_scenarios
+    return {"scenarios": get_scenarios()}
+
+
+@app.get("/api/v2/topics")
+async def list_topics():
+    """获取种子话题"""
+    from seeds.loader import get_seed_topics
+    return {"topics": get_seed_topics()}
+
+
+# ──────────────────────────────────────────────
 # 前端页面
 # ──────────────────────────────────────────────
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
