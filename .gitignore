@@ -5,3 +5,4 @@ __pycache__/
 .drugmind_data/
 .env
 node_modules/
+drugmind_data/
