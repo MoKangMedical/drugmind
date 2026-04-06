@@ -38,10 +38,29 @@ kanban = None
 compound_tracker = None
 user_mgr = None
 discussion_hub = None
+agent_registry = None
+skill_registry = None
+tool_registry = None
+project_memory = None
+workflow_orchestrator = None
 
 
-def init_engines(twin, discussion, board, tracker, users, hub, sm_integration=None):
+def init_engines(
+    twin,
+    discussion,
+    board,
+    tracker,
+    users,
+    hub,
+    sm_integration=None,
+    agent_reg=None,
+    skill_reg=None,
+    tool_reg=None,
+    project_memory_store=None,
+    workflow_engine=None,
+):
     global twin_engine, discussion_engine, kanban, compound_tracker, user_mgr, discussion_hub, second_me
+    global agent_registry, skill_registry, tool_registry, project_memory, workflow_orchestrator
     twin_engine = twin
     discussion_engine = discussion
     kanban = board
@@ -49,6 +68,11 @@ def init_engines(twin, discussion, board, tracker, users, hub, sm_integration=No
     user_mgr = users
     discussion_hub = hub
     second_me = sm_integration
+    agent_registry = agent_reg
+    skill_registry = skill_reg
+    tool_registry = tool_reg
+    project_memory = project_memory_store
+    workflow_orchestrator = workflow_engine
     # 初始化MCP Server
     init_mcp(twin, discussion, hub, users)
 
@@ -64,6 +88,10 @@ async def health():
         "twins": len(twin_engine.list_twins()) if twin_engine else 0,
         "discussions": len(discussion_engine.sessions) if discussion_engine else 0,
         "users": len(user_mgr.users) if user_mgr else 0,
+        "registered_agents": agent_registry.count() if agent_registry else 0,
+        "registered_skills": skill_registry.count() if skill_registry else 0,
+        "registered_tools": tool_registry.count() if tool_registry else 0,
+        "workflow_runs": workflow_orchestrator.count_runs() if workflow_orchestrator else 0,
     }
 
 
@@ -173,7 +201,50 @@ async def platform_stats():
         "discussions_count": len(discussion_hub.discussions) if discussion_hub else 0,
         "users_count": len(user_mgr.users) if user_mgr else 0,
         "roles": 5,
+        "registered_agents": agent_registry.count() if agent_registry else 0,
+        "registered_skills": skill_registry.count() if skill_registry else 0,
+        "registered_tools": tool_registry.count() if tool_registry else 0,
+        "workflow_runs": workflow_orchestrator.count_runs() if workflow_orchestrator else 0,
     }
+
+
+# ──────────────────────────────────────────────
+# 平台骨架
+# ──────────────────────────────────────────────
+@app.get("/api/v2/platform/overview")
+async def platform_overview():
+    return {
+        "agents": agent_registry.list_agents(active_only=False) if agent_registry else [],
+        "skills": skill_registry.list_skills() if skill_registry else [],
+        "tools": tool_registry.list_tools(enabled_only=False) if tool_registry else [],
+        "workflow_templates": workflow_orchestrator.list_templates() if workflow_orchestrator else [],
+        "workflow_runs": workflow_orchestrator.list_runs() if workflow_orchestrator else [],
+    }
+
+
+@app.get("/api/v2/platform/agents")
+async def list_platform_agents(category: str = "", active_only: bool = True):
+    return {"agents": agent_registry.list_agents(category=category, active_only=active_only) if agent_registry else []}
+
+
+@app.get("/api/v2/platform/agents/{agent_id}")
+async def get_platform_agent(agent_id: str):
+    if not agent_registry:
+        raise HTTPException(503, "Agent registry 未初始化")
+    agent = agent_registry.get_agent(agent_id)
+    if not agent:
+        raise HTTPException(404, "Agent 不存在")
+    return agent
+
+
+@app.get("/api/v2/platform/skills")
+async def list_platform_skills(category: str = ""):
+    return {"skills": skill_registry.list_skills(category=category) if skill_registry else []}
+
+
+@app.get("/api/v2/platform/tools")
+async def list_platform_tools(tag: str = "", enabled_only: bool = True):
+    return {"tools": tool_registry.list_tools(tag=tag, enabled_only=enabled_only) if tool_registry else []}
 
 
 # ──────────────────────────────────────────────
@@ -335,12 +406,62 @@ async def create_project(data: dict):
         disease=data.get("disease", ""),
         budget=data.get("budget", 0),
     )
+    if project_memory:
+        project_memory.add_entry(
+            project_id=project.project_id,
+            memory_type="project_brief",
+            title=f"{project.name} bootstrap",
+            content=(
+                f"Project created for target={project.target or 'N/A'}; "
+                f"disease={project.disease or 'N/A'}; budget={project.budget_total}"
+            ),
+            tags=["bootstrap", "project"],
+            source="api.create_project",
+        )
     return {"project_id": project.project_id, "name": project.name}
 
 
 @app.get("/api/v2/projects/board")
 async def get_board():
     return kanban.get_board()
+
+
+@app.post("/api/v2/projects/{project_id}/memory")
+async def add_project_memory(project_id: str, data: dict):
+    if not project_memory:
+        raise HTTPException(503, "Project memory 未初始化")
+    if not data.get("title") or not data.get("content"):
+        raise HTTPException(400, "title 和 content 不能为空")
+    entry = project_memory.add_entry(
+        project_id=project_id,
+        memory_type=data.get("memory_type", "note"),
+        title=data["title"],
+        content=data["content"],
+        tags=data.get("tags", []),
+        source=data.get("source", ""),
+        author_id=data.get("author_id", ""),
+        related_agents=data.get("related_agents", []),
+        related_compounds=data.get("related_compounds", []),
+    )
+    return entry
+
+
+@app.get("/api/v2/projects/{project_id}/memory")
+async def list_project_memory(project_id: str, memory_type: str = "", query: str = "", limit: int = 50):
+    if not project_memory:
+        raise HTTPException(503, "Project memory 未初始化")
+    return {
+        "project_id": project_id,
+        "entries": project_memory.list_entries(project_id, memory_type=memory_type, query=query, limit=limit),
+        "stats": project_memory.stats(project_id),
+    }
+
+
+@app.get("/api/v2/projects/{project_id}/memory/context")
+async def get_project_memory_context(project_id: str, query: str = "", limit: int = 8):
+    if not project_memory:
+        raise HTTPException(503, "Project memory 未初始化")
+    return project_memory.get_context(project_id, query=query, limit=limit)
 
 
 # ──────────────────────────────────────────────
@@ -360,6 +481,92 @@ async def add_compound(data: dict):
 @app.get("/api/v2/compounds/pipeline")
 async def get_pipeline():
     return compound_tracker.get_pipeline()
+
+
+# ──────────────────────────────────────────────
+# Workflow骨架
+# ──────────────────────────────────────────────
+@app.get("/api/v2/workflows/templates")
+async def list_workflow_templates(category: str = ""):
+    if not workflow_orchestrator:
+        raise HTTPException(503, "Workflow orchestrator 未初始化")
+    return {"templates": workflow_orchestrator.list_templates(category=category)}
+
+
+@app.post("/api/v2/workflows/runs")
+async def start_workflow_run(data: dict):
+    if not workflow_orchestrator:
+        raise HTTPException(503, "Workflow orchestrator 未初始化")
+    if not data.get("template_id") or not data.get("project_id") or not data.get("topic"):
+        raise HTTPException(400, "template_id / project_id / topic 为必填")
+    try:
+        run = workflow_orchestrator.start_run(
+            template_id=data["template_id"],
+            project_id=data["project_id"],
+            topic=data["topic"],
+            created_by=data.get("created_by", ""),
+            context=data.get("context", {}),
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+    if project_memory:
+        project_memory.add_entry(
+            project_id=data["project_id"],
+            memory_type="workflow",
+            title=f"Workflow started: {run['template_name']}",
+            content=f"Workflow topic: {data['topic']}",
+            tags=["workflow", run["template_id"]],
+            source="api.start_workflow_run",
+            related_agents=[step["agent_id"] for step in run["steps"]],
+        )
+    return run
+
+
+@app.get("/api/v2/workflows/runs")
+async def list_workflow_runs(project_id: str = "", status: str = ""):
+    if not workflow_orchestrator:
+        raise HTTPException(503, "Workflow orchestrator 未初始化")
+    return {"runs": workflow_orchestrator.list_runs(project_id=project_id, status=status)}
+
+
+@app.get("/api/v2/workflows/runs/{run_id}")
+async def get_workflow_run(run_id: str):
+    if not workflow_orchestrator:
+        raise HTTPException(503, "Workflow orchestrator 未初始化")
+    run = workflow_orchestrator.get_run(run_id)
+    if not run:
+        raise HTTPException(404, "Workflow run 不存在")
+    return run
+
+
+@app.post("/api/v2/workflows/runs/{run_id}/steps/{step_id}/complete")
+async def complete_workflow_step(run_id: str, step_id: str, data: dict = None):
+    if not workflow_orchestrator:
+        raise HTTPException(503, "Workflow orchestrator 未初始化")
+    data = data or {}
+    try:
+        run = workflow_orchestrator.complete_step(
+            run_id=run_id,
+            step_id=step_id,
+            output=data.get("output", ""),
+            note=data.get("note", ""),
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+    if project_memory:
+        step = next((item for item in run["steps"] if item["step_id"] == step_id), None)
+        project_memory.add_entry(
+            project_id=run["project_id"],
+            memory_type="workflow_step",
+            title=f"Workflow step completed: {step['name'] if step else step_id}",
+            content=data.get("output", "") or data.get("note", "") or "Step completed",
+            tags=["workflow_step", run["template_id"]],
+            source="api.complete_workflow_step",
+            related_agents=[step["agent_id"]] if step else [],
+        )
+    return run
 
 
 # ──────────────────────────────────────────────
