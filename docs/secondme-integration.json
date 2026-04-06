@@ -1,68 +1,26 @@
 {
   "skill": {
     "key": "drugmind",
-    "displayName": "DrugMind — 药物研发AI讨论",
-    "description": "药物研发数字分身协作平台，5个专业AI角色从不同角度分析药物研发问题",
+    "displayName": "DrugMind — 药物研发AI协作",
+    "description": "AI驱动的药物研发数字分身协作平台，5个专业AI角色提供多角度分析",
     "keywords": ["drug", "pharma", "medicinal chemistry", "ADMET", "药物研发", "AI制药"]
   },
   "prompts": {
     "activationShort": "药物研发讨论",
-    "activationLong": "当你需要药物研发相关的专业分析时，使用DrugMind。它会从药物化学、生物学、药理学、数据科学、项目管理五个角度给出专业回答。",
-    "systemSummary": "DrugMind是一个药物研发数字分身协作平台，提供多角度专业分析、团队讨论、ADMET评估和化合物管理功能。"
+    "activationLong": "当你需要药物研发相关的专业分析时，使用DrugMind。从药物化学、生物学、药理学、数据科学、项目管理五个角度给出专业回答。",
+    "systemSummary": "DrugMind提供多角色AI问答、团队讨论、ADMET评估和化合物管理功能。"
   },
   "actions": [
-    {
-      "name": "AI专业问答",
-      "description": "向药物研发AI团队提问，获得多角度专业分析",
-      "toolName": "drugmind_ask",
-      "displayHint": "提问"
-    },
-    {
-      "name": "团队讨论",
-      "description": "5个专业数字分身围绕药物研发议题进行讨论",
-      "toolName": "drugmind_discuss",
-      "displayHint": "讨论"
-    },
-    {
-      "name": "ADMET评估",
-      "description": "快速评估化合物的ADMET性质",
-      "toolName": "drugmind_admet",
-      "displayHint": "评估"
-    },
-    {
-      "name": "场景模板",
-      "description": "获取药物研发场景检查清单",
-      "toolName": "drugmind_scenario",
-      "displayHint": "模板"
-    },
-    {
-      "name": "化合物管理",
-      "description": "管理化合物管线",
-      "toolName": "drugmind_compound",
-      "displayHint": "管理"
-    }
+    {"name": "AI专业问答", "description": "多角度专业分析", "toolName": "drugmind_ask", "displayHint": "提问"},
+    {"name": "团队讨论", "description": "5角色团队讨论", "toolName": "drugmind_discuss", "displayHint": "讨论"},
+    {"name": "ADMET评估", "description": "化合物ADMET性质", "toolName": "drugmind_admet", "displayHint": "评估"},
+    {"name": "场景模板", "description": "药物研发场景检查清单", "toolName": "drugmind_scenario", "displayHint": "模板"},
+    {"name": "化合物管理", "description": "管线管理", "toolName": "drugmind_compound", "displayHint": "管理"}
   ],
   "mcp": {
-    "endpoint": "https://你的域名/api/mcp",
+    "endpoint": "http://43.128.114.201:8096/api/mcp",
     "timeoutMs": 60000,
     "authMode": "none",
-    "toolAllow": ["drugmind_ask", "drugmind_discuss", "drugmind_admet", "drugmind_scenario", "drugmind_compound"],
-    "headersTemplate": {}
-  },
-  "oauth": {
-    "appId": "drugmind_oauth_app_id",
-    "requiredScopes": ["userinfo"]
-  },
-  "environments": {
-    "pre": {
-      "enabled": true,
-      "endpointOverride": "https://43.128.114.201:8096/api/mcp",
-      "secrets": {}
-    },
-    "prod": {
-      "enabled": true,
-      "endpointOverride": "https://43.128.114.201:8096/api/mcp",
-      "secrets": {}
-    }
+    "toolAllow": ["drugmind_ask", "drugmind_discuss", "drugmind_admet", "drugmind_scenario", "drugmind_compound"]
   }
 }
