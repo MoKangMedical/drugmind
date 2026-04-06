@@ -50,3 +50,5 @@ INFO:     127.0.0.1:49026 - "GET /api/v2/hub/disc_disc_9abdb75c HTTP/1.1" 404 No
 INFO:     127.0.0.1:49042 - "GET /api/v2/hub HTTP/1.1" 200 OK
 INFO:     127.0.0.1:49054 - "GET /api/v2/hub/disc_9abdb75c HTTP/1.1" 200 OK
 INFO:     127.0.0.1:46080 - "GET /api/v2/scenarios HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55670 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55676 - "GET /api/v2/hub HTTP/1.1" 200 OK
