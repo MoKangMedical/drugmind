@@ -51,6 +51,7 @@ class KanbanBoard:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.projects: dict[str, Project] = {}
+        self._load()
 
     def create_project(
         self,
@@ -72,6 +73,17 @@ class KanbanBoard:
         self._save()
         logger.info(f"创建项目: {name} (靶点: {target})")
         return project
+
+    def get_project(self, project_id: str) -> dict | None:
+        project = self.projects.get(project_id)
+        return asdict(project) if project else None
+
+    def list_projects(self, status: str = "") -> list[dict]:
+        projects = list(self.projects.values())
+        if status:
+            projects = [project for project in projects if project.status == status]
+        projects.sort(key=lambda project: project.updated_at or project.created_at, reverse=True)
+        return [asdict(project) for project in projects]
 
     def advance_stage(self, project_id: str, compound_id: str = ""):
         """推进项目阶段"""
@@ -110,6 +122,23 @@ class KanbanBoard:
             })
             self._save()
 
+    def link_compound(self, project_id: str, compound_id: str, compound_name: str = ""):
+        project = self.projects.get(project_id)
+        if not project:
+            return
+        if any(item.get("compound_id") == compound_id for item in project.compounds):
+            return
+        project.compounds.append({
+            "compound_id": compound_id,
+            "name": compound_name or compound_id,
+            "linked_at": datetime.now().isoformat(),
+        })
+        project.updated_at = datetime.now().isoformat()
+        self._save()
+
+    def count(self) -> int:
+        return len(self.projects)
+
     def get_board(self) -> dict:
         """获取看板数据"""
         board = {stage[0]: {"name": stage[1], "projects": []} for stage in self.STAGES}
@@ -133,3 +162,9 @@ class KanbanBoard:
         data = {k: asdict(v) for k, v in self.projects.items()}
         path = self.data_dir / "projects.json"
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+
+    def _load(self):
+        path = self.data_dir / "projects.json"
+        if path.exists():
+            data = json.loads(path.read_text())
+            self.projects = {k: Project(**v) for k, v in data.items()}
