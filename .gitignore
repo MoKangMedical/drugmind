@@ -1,8 +1,10 @@
 __pycache__/
 *.pyc
 *.pyo
-*.egg-info/
-.drugmind_data/
+drugmind.log
+drugmind.pid
+drugmind_data/*.json
 .env
+.DS_Store
 node_modules/
-drugmind_data/
+*.egg-info/
