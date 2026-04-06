@@ -19,38 +19,38 @@
   },
   "actions": [
     {
-      "name": "AI专业问答",
+      "name": "askDrugmind",
       "description": "向药物研发AI团队提问，获得多角度专业分析",
       "toolName": "drugmind_ask",
       "displayHint": "提问"
     },
     {
-      "name": "团队讨论",
+      "name": "runDrugmindDiscussion",
       "description": "5个专业数字分身围绕药物研发议题进行讨论",
       "toolName": "drugmind_discuss",
       "displayHint": "讨论"
     },
     {
-      "name": "ADMET评估",
+      "name": "assessAdmet",
       "description": "快速评估化合物的ADMET性质",
       "toolName": "drugmind_admet",
       "displayHint": "评估"
     },
     {
-      "name": "场景模板",
+      "name": "getDrugmindScenario",
       "description": "获取药物研发场景检查清单",
       "toolName": "drugmind_scenario",
       "displayHint": "模板"
     },
     {
-      "name": "化合物管理",
+      "name": "manageDrugmindCompound",
       "description": "管理化合物管线",
       "toolName": "drugmind_compound",
       "displayHint": "管理"
     }
   ],
   "mcp": {
-    "endpoint": "http://43.128.114.201:8096/api/mcp",
+    "endpoint": "https://testing-pixels-homepage-son.trycloudflare.com/api/mcp",
     "timeoutMs": 60000,
     "authMode": "none",
     "toolAllow": [
@@ -62,20 +62,32 @@
     ]
   },
   "oauth": {
-    "appId": "",
+    "appId": "d591fc1f-5be2-49c6-84a6-1f142d7e8f09",
     "requiredScopes": [
       "userinfo"
     ],
-    "note": "先在 Second Me 控制台创建 OAuth App，再回填 appId。当前建议 MCP authMode 使用 none，后续可升级为 bearer_token。"
+    "note": "Second Me 控制台当前已创建 OAuth App。Client Secret 不应写入仓库；当前 MCP authMode 使用 none，后续如切换 bearer_token，再由服务端安全保存 secret。"
   },
   "environments": {
     "pre": {
       "enabled": true,
-      "endpointOverride": "http://43.128.114.201:8096/api/mcp"
+      "endpointOverride": "https://testing-pixels-homepage-son.trycloudflare.com/api/mcp"
     },
     "prod": {
       "enabled": true,
-      "endpointOverride": "http://43.128.114.201:8096/api/mcp"
+      "endpointOverride": "https://testing-pixels-homepage-son.trycloudflare.com/api/mcp"
     }
+  },
+  "integration": {
+    "id": "97cbd940-ae50-42a6-8e58-1cb1ebf4c1ca",
+    "versionStatus": "not_released",
+    "validation": {
+      "overallOk": true,
+      "validatedAt": "2026-04-06"
+    },
+    "notes": [
+      "Second Me create API currently rejects Chinese action names; use ASCII identifiers for actions[].name.",
+      "The current MCP endpoint is a temporary Cloudflare quick tunnel and must be replaced with a permanent HTTPS endpoint before release."
+    ]
   }
 }

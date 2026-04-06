@@ -16,6 +16,17 @@
 
 在 Second Me 开发者控制台创建 Integration 时，直接使用下面这组配置：
 
+### 当前已创建结果
+
+| 字段 | 值 |
+|------|----|
+| OAuth App / Client ID | `d591fc1f-5be2-49c6-84a6-1f142d7e8f09` |
+| Integration ID | `97cbd940-ae50-42a6-8e58-1cb1ebf4c1ca` |
+| 当前验证状态 | `overallOk = true` |
+| Release 状态 | `not_released` |
+
+> 注意：Second Me 控制台当前不接受中文 `Action Name`。界面展示可以保留中文描述，但实际保存时建议使用 ASCII 标识符。
+
 ### Skill Metadata
 
 | 字段 | 值 |
@@ -37,17 +48,17 @@
 
 | Action Name | Description | Tool Name |
 |-------------|-------------|-----------|
-| `AI专业问答` | 向药物研发AI团队提问，获得多角度专业分析 | `drugmind_ask` |
-| `团队讨论` | 5个专业数字分身围绕药物研发议题进行讨论 | `drugmind_discuss` |
-| `ADMET评估` | 快速评估化合物的ADMET性质 | `drugmind_admet` |
-| `场景模板` | 获取药物研发场景检查清单 | `drugmind_scenario` |
-| `化合物管理` | 管理化合物管线 | `drugmind_compound` |
+| `askDrugmind` | 向药物研发AI团队提问，获得多角度专业分析 | `drugmind_ask` |
+| `runDrugmindDiscussion` | 5个专业数字分身围绕药物研发议题进行讨论 | `drugmind_discuss` |
+| `assessAdmet` | 快速评估化合物的ADMET性质 | `drugmind_admet` |
+| `getDrugmindScenario` | 获取药物研发场景检查清单 | `drugmind_scenario` |
+| `manageDrugmindCompound` | 管理化合物管线 | `drugmind_compound` |
 
 ### MCP Configuration
 
 | 字段 | 值 |
 |------|----|
-| MCP Endpoint | `http://43.128.114.201:8096/api/mcp` |
+| MCP Endpoint | `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp` |
 | Timeout (ms) | `60000` |
 | Auth Mode | `none` |
 | Allowed Tools | `drugmind_ask, drugmind_discuss, drugmind_admet, drugmind_scenario, drugmind_compound` |
@@ -56,22 +67,33 @@
 
 | 字段 | 值 |
 |------|----|
-| OAuth App ID | 在 Second Me 控制台创建 OAuth App 后填写 |
+| OAuth App ID | `d591fc1f-5be2-49c6-84a6-1f142d7e8f09` |
 | Required Scopes | `userinfo` |
 
 ### Environment Bindings
 
 | 环境 | Enabled | Endpoint Override |
 |------|---------|-------------------|
-| `pre` | ✅ | `http://43.128.114.201:8096/api/mcp` |
-| `prod` | ✅ | `http://43.128.114.201:8096/api/mcp` |
+| `pre` | ✅ | `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp` |
+| `prod` | ✅ | `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp` |
 
 ### 推荐填写顺序
 
 1. 先创建 OAuth App，拿到 App ID。
 2. 再创建 Integration，填入上面的 Skill Metadata、Prompts、Actions 和 MCP 配置。
-3. MCP Endpoint 先使用 `http://43.128.114.201:8096/api/mcp`。
+3. 如果正式服务暂时只有 HTTP，可先用临时 HTTPS 隧道，例如 `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp`。
 4. Auth Mode 先选 `none`，后续如果要接入用户级别授权，再切换为 `bearer_token`。
+
+### 临时联调说明
+
+- 当前 Second Me 验证通过依赖 `cloudflared tunnel --url http://43.128.114.201:8096` 暴露出来的临时 HTTPS 地址。
+- 这个 `trycloudflare.com` 地址不是永久域名，`cloudflared` 进程退出后会失效。
+- 正式发布前，建议把 `43.128.114.201:8096` 放到固定 HTTPS 反向代理或命名 Cloudflare Tunnel 后面，再把 Integration 的 MCP Endpoint 改成正式域名。
+
+### OAuth Secret
+
+- `Client Secret` 不要提交进 Git 仓库，也不要写入公开文档。
+- 只有在未来把 MCP 鉴权切到 `bearer_token` 或服务端要做 OAuth code exchange 时，才需要在服务端安全保存它。
 
 ## 第一步：在Mac Mini上部署Second Me
 
