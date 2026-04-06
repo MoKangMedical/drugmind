@@ -15,31 +15,95 @@ STORAGE_DIR = str(Path(__file__).parent / "drugmind_data")
 
 
 def get_engines(use_llm=True):
+    from collaboration.decision_log import DecisionLogger
+    from agents.registry import AgentRegistry
     from digital_twin.engine import DigitalTwinEngine
     from collaboration.discussion import DiscussionEngine
     from project.kanban import KanbanBoard
+    from project.workspace import ProjectWorkspaceStore
     from drug_modeling.compound_tracker import CompoundTracker
     from auth.user import UserManager
     from community.hub import DiscussionHub
+    from memory.project_memory import ProjectMemoryStore
     from second_me.integration import SecondMeIntegration
+    from skills.registry import SkillRegistry
+    from tools.registry import ToolRegistry
+    from workflows.orchestrator import WorkflowOrchestrator
 
     twin = DigitalTwinEngine(storage_dir=STORAGE_DIR, use_llm=use_llm)
     discussion = DiscussionEngine(twin)
+    decisions = DecisionLogger(f"{STORAGE_DIR}/decisions")
     kanban = KanbanBoard(f"{STORAGE_DIR}/projects")
+    workspace_store = ProjectWorkspaceStore(f"{STORAGE_DIR}/platform/workspaces")
     tracker = CompoundTracker(f"{STORAGE_DIR}/compounds")
     users = UserManager(f"{STORAGE_DIR}/users")
     hub = DiscussionHub(f"{STORAGE_DIR}/discussions")
     sm = SecondMeIntegration(mode="cloud")
+    agent_registry = AgentRegistry(f"{STORAGE_DIR}/platform/agents")
+    skill_registry = SkillRegistry(f"{STORAGE_DIR}/platform/skills")
+    tool_registry = ToolRegistry(f"{STORAGE_DIR}/platform/tools")
+    project_memory = ProjectMemoryStore(f"{STORAGE_DIR}/platform/memory")
+    workflow_orchestrator = WorkflowOrchestrator(
+        f"{STORAGE_DIR}/platform/workflows",
+        agent_registry=agent_registry,
+        skill_registry=skill_registry,
+        tool_registry=tool_registry,
+    )
 
-    return twin, discussion, kanban, tracker, users, hub, sm
+    return (
+        twin,
+        discussion,
+        decisions,
+        kanban,
+        workspace_store,
+        tracker,
+        users,
+        hub,
+        sm,
+        agent_registry,
+        skill_registry,
+        tool_registry,
+        project_memory,
+        workflow_orchestrator,
+    )
 
 
 def cmd_serve(args):
     import uvicorn
     from api.api import app, init_engines
 
-    twin, discussion, kanban, tracker, users, hub, sm = get_engines(use_llm=True)
-    init_engines(twin, discussion, kanban, tracker, users, hub, sm)
+    (
+        twin,
+        discussion,
+        decisions,
+        kanban,
+        workspace_store,
+        tracker,
+        users,
+        hub,
+        sm,
+        agent_registry,
+        skill_registry,
+        tool_registry,
+        project_memory,
+        workflow_orchestrator,
+    ) = get_engines(use_llm=True)
+    init_engines(
+        twin,
+        discussion,
+        decisions,
+        kanban,
+        workspace_store,
+        tracker,
+        users,
+        hub,
+        sm,
+        agent_registry,
+        skill_registry,
+        tool_registry,
+        project_memory,
+        workflow_orchestrator,
+    )
 
     # 创建默认团队
     for role_id, name in [
@@ -63,8 +127,37 @@ def cmd_test(args):
     except Exception as e:
         print(f"  MIMO: ❌ {e}")
 
-    twin, disc, kanban, tracker, users, hub, sm = get_engines(use_llm=False)
+    (
+        twin,
+        disc,
+        decisions,
+        kanban,
+        workspace_store,
+        tracker,
+        users,
+        hub,
+        sm,
+        agent_registry,
+        skill_registry,
+        tool_registry,
+        project_memory,
+        workflow_orchestrator,
+    ) = get_engines(use_llm=False)
     print(f"  引擎: ✅ 数字分身/协作/项目/化合物/用户/社区")
+    print(
+        "  平台骨架: ✅ "
+        f"agents={agent_registry.count()} "
+        f"skills={skill_registry.count()} "
+        f"tools={tool_registry.count()} "
+        f"workflow_templates={len(workflow_orchestrator.templates)}"
+    )
+    print(
+        "  项目上下文: ✅ "
+        f"workspaces={workspace_store.count()} "
+        f"decisions={decisions.count()} "
+        f"projects={kanban.count()} "
+        f"compounds={tracker.count()}"
+    )
 
     try:
         from drug_modeling.admet_bridge import ADMETBridge
