@@ -10,6 +10,8 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
+from .mcp_server import router as mcp_router, init_mcp
+
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
@@ -46,6 +48,8 @@ def init_engines(twin, discussion, board, tracker, users, hub, sm_integration=No
     user_mgr = users
     discussion_hub = hub
     second_me = sm_integration
+    # 初始化MCP Server
+    init_mcp(twin, discussion, hub, users)
 
 
 # ──────────────────────────────────────────────
@@ -405,6 +409,11 @@ async def list_topics():
     """获取种子话题"""
     from seeds.loader import get_seed_topics
     return {"topics": get_seed_topics()}
+
+
+
+# MCP Server路由
+app.include_router(mcp_router)
 
 
 # ──────────────────────────────────────────────

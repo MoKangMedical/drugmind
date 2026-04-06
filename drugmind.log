@@ -1,54 +1,15 @@
-2026-04-06 09:14:58,168 [INFO] digital_twin.engine: ✅ MIMO LLM已连接
-2026-04-06 09:14:58,169 [INFO] digital_twin.personality: 创建数字分身: 张化学家 (药物化学家)
-2026-04-06 09:14:58,169 [INFO] digital_twin.personality: 创建数字分身: 李生物 (生物学家)
-2026-04-06 09:14:58,169 [INFO] digital_twin.personality: 创建数字分身: 王药理 (药理学家)
-2026-04-06 09:14:58,170 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
-2026-04-06 09:14:58,170 [INFO] digital_twin.personality: 创建数字分身: 刘项目 (项目负责人)
-2026-04-06 09:14:58,170 [INFO] drugmind: ✅ 默认团队: 5个分身就绪
-2026-04-06 09:14:58,170 [INFO] drugmind: 🚀 DrugMind v2.0: http://0.0.0.0:8096
-INFO:     Started server process [987044]
+2026-04-06 09:41:18,281 [INFO] digital_twin.engine: ✅ MIMO LLM已连接
+2026-04-06 09:41:18,282 [INFO] digital_twin.personality: 创建数字分身: 张化学家 (药物化学家)
+2026-04-06 09:41:18,282 [INFO] digital_twin.personality: 创建数字分身: 李生物 (生物学家)
+2026-04-06 09:41:18,283 [INFO] digital_twin.personality: 创建数字分身: 王药理 (药理学家)
+2026-04-06 09:41:18,283 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
+2026-04-06 09:41:18,283 [INFO] digital_twin.personality: 创建数字分身: 刘项目 (项目负责人)
+2026-04-06 09:41:18,283 [INFO] drugmind: ✅ 默认团队: 5个分身就绪
+2026-04-06 09:41:18,283 [INFO] drugmind: 🚀 DrugMind v2.0: http://0.0.0.0:8096
+INFO:     Started server process [993675]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8096 (Press CTRL+C to quit)
-INFO:     127.0.0.1:45010 - "GET /health HTTP/1.1" 200 OK
-2026-04-06 09:15:21,212 [INFO] digital_twin.personality: 创建数字分身: 陈化学家 (药物化学家)
-2026-04-06 09:15:21,213 [INFO] digital_twin.personality: 创建数字分身: 王生物 (生物学家)
-2026-04-06 09:15:21,213 [INFO] digital_twin.personality: 创建数字分身: 李药理 (药理学家)
-2026-04-06 09:15:21,213 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
-2026-04-06 09:15:21,213 [INFO] digital_twin.personality: 创建数字分身: 刘总监 (项目负责人)
-2026-04-06 09:15:21,214 [INFO] seeds.loader: ✅ 创建 5 个种子分身
-2026-04-06 09:15:38,701 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:15:55,925 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:16:12,911 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:16:29,751 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:16:47,676 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:16:47,677 [INFO] seeds.loader: 📝 创建种子讨论: GLP-1受体激动剂：口服 vs 注射，哪个技术路线更值得押注？
-2026-04-06 09:17:04,793 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:17:22,104 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:17:40,084 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:17:57,163 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:18:14,694 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:18:14,696 [INFO] seeds.loader: 📝 创建种子讨论: ADC药物：DS-8201之后，下一个重磅炸弹在哪里？
-INFO:     127.0.0.1:58396 - "POST /api/v2/seed HTTP/1.1" 200 OK
-2026-04-06 09:18:14,697 [INFO] digital_twin.personality: 创建数字分身: 陈化学家 (药物化学家)
-2026-04-06 09:18:14,697 [INFO] digital_twin.personality: 创建数字分身: 王生物 (生物学家)
-2026-04-06 09:18:14,697 [INFO] digital_twin.personality: 创建数字分身: 李药理 (药理学家)
-2026-04-06 09:18:14,700 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
-2026-04-06 09:18:14,700 [INFO] digital_twin.personality: 创建数字分身: 刘总监 (项目负责人)
-2026-04-06 09:18:14,700 [INFO] seeds.loader: ✅ 创建 5 个种子分身
-2026-04-06 09:18:31,390 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:18:48,745 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:19:05,732 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:19:23,216 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:19:39,918 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-04-06 09:19:39,920 [INFO] seeds.loader: 📝 创建种子讨论: GLP-1受体激动剂：口服 vs 注射，哪个技术路线更值得押注？
-INFO:     127.0.0.1:38954 - "POST /api/v2/seed HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37448 - "GET /api/v2/hub HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37464 - "GET /api/v2/hub HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49020 - "GET /api/v2/hub HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49026 - "GET /api/v2/hub/disc_disc_9abdb75c HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49042 - "GET /api/v2/hub HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49054 - "GET /api/v2/hub/disc_9abdb75c HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46080 - "GET /api/v2/scenarios HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55670 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55676 - "GET /api/v2/hub HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45586 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45372 - "POST /api/mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58696 - "POST /api/mcp HTTP/1.1" 200 OK
