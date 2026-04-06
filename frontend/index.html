@@ -3,415 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DrugMind — 药物研发数字分身协作平台</title>
-<style>
-:root {
-  --bg: #0a0e1a; --surface: #111827; --surface2: #1e293b;
-  --border: #334155; --text: #e2e8f0; --text2: #94a3b8;
-  --accent: #6366f1; --accent2: #818cf8; --green: #10b981;
-  --red: #ef4444; --amber: #f59e0b; --cyan: #06b6d4;
-  --radius: 12px;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height:100vh; }
-
-/* ===== Header ===== */
-header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%); padding: 20px 32px; display:flex; align-items:center; gap:16px; border-bottom: 1px solid var(--border); }
-header h1 { font-size:24px; font-weight:700; }
-header h1 span { color: var(--accent2); }
-header .tag { background: var(--accent); color:#fff; padding:3px 10px; border-radius:20px; font-size:12px; }
-header .status { margin-left:auto; display:flex; align-items:center; gap:8px; font-size:13px; color:var(--green); }
-header .status::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-/* ===== Layout ===== */
-.container { display:grid; grid-template-columns: 280px 1fr; height: calc(100vh - 65px); }
-
-/* ===== Sidebar ===== */
-.sidebar { background: var(--surface); border-right: 1px solid var(--border); overflow-y:auto; padding:16px; }
-.sidebar h3 { font-size:13px; text-transform:uppercase; color:var(--text2); margin:16px 0 8px; letter-spacing:1px; }
-.sidebar h3:first-child { margin-top:0; }
-
-.twin-card { background: var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin-bottom:8px; cursor:pointer; transition: all .2s; }
-.twin-card:hover { border-color:var(--accent); transform:translateX(2px); }
-.twin-card.active { border-color:var(--accent); background:rgba(99,102,241,.1); }
-.twin-card .emoji { font-size:20px; }
-.twin-card .name { font-size:14px; font-weight:600; margin-top:4px; }
-.twin-card .role { font-size:12px; color:var(--text2); }
-
-.btn { background: var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-size:13px; width:100%; font-weight:600; transition: background .2s; }
-.btn:hover { background: var(--accent2); }
-.btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
-.btn-outline:hover { border-color:var(--accent); color:var(--accent2); }
-
-/* ===== Main ===== */
-.main { display:flex; flex-direction:column; }
-
-/* Discussion Header */
-.disc-header { padding:16px 24px; border-bottom:1px solid var(--border); background:var(--surface); }
-.disc-header h2 { font-size:16px; font-weight:600; }
-.disc-header .meta { font-size:12px; color:var(--text2); margin-top:4px; }
-
-/* Messages */
-.messages { flex:1; overflow-y:auto; padding:16px 24px; }
-.msg { display:flex; gap:12px; margin-bottom:20px; animation: fadeIn .3s ease; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-.msg .avatar { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-.msg .bubble { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:12px 16px; max-width:700px; }
-.msg .bubble .header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.msg .bubble .header .name { font-weight:600; font-size:14px; }
-.msg .bubble .header .role-tag { font-size:11px; background:rgba(99,102,241,.2); color:var(--accent2); padding:2px 8px; border-radius:12px; }
-.msg .bubble .header .time { font-size:11px; color:var(--text2); margin-left:auto; }
-.msg .bubble .content { font-size:14px; line-height:1.7; white-space:pre-wrap; }
-
-/* Color by role */
-.role-chemist .avatar { background: linear-gradient(135deg, #059669, #10b981); }
-.role-biologist .avatar { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-.role-pharma .avatar { background: linear-gradient(135deg, #dc2626, #ef4444); }
-.role-data .avatar { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
-.role-lead .avatar { background: linear-gradient(135deg, #d97706, #f59e0b); }
-
-/* Input */
-.input-area { padding:16px 24px; border-top:1px solid var(--border); background:var(--surface); display:flex; gap:12px; }
-.input-area input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 16px; color:var(--text); font-size:14px; outline:none; }
-.input-area input:focus { border-color:var(--accent); }
-.input-area .btn { width:auto; padding:12px 24px; }
-
-/* Loading */
-.loading { text-align:center; padding:20px; color:var(--text2); }
-.loading .dots::after { content:''; animation:dots 1.5s infinite; }
-@keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
-
-/* Panels */
-.panel { display:none; }
-.panel.active { display:block; }
-.create-form { padding:24px; }
-.create-form label { display:block; font-size:13px; color:var(--text2); margin:12px 0 4px; }
-.create-form select, .create-form input { width:100%; padding:10px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; }
-
-/* Project board */
-.board { display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; padding:16px 24px; }
-.col { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:12px; }
-.col h4 { font-size:13px; color:var(--text2); margin-bottom:8px; text-align:center; }
-.col .card { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:8px; font-size:13px; }
-.col .card .proj-name { font-weight:600; }
-.col .card .proj-target { color:var(--text2); font-size:12px; }
-
-/* Responsive */
-@media(max-width:768px) {
-  .container { grid-template-columns:1fr; }
-  .sidebar { display:none; }
-}
-</style>
+<title>DrugMind — AI驱动的药物研发协作平台</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<header>
-  <h1>🧠 Drug<span>Mind</span></h1>
-  <span class="tag">v1.0</span>
-  <span class="status" id="status">API 连接中...</span>
-</header>
-
-<div class="container">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h3>🧪 数字分身</h3>
-    <div id="twin-list"></div>
-    <button class="btn" onclick="showCreateTwin()" style="margin-top:8px">+ 创建分身</button>
-
-    <h3>💬 讨论</h3>
-    <button class="btn-outline btn" onclick="showNewDiscussion()" style="margin-top:4px">发起新讨论</button>
-
-    <h3>📊 项目</h3>
-    <button class="btn-outline btn" onclick="switchPanel('projects')" style="margin-top:4px">项目看板</button>
-  </div>
-
-  <!-- Main Content -->
-  <div class="main">
-    <!-- Discussion Panel -->
-    <div class="panel active" id="panel-discussion">
-      <div class="disc-header">
-        <h2 id="disc-topic">欢迎来到 DrugMind</h2>
-        <div class="meta" id="disc-meta">创建数字分身后，发起药物研发讨论</div>
-      </div>
-      <div class="messages" id="messages">
-        <div style="text-align:center; padding:60px 20px; color:var(--text2);">
-          <div style="font-size:48px; margin-bottom:16px">🧬</div>
-          <p>药物研发团队的数字分身协作平台</p>
-          <p style="font-size:12px; margin-top:8px">Second Me for Pharma — 7×24 AI讨论</p>
-          <div style="margin-top:24px">
-            <p style="font-size:13px; color:var(--accent2)">💡 提示：在下方输入问题，所有数字分身将参与讨论</p>
-          </div>
-        </div>
-      </div>
-      <div class="input-area">
-        <input type="text" id="user-input" placeholder="输入问题，所有分身参与讨论... (回车发送)" onkeydown="if(event.key==='Enter')sendQuestion()">
-        <button class="btn" onclick="sendQuestion()">发 送</button>
-      </div>
-    </div>
-
-    <!-- Create Twin Panel -->
-    <div class="panel" id="panel-create-twin">
-      <div class="disc-header"><h2>创建数字分身</h2></div>
-      <div class="create-form">
-        <label>角色</label>
-        <select id="twin-role">
-          <option value="medicinal_chemist">🧪 药物化学家</option>
-          <option value="biologist">🔬 生物学家</option>
-          <option value="pharmacologist">💊 药理学家</option>
-          <option value="data_scientist">📊 数据科学家</option>
-          <option value="project_lead">📋 项目负责人</option>
-        </select>
-        <label>姓名</label>
-        <input type="text" id="twin-name" placeholder="例：张博士">
-        <button class="btn" style="margin-top:16px" onclick="createTwin()">创建分身</button>
-      </div>
-    </div>
-
-    <!-- New Discussion Panel -->
-    <div class="panel" id="panel-new-discussion">
-      <div class="disc-header"><h2>发起新讨论</h2></div>
-      <div class="create-form">
-        <label>讨论议题</label>
-        <input type="text" id="disc-topic-input" placeholder="例：Compound #47 是否进入先导优化？">
-        <label>参与分身（选择多个）</label>
-        <div id="twin-checkboxes" style="margin:8px 0"></div>
-        <label>讨论轮数</label>
-        <input type="number" id="disc-rounds" value="2" min="1" max="5">
-        <label>背景信息（可选）</label>
-        <input type="text" id="disc-context" placeholder="化合物信息、实验数据等">
-        <button class="btn" style="margin-top:16px" onclick="startDiscussion()">开始讨论</button>
-      </div>
-    </div>
-
-    <!-- Projects Panel -->
-    <div class="panel" id="panel-projects">
-      <div class="disc-header"><h2>📊 项目看板</h2></div>
-      <div class="board" id="board"></div>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo" onclick="showPage('home')">🧬 DrugMind</a>
+    <button class="mobile-toggle" onclick="toggleMenu()">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#" class="nav-link active" data-page="home" onclick="showPage('home')">首页</a>
+      <a href="#" class="nav-link" data-page="discuss" onclick="showPage('discuss')">讨论</a>
+      <a href="#" class="nav-link" data-page="team" onclick="showPage('team')">AI团队</a>
+      <a href="#" class="nav-link" data-page="tools" onclick="showPage('tools')">分子工具</a>
+      <a href="#" class="nav-link" data-page="about" onclick="showPage('about')">关于</a>
     </div>
   </div>
-</div>
+</nav>
 
-<script>
-const API = window.location.origin;
-let twins = [];
-let currentSession = null;
-
-// ===== API helpers =====
-async function api(path, method='GET', body=null) {
-  const opts = { method, headers:{'Content-Type':'application/json'} };
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(API + path, opts);
-  return r.json();
-}
-
-// ===== Init =====
-async function init() {
-  try {
-    const h = await api('/health');
-    document.getElementById('status').textContent = `MIMO 连接正常 · ${h.twins_count} 个分身`;
-    await loadTwins();
-  } catch(e) {
-    document.getElementById('status').textContent = 'API 连接失败';
-    document.getElementById('status').style.color = 'var(--red)';
-  }
-}
-
-// ===== Twins =====
-async function loadTwins() {
-  const r = await api('/api/v1/twins');
-  twins = r.twins || [];
-  renderTwins();
-}
-
-function renderTwins() {
-  const el = document.getElementById('twin-list');
-  el.innerHTML = twins.map(t => {
-    const roleClass = getRoleClass(t.role_id);
-    return `<div class="twin-card" onclick="selectTwin('${t.twin_id}')">
-      <span class="emoji">${t.emoji}</span>
-      <div class="name">${t.name}</div>
-      <div class="role">${t.role}</div>
-    </div>`;
-  }).join('');
-
-  // Update checkboxes
-  const cb = document.getElementById('twin-checkboxes');
-  cb.innerHTML = twins.map(t =>
-    `<label style="display:block;margin:4px 0"><input type="checkbox" value="${t.twin_id}" checked> ${t.emoji} ${t.name} (${t.role})</label>`
-  ).join('');
-}
-
-function getRoleClass(roleId) {
-  if (roleId.includes('chemist')) return 'role-chemist';
-  if (roleId.includes('biolog')) return 'role-biologist';
-  if (roleId.includes('pharma')) return 'role-pharma';
-  if (roleId.includes('data')) return 'role-data';
-  return 'role-lead';
-}
-
-function getRoleEmoji(roleId) {
-  const map = {medicinal_chemist:'🧪', biologist:'🔬', pharmacologist:'💊', data_scientist:'📊', project_lead:'📋'};
-  return map[roleId] || '🧠';
-}
-
-async function createTwin() {
-  const role = document.getElementById('twin-role').value;
-  const name = document.getElementById('twin-name').value;
-  if (!name) return alert('请输入姓名');
-  await api('/api/v1/twins/create', 'POST', {role_id:role, name});
-  await loadTwins();
-  switchPanel('discussion');
-}
-
-function selectTwin(id) {
-  document.querySelectorAll('.twin-card').forEach(c => c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-}
-
-// ===== Discussion =====
-async function sendQuestion() {
-  const input = document.getElementById('user-input');
-  const q = input.value.trim();
-  if (!q || twins.length === 0) return;
-  input.value = '';
-
-  // Show user message
-  addMsg({emoji:'🧑‍⚕️', name:'你', role:'提问者', content:q, isUser:true});
-
-  // Show loading for each twin
-  const loadingIds = twins.map(t => {
-    const id = 'loading-' + Math.random().toString(36).slice(2,8);
-    addLoading(t, id);
-    return {twin_id: t.twin_id, loadingId: id, twin: t};
-  });
-
-  // Ask each twin
-  for (const item of loadingIds) {
-    try {
-      const r = await api('/api/v1/twins/ask', 'POST', {
-        twin_id: item.twin_id,
-        question: q,
-        context: `讨论议题: ${document.getElementById('disc-topic').textContent}`
-      });
-      removeLoading(item.loadingId);
-      addMsg(r);
-    } catch(e) {
-      removeLoading(item.loadingId);
-      addMsg({emoji:'❌', name:item.twin.name, role:item.twin.role, content:'请求失败: ' + e.message});
-    }
-  }
-}
-
-function addMsg(m) {
-  const el = document.getElementById('messages');
-  const roleClass = getRoleClass(m.role_id || '');
-  const div = document.createElement('div');
-  div.className = `msg ${roleClass}`;
-  const now = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
-  div.innerHTML = `
-    <div class="avatar">${m.emoji}</div>
-    <div class="bubble">
-      <div class="header">
-        <span class="name">${m.name}</span>
-        <span class="role-tag">${m.role}</span>
-        <span class="time">${now}</span>
+<main class="main">
+  <!-- 首页 -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-glow"></div>
+      <h1>AI驱动的<br><span class="gradient-text">药物研发协作平台</span></h1>
+      <p class="hero-sub">让所有想制药的人，有一个专业的地方讨论、协作、推进项目</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="showPage('discuss')">📖 浏览讨论</button>
+        <button class="btn btn-outline btn-lg" onclick="showPage('tools')">🤖 AI提问</button>
       </div>
-      <div class="content">${escapeHtml(m.content)}</div>
-    </div>`;
-  el.appendChild(div);
-  el.scrollTop = el.scrollHeight;
-}
+      <div class="hero-stats" id="heroStats">
+        <div class="stat"><span class="stat-num" id="statTwins">--</span><span class="stat-label">AI分身</span></div>
+        <div class="stat"><span class="stat-num" id="statDisc">--</span><span class="stat-label">讨论</span></div>
+        <div class="stat"><span class="stat-num">5</span><span class="stat-label">专业角色</span></div>
+      </div>
+    </div>
 
-function addLoading(twin, id) {
-  const el = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg';
-  div.id = id;
-  div.innerHTML = `
-    <div class="avatar">${twin.emoji}</div>
-    <div class="bubble">
-      <div class="header"><span class="name">${twin.name}</span><span class="role-tag">${twin.role}</span></div>
-      <div class="content loading">思考中<span class="dots"></span></div>
-    </div>`;
-  el.appendChild(div);
-  el.scrollTop = el.scrollHeight;
-}
+    <div class="section">
+      <h2 class="section-title">🔬 最新讨论</h2>
+      <div class="feed" id="homeFeed">
+        <div class="skeleton" style="height:100px"></div>
+        <div class="skeleton" style="height:100px"></div>
+      </div>
+    </div>
 
-function removeLoading(id) {
-  const el = document.getElementById(id);
-  if (el) el.remove();
-}
+    <div class="section">
+      <h2 class="section-title">🤖 AI团队</h2>
+      <div class="team-showcase" id="teamShowcase"></div>
+    </div>
+  </section>
 
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
+  <!-- 讨论广场 -->
+  <section class="page" id="page-discuss">
+    <div class="page-header">
+      <h1>💬 讨论广场</h1>
+      <p>药物研发领域的专业讨论社区</p>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="搜索讨论..." class="search-input">
+      <button class="btn btn-primary" onclick="searchDiscussions()">搜索</button>
+    </div>
+    <div class="tags-bar" id="tagsBar"></div>
+    <div class="feed" id="discussFeed"></div>
+  </section>
 
-// ===== Panels =====
-function switchPanel(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-}
+  <!-- AI团队 -->
+  <section class="page" id="page-team">
+    <div class="page-header">
+      <h1>🤖 AI数字分身团队</h1>
+      <p>5个专业数字分身，从不同角度分析药物研发问题</p>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </section>
 
-function showCreateTwin() { switchPanel('create-twin'); }
-function showNewDiscussion() { switchPanel('new-discussion'); }
+  <!-- 分子工具 & AI提问 -->
+  <section class="page" id="page-tools">
+    <div class="page-header">
+      <h1>🧬 分子工具 & AI提问</h1>
+      <p>ADMET评估 · AI问答 · 场景模板</p>
+    </div>
 
-async function startDiscussion() {
-  const topic = document.getElementById('disc-topic-input').value;
-  const rounds = parseInt(document.getElementById('disc-rounds').value);
-  const context = document.getElementById('disc-context').value;
-  const checkboxes = document.querySelectorAll('#twin-checkboxes input:checked');
-  const participantIds = Array.from(checkboxes).map(c => c.value);
+    <!-- AI提问 -->
+    <div class="tool-card">
+      <h2>💬 向AI团队提问</h2>
+      <div class="role-selector" id="roleSelector"></div>
+      <textarea id="askQuestion" class="textarea" placeholder="输入你的药物研发问题..." rows="4"></textarea>
+      <textarea id="askContext" class="textarea small" placeholder="背景信息（可选）：化合物数据、实验结果等..." rows="2"></textarea>
+      <button class="btn btn-primary btn-lg full" id="askBtn" onclick="submitAsk()">提交问题</button>
+      <div class="responses" id="askResponses"></div>
+    </div>
 
-  if (!topic || participantIds.length < 2) return alert('需要议题和至少2个分身');
+    <!-- ADMET -->
+    <div class="tool-card">
+      <h2>🧪 ADMET 快速评估</h2>
+      <div class="input-row">
+        <input type="text" id="smilesInput" class="input" placeholder="输入SMILES表达式，例如：CC(=O)Oc1ccccc1C(=O)O">
+        <button class="btn btn-primary" onclick="runAdmet()">评估</button>
+      </div>
+      <div class="admet-result" id="admetResult"></div>
+    </div>
 
-  document.getElementById('disc-topic').textContent = topic;
-  document.getElementById('disc-meta').textContent = `${participantIds.length} 位分身 · ${rounds} 轮讨论`;
-  document.getElementById('messages').innerHTML = '';
-  switchPanel('discussion');
+    <!-- 场景模板 -->
+    <div class="tool-card">
+      <h2>📋 药物研发场景模板</h2>
+      <div class="scenario-tabs" id="scenarioTabs"></div>
+      <div class="scenario-content" id="scenarioContent"></div>
+    </div>
+  </section>
 
-  // Create session
-  const session = await api('/api/v1/discussions/create', 'POST', {topic, participant_ids: participantIds, context});
+  <!-- 关于 -->
+  <section class="page" id="page-about">
+    <div class="page-header">
+      <h1>关于 DrugMind</h1>
+      <p>药物研发人员的数字分身协作平台</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-icon">🧬</div>
+        <h3>AI协作讨论</h3>
+        <p>5个专业数字分身从药物化学、生物学、药理学、数据科学、项目管理五个角度，为你的药物研发问题提供全方位分析。</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">🔬</div>
+        <h3>分子工具</h3>
+        <p>基于RDKit的ADMET快速评估、化合物管线管理、场景模板，让药物研发更高效。</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">👥</div>
+        <h3>社群协作</h3>
+        <p>公开讨论广场、标签聚合、用户关注，打造药物研发领域的专业社群。</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">🔗</div>
+        <h3>Second Me集成</h3>
+        <p>通过MCP协议接入Second Me，创建你的个人数字分身，在DrugMind社群中代表你。</p>
+      </div>
+    </div>
+    <div class="about-footer">
+      <p>DrugMind — 让所有想制药的人，有一个专业的地方讨论、协作、推进项目</p>
+      <p class="about-links">
+        <a href="https://github.com/MoKangMedical/drugmind" target="_blank">GitHub</a> ·
+        <a href="/docs" target="_blank">API文档</a> ·
+        <a href="/api/mcp" target="_blank">MCP接口</a>
+      </p>
+    </div>
+  </section>
+</main>
 
-  // Run discussion
-  const result = await api('/api/v1/discussions/run', 'POST', {
-    session_id: session.session_id, context, max_rounds: rounds
-  });
+<footer class="footer">
+  <p>© 2026 DrugMind · AI驱动的药物研发协作平台 · <a href="https://github.com/MoKangMedical/drugmind">GitHub</a></p>
+</footer>
 
-  // Show messages
-  for (const m of result.messages) {
-    addMsg(m);
-  }
-}
-
-// ===== Projects =====
-async function loadProjects() {
-  const r = await api('/api/v1/projects/board');
-  const board = document.getElementById('board');
-  const stages = [
-    {key:'target_id', label:'🎯 靶点确认'}, {key:'screening', label:'🔬 虚拟筛选'},
-    {key:'hit_to_lead', label:'🧪 Hit-to-Lead'}, {key:'lead_opt', label:'💡 先导优化'},
-    {key:'candidate', label:'🏆 候选化合物'},
-  ];
-  board.innerHTML = stages.map(s => {
-    const projects = r[s.key]?.projects || [];
-    return `<div class="col">
-      <h4>${s.label}</h4>
-      ${projects.map(p => `<div class="card"><div class="proj-name">${p.name}</div><div class="proj-target">${p.target || '—'}</div></div>`).join('') || '<div style="color:var(--text2);font-size:12px;text-align:center">暂无</div>'}
-    </div>`;
-  }).join('');
-}
-
-// Auto-load projects on panel switch
-const origSwitch = switchPanel;
-switchPanel = function(name) {
-  origSwitch(name);
-  if (name === 'projects') loadProjects();
-};
-
-init();
-</script>
+<script src="js/app.js"></script>
 </body>
 </html>

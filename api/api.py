@@ -6,9 +6,10 @@ DrugMind v2.0 — REST API
 import logging
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from .mcp_server import router as mcp_router, init_mcp
 
@@ -111,6 +112,68 @@ async def update_user(user_id: str, data: dict):
     if not ok:
         raise HTTPException(404, "用户不存在")
     return {"status": "updated"}
+
+
+# ──────────────────────────────────────────────
+# 快捷接口（微信小程序/Web前端）
+# ──────────────────────────────────────────────
+
+@app.post("/api/v2/quick-ask")
+async def quick_ask(data: dict):
+    """快捷AI提问 - 返回多角色回答"""
+    question = data.get("question", "")
+    context = data.get("context", "")
+    roles = data.get("roles", ["medicinal_chemist", "biologist", "pharmacologist"])
+    
+    if not question:
+        raise HTTPException(400, "问题不能为空")
+    
+    responses = []
+    for role_id in roles:
+        name_map = {
+            "medicinal_chemist": "陈化学家",
+            "biologist": "王生物",
+            "pharmacologist": "李药理",
+            "data_scientist": "赵数据",
+            "project_lead": "刘总监",
+        }
+        emoji_map = {
+            "medicinal_chemist": "🧪",
+            "biologist": "🔬",
+            "pharmacologist": "💊",
+            "data_scientist": "📊",
+            "project_lead": "📋",
+        }
+        twin_id = f"{role_id}_{name_map.get(role_id, role_id)}"
+        try:
+            resp = twin_engine.ask_twin(twin_id, question, context)
+            responses.append({
+                "role": role_id,
+                "name": resp.name,
+                "emoji": resp.emoji,
+                "message": resp.message,
+            })
+        except Exception as e:
+            responses.append({
+                "role": role_id,
+                "name": name_map.get(role_id, role_id),
+                "emoji": emoji_map.get(role_id, "🤖"),
+                "message": f"抱歉，我暂时无法回答这个问题。",
+            })
+    
+    return {"responses": responses, "question": question}
+
+
+@app.get("/api/v2/stats")
+async def platform_stats():
+    """平台统计数据"""
+    twins = twin_engine.list_twins() if twin_engine else []
+    return {
+        "twins_count": len(twins),
+        "discussions_count": len(discussion_hub.discussions) if discussion_hub else 0,
+        "users_count": len(user_mgr.users) if user_mgr else 0,
+        "roles": 5,
+    }
 
 
 # ──────────────────────────────────────────────
@@ -428,3 +491,27 @@ async def index():
     if f.exists():
         return HTMLResponse(content=f.read_text(encoding="utf-8"))
     return HTMLResponse(content="<h1>DrugMind</h1><p>前端文件未找到</p>")
+
+
+@app.get("/css/{path:path}")
+async def css_file(path: str):
+    f = FRONTEND_DIR / "css" / path
+    if f.exists():
+        return FileResponse(f, media_type="text/css")
+    raise HTTPException(404)
+
+
+@app.get("/js/{path:path}")
+async def js_file(path: str):
+    f = FRONTEND_DIR / "js" / path
+    if f.exists():
+        return FileResponse(f, media_type="application/javascript")
+    raise HTTPException(404)
+
+
+@app.get("/img/{path:path}")
+async def img_file(path: str):
+    f = FRONTEND_DIR / "img" / path
+    if f.exists():
+        return FileResponse(f)
+    raise HTTPException(404)

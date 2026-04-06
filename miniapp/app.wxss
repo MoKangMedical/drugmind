@@ -1,0 +1,116 @@
+/* DrugMind 微信小程序 - 全局样式 */
+page {
+  background: #0a0a1a;
+  color: #ccd6f6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.page { padding: 30rpx; }
+.hero {
+  text-align: center;
+  padding: 80rpx 20rpx 60rpx;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: 24rpx;
+  margin-bottom: 40rpx;
+}
+.hero-title { font-size: 44rpx; font-weight: 700; display: block; color: #fff; margin-bottom: 16rpx; }
+.hero-subtitle { font-size: 28rpx; color: #8892b0; display: block; margin-bottom: 40rpx; }
+.hero-actions { display: flex; gap: 20rpx; justify-content: center; }
+.section { margin-bottom: 50rpx; }
+.section-title { font-size: 36rpx; font-weight: 600; color: #fff; display: block; margin-bottom: 24rpx; }
+.card {
+  background: #1a1a2e;
+  border: 1px solid #233554;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  transition: all 0.2s;
+}
+.card:active { border-color: #64ffda; transform: scale(0.98); }
+.card-title { font-size: 30rpx; font-weight: 600; color: #fff; display: block; margin-bottom: 16rpx; }
+.card-meta { display: flex; justify-content: space-between; align-items: center; }
+.tags { display: flex; gap: 12rpx; }
+.tag {
+  background: rgba(100, 255, 218, 0.1);
+  color: #64ffda;
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+}
+.meta-text { font-size: 24rpx; color: #8892b0; }
+.btn-primary {
+  background: linear-gradient(135deg, #0f3460, #64ffda);
+  color: #0a0a1a;
+  font-weight: 600;
+  border-radius: 12rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+  border: none;
+}
+.btn-primary:active { opacity: 0.8; }
+.btn-primary[disabled] { opacity: 0.5; }
+.btn-secondary {
+  background: transparent;
+  border: 2px solid #64ffda;
+  color: #64ffda;
+  font-weight: 600;
+  border-radius: 12rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+}
+.btn-secondary:active { background: rgba(100, 255, 218, 0.1); }
+.full { width: 100%; margin-top: 24rpx; }
+.team-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.team-card {
+  background: #1a1a2e;
+  border: 1px solid #233554;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  width: calc(50% - 8rpx);
+  box-sizing: border-box;
+  text-align: center;
+}
+.team-emoji { font-size: 64rpx; display: block; margin-bottom: 12rpx; }
+.team-name { font-size: 28rpx; font-weight: 600; color: #fff; display: block; margin-bottom: 8rpx; }
+.team-desc { font-size: 22rpx; color: #8892b0; display: block; }
+.role-item {
+  display: flex;
+  align-items: center;
+  background: #1a1a2e;
+  border: 1px solid #233554;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+.role-item.selected { border-color: #64ffda; background: rgba(100, 255, 218, 0.05); }
+.role-emoji { font-size: 48rpx; margin-right: 20rpx; }
+.role-info { flex: 1; }
+.role-name { font-size: 28rpx; font-weight: 600; color: #fff; display: block; }
+.role-expertise { font-size: 22rpx; color: #8892b0; display: block; }
+.role-check { transform: scale(0.7); }
+.input-area {
+  background: #1a1a2e;
+  border: 1px solid #233554;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  color: #ccd6f6;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 200rpx;
+}
+.input-area.small { min-height: 120rpx; }
+.input-area:focus { border-color: #64ffda; }
+.input-label { font-size: 24rpx; color: #8892b0; margin: 16rpx 0 8rpx; }
+.response-card {
+  background: #1a1a2e;
+  border: 1px solid #233554;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+.response-header { display: flex; align-items: center; margin-bottom: 16rpx; }
+.response-emoji { font-size: 36rpx; margin-right: 12rpx; }
+.response-name { font-size: 28rpx; font-weight: 600; color: #fff; margin-right: 12rpx; }
+.response-role { font-size: 22rpx; color: #8892b0; }
+.response-content { font-size: 26rpx; color: #ccd6f6; line-height: 1.6; }
+.empty { text-align: center; padding: 80rpx 0; color: #8892b0; font-size: 28rpx; }

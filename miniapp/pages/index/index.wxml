@@ -1,0 +1,40 @@
+<!-- 首页 -->
+<view class="page">
+  <view class="hero">
+    <text class="hero-title">AI驱动的药物研发协作平台</text>
+    <text class="hero-subtitle">让所有想制药的人，有一个专业的地方讨论、协作、推进项目</text>
+    <view class="hero-actions">
+      <button class="btn-primary" bindtap="goDiscuss">浏览讨论</button>
+      <button class="btn-secondary" bindtap="goAsk">AI提问</button>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="section-title">🔬 最新讨论</text>
+    <block wx:for="{{discussions}}" wx:key="session_id">
+      <view class="card" bindtap="goDetail" data-id="{{item.session_id}}">
+        <text class="card-title">{{item.topic}}</text>
+        <view class="card-meta">
+          <view class="tags">
+            <text class="tag" wx:for="{{item.tags}}" wx:for-item="tag">{{tag}}</text>
+          </view>
+          <text class="meta-text">💬{{item.messages_count}} 👀{{item.views}} ❤️{{item.likes}}</text>
+        </view>
+      </view>
+    </block>
+    <view class="empty" wx:if="{{discussions.length===0}}">
+      <text>暂无讨论，成为第一个</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="section-title">🤖 AI团队</text>
+    <view class="team-grid">
+      <view class="team-card" wx:for="{{roles}}" wx:key="role_id">
+        <text class="team-emoji">{{item.emoji}}</text>
+        <text class="team-name">{{item.display_name}}</text>
+        <text class="team-desc">{{item.expertise[0]}} / {{item.expertise[1]}}</text>
+      </view>
+    </view>
+  </view>
+</view>
