@@ -1,11 +1,43 @@
 // DrugMind — 前端应用
-const API = window.location.origin;
+const PAGE_CONFIG = window.DRUGMIND_CONFIG || {};
+const API_STORAGE_KEY = 'drugmind.apiBase';
+const API_QUERY_KEY = 'api_base';
+const GITHUB_PAGES_HOST = /\.github\.io$/i;
 let allDiscussions = [];
 let allRoles = [];
 let selectedRoles = [];
+let API = resolveApiBase();
+
+function normalizeApiBase(url) {
+  if (!url) return '';
+  return url.replace(/\/+$/, '');
+}
+
+function resolveApiBase() {
+  const params = new URLSearchParams(window.location.search);
+  const queryApi = normalizeApiBase(params.get(API_QUERY_KEY) || '');
+  const storedApi = normalizeApiBase(window.localStorage.getItem(API_STORAGE_KEY) || '');
+  const configuredApi = normalizeApiBase(PAGE_CONFIG.defaultApiBase || '');
+  const sameOrigin = normalizeApiBase(window.location.origin);
+  if (queryApi) return queryApi;
+  if (storedApi) return storedApi;
+  if (configuredApi) return configuredApi;
+  return sameOrigin;
+}
+
+function apiUrl(path) {
+  const base = normalizeApiBase(API);
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${normalizedPath}`;
+}
+
+function isGitHubPages() {
+  return GITHUB_PAGES_HOST.test(window.location.hostname);
+}
 
 // ─── 初始化 ───
 document.addEventListener('DOMContentLoaded', async () => {
+  initDebugPanel();
   await loadStats();
   await loadRoles();
   await loadDiscussions();
@@ -35,7 +67,7 @@ function closeMenu() {
 // ─── 数据加载 ───
 async function loadStats() {
   try {
-    const r = await fetch(API + '/api/v2/stats').then(r => r.json());
+    const r = await fetch(apiUrl('/api/v2/stats')).then(r => r.json());
     document.getElementById('statTwins').textContent = r.twins_count;
     document.getElementById('statDisc').textContent = r.discussions_count;
   } catch(e) { console.warn('Stats load failed:', e); }
@@ -43,7 +75,7 @@ async function loadStats() {
 
 async function loadRoles() {
   try {
-    const r = await fetch(API + '/api/v2/roles').then(r => r.json());
+    const r = await fetch(apiUrl('/api/v2/roles')).then(r => r.json());
     allRoles = r.roles || [];
     renderTeamShowcase();
     renderTeamGrid();
@@ -53,7 +85,7 @@ async function loadRoles() {
 
 async function loadDiscussions() {
   try {
-    const r = await fetch(API + '/api/v2/hub').then(r => r.json());
+    const r = await fetch(apiUrl('/api/v2/hub')).then(r => r.json());
     allDiscussions = r.discussions || [];
     renderFeed('homeFeed', allDiscussions.slice(0, 5));
     renderFeed('discussFeed', allDiscussions);
@@ -140,7 +172,7 @@ async function expandDiscussion(sessionId, card) {
   expanded.style.display = 'block';
   expanded.innerHTML = '<div class="skeleton" style="height:80px"></div><div class="skeleton" style="height:80px"></div>';
   try {
-    const d = await fetch(API + `/api/v2/hub/${sessionId}`).then(r => r.json());
+    const d = await fetch(apiUrl(`/api/v2/hub/${sessionId}`)).then(r => r.json());
     let html = '';
     if (d.context) html += `<div class="card-context" style="display:block;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">${escapeHtml(d.context)}</div>`;
     if (d.messages && d.messages.length) {
@@ -189,7 +221,7 @@ async function submitAsk() {
   responsesEl.innerHTML = '<div class="skeleton" style="height:120px"></div><div class="skeleton" style="height:120px"></div>';
 
   try {
-    const r = await fetch(API + '/api/v2/quick-ask', {
+    const r = await fetch(apiUrl('/api/v2/quick-ask'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, context, roles: selectedRoles })
@@ -219,7 +251,7 @@ async function runAdmet() {
   el.innerHTML = '<div class="skeleton" style="height:200px"></div>';
 
   try {
-    const r = await fetch(API + '/api/v2/admet', {
+    const r = await fetch(apiUrl('/api/v2/admet'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ smiles })
@@ -277,6 +309,103 @@ function showScenario(idx, btn) {
     <p style="color:var(--text-secondary);margin-bottom:16px">${s.desc}</p>
     <ul class="scenario-checklist">${s.items.map(i => `<li>${i}</li>`).join('')}</ul>
   `;
+}
+
+function initDebugPanel() {
+  document.getElementById('frontendHostLabel').textContent = window.location.origin;
+  document.getElementById('apiBaseInput').value = API;
+  renderPresetList();
+  refreshApiLabels();
+  if (isGitHubPages() && !PAGE_CONFIG.defaultApiBase && !window.localStorage.getItem(API_STORAGE_KEY) && !new URLSearchParams(window.location.search).get(API_QUERY_KEY)) {
+    setDebugResult('当前运行在 GitHub Pages。请先配置一个 HTTPS API Base URL，再调试动态功能。', 'warn');
+  }
+}
+
+function renderPresetList() {
+  const presetList = document.getElementById('presetList');
+  const presets = [];
+  if (!isGitHubPages()) {
+    presets.push(window.location.origin);
+  }
+  (PAGE_CONFIG.preferredApiBases || []).forEach((item) => {
+    const normalized = normalizeApiBase(item);
+    if (normalized && !presets.includes(normalized)) presets.push(normalized);
+  });
+  if (presets.length === 0) {
+    presetList.innerHTML = '<span class="debug-help">暂无预置端点</span>';
+    return;
+  }
+  presetList.innerHTML = presets.map((preset) => `
+    <button class="preset-btn" type="button" onclick="applyPresetApi('${escapeHtml(preset)}')">${escapeHtml(preset)}</button>
+  `).join('');
+}
+
+function applyPresetApi(apiBase) {
+  document.getElementById('apiBaseInput').value = apiBase;
+}
+
+function toggleDebugPanel() {
+  document.getElementById('debugPanel').classList.toggle('open');
+}
+
+function saveApiBase() {
+  const nextBase = normalizeApiBase(document.getElementById('apiBaseInput').value.trim());
+  API = nextBase || normalizeApiBase(window.location.origin);
+  if (nextBase) {
+    window.localStorage.setItem(API_STORAGE_KEY, nextBase);
+  } else {
+    window.localStorage.removeItem(API_STORAGE_KEY);
+  }
+  refreshApiLabels();
+  setDebugResult(`已保存 API 端点：${API}`, 'ok');
+  loadStats();
+  loadRoles();
+  loadDiscussions();
+}
+
+function clearApiBase() {
+  window.localStorage.removeItem(API_STORAGE_KEY);
+  document.getElementById('apiBaseInput').value = '';
+  API = resolveApiBase();
+  refreshApiLabels();
+  setDebugResult(`已恢复默认 API 端点：${API}`, 'ok');
+}
+
+function refreshApiLabels() {
+  document.getElementById('apiBaseLabel').textContent = API;
+  document.getElementById('envModeBadge').textContent = isGitHubPages() ? 'GitHub Pages' : 'Local / Custom Host';
+  const docsUrl = `${normalizeApiBase(API)}/docs`;
+  const mcpUrl = `${normalizeApiBase(API)}/api/mcp`;
+  document.getElementById('apiDocsLink').href = docsUrl;
+  document.getElementById('mcpLink').href = mcpUrl;
+  document.getElementById('aboutApiDocsLink').href = docsUrl;
+  document.getElementById('aboutMcpLink').href = mcpUrl;
+}
+
+async function testApiConnection() {
+  const statusEl = document.getElementById('apiHealthStatus');
+  statusEl.textContent = '检测中...';
+  statusEl.className = 'env-status pending';
+  try {
+    const response = await fetch(apiUrl('/health'));
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    statusEl.textContent = '连接正常';
+    statusEl.className = 'env-status ok';
+    setDebugResult(`健康检查通过：status=${payload.status}, version=${payload.version}`, 'ok');
+  } catch (error) {
+    statusEl.textContent = '连接失败';
+    statusEl.className = 'env-status error';
+    setDebugResult(`API 检测失败：${error.message}`, 'error');
+  }
+}
+
+function setDebugResult(message, mode = '') {
+  const result = document.getElementById('debugResult');
+  result.textContent = message;
+  result.className = `debug-result ${mode}`.trim();
 }
 
 // ─── 工具函数 ───

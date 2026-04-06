@@ -21,6 +21,54 @@
   </div>
 </nav>
 
+<section class="env-bar" id="envBar">
+  <div class="env-bar-inner">
+    <div class="env-summary">
+      <span class="env-badge" id="envModeBadge">Frontend</span>
+      <span class="env-text">API: <code id="apiBaseLabel">检测中...</code></span>
+      <span class="env-status" id="apiHealthStatus">未检测</span>
+    </div>
+    <div class="env-actions">
+      <button class="btn btn-sm btn-outline" type="button" onclick="toggleDebugPanel()">调试配置</button>
+      <button class="btn btn-sm btn-primary" type="button" onclick="testApiConnection()">检测 API</button>
+    </div>
+  </div>
+</section>
+
+<section class="debug-panel" id="debugPanel">
+  <div class="debug-card">
+    <div class="debug-header">
+      <div>
+        <h2>GitHub Pages 调试面板</h2>
+        <p>Pages 只托管前端。这里配置后端 API 端点，用于调试所有动态功能。</p>
+      </div>
+      <button class="btn btn-sm btn-outline" type="button" onclick="toggleDebugPanel()">收起</button>
+    </div>
+    <div class="debug-grid">
+      <div class="debug-field">
+        <label for="apiBaseInput">API Base URL</label>
+        <input type="text" id="apiBaseInput" class="input" placeholder="例如：https://your-api.example.com">
+        <p class="debug-help">GitHub Pages 页面必须连接 HTTPS 后端。HTTP 端点在浏览器里会被 Mixed Content 阻止。</p>
+      </div>
+      <div class="debug-field">
+        <label>快捷端点</label>
+        <div class="preset-list" id="presetList"></div>
+      </div>
+    </div>
+    <div class="debug-actions">
+      <button class="btn btn-primary" type="button" onclick="saveApiBase()">保存端点</button>
+      <button class="btn btn-outline" type="button" onclick="clearApiBase()">恢复默认</button>
+      <button class="btn btn-outline" type="button" onclick="testApiConnection()">检测 /health</button>
+    </div>
+    <div class="debug-meta">
+      <div>Frontend Host: <code id="frontendHostLabel"></code></div>
+      <div>Docs: <a id="apiDocsLink" href="#" target="_blank" rel="noreferrer">API Docs</a></div>
+      <div>MCP: <a id="mcpLink" href="#" target="_blank" rel="noreferrer">MCP Endpoint</a></div>
+    </div>
+    <div class="debug-result" id="debugResult"></div>
+  </div>
+</section>
+
 <main class="main">
   <!-- 首页 -->
   <section class="page active" id="page-home">
@@ -143,8 +191,8 @@
       <p>DrugMind — 让所有想制药的人，有一个专业的地方讨论、协作、推进项目</p>
       <p class="about-links">
         <a href="https://github.com/MoKangMedical/drugmind" target="_blank">GitHub</a> ·
-        <a href="/docs" target="_blank">API文档</a> ·
-        <a href="/api/mcp" target="_blank">MCP接口</a>
+        <a id="aboutApiDocsLink" href="#" target="_blank" rel="noreferrer">API文档</a> ·
+        <a id="aboutMcpLink" href="#" target="_blank" rel="noreferrer">MCP接口</a>
       </p>
     </div>
   </section>
@@ -154,6 +202,7 @@
   <p>© 2026 DrugMind · AI驱动的药物研发协作平台 · <a href="https://github.com/MoKangMedical/drugmind">GitHub</a></p>
 </footer>
 
+<script src="js/config.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
