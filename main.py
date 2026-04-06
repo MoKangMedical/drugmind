@@ -15,10 +15,12 @@ STORAGE_DIR = str(Path(__file__).parent / "drugmind_data")
 
 
 def get_engines(use_llm=True):
+    from collaboration.decision_log import DecisionLogger
     from agents.registry import AgentRegistry
     from digital_twin.engine import DigitalTwinEngine
     from collaboration.discussion import DiscussionEngine
     from project.kanban import KanbanBoard
+    from project.workspace import ProjectWorkspaceStore
     from drug_modeling.compound_tracker import CompoundTracker
     from auth.user import UserManager
     from community.hub import DiscussionHub
@@ -30,7 +32,9 @@ def get_engines(use_llm=True):
 
     twin = DigitalTwinEngine(storage_dir=STORAGE_DIR, use_llm=use_llm)
     discussion = DiscussionEngine(twin)
+    decisions = DecisionLogger(f"{STORAGE_DIR}/decisions")
     kanban = KanbanBoard(f"{STORAGE_DIR}/projects")
+    workspace_store = ProjectWorkspaceStore(f"{STORAGE_DIR}/platform/workspaces")
     tracker = CompoundTracker(f"{STORAGE_DIR}/compounds")
     users = UserManager(f"{STORAGE_DIR}/users")
     hub = DiscussionHub(f"{STORAGE_DIR}/discussions")
@@ -49,7 +53,9 @@ def get_engines(use_llm=True):
     return (
         twin,
         discussion,
+        decisions,
         kanban,
+        workspace_store,
         tracker,
         users,
         hub,
@@ -69,7 +75,9 @@ def cmd_serve(args):
     (
         twin,
         discussion,
+        decisions,
         kanban,
+        workspace_store,
         tracker,
         users,
         hub,
@@ -83,7 +91,9 @@ def cmd_serve(args):
     init_engines(
         twin,
         discussion,
+        decisions,
         kanban,
+        workspace_store,
         tracker,
         users,
         hub,
@@ -120,7 +130,9 @@ def cmd_test(args):
     (
         twin,
         disc,
+        decisions,
         kanban,
+        workspace_store,
         tracker,
         users,
         hub,
@@ -138,6 +150,13 @@ def cmd_test(args):
         f"skills={skill_registry.count()} "
         f"tools={tool_registry.count()} "
         f"workflow_templates={len(workflow_orchestrator.templates)}"
+    )
+    print(
+        "  项目上下文: ✅ "
+        f"workspaces={workspace_store.count()} "
+        f"decisions={decisions.count()} "
+        f"projects={kanban.count()} "
+        f"compounds={tracker.count()}"
     )
 
     try:

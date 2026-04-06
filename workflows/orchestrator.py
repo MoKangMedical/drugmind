@@ -67,6 +67,8 @@ class WorkflowStepRun:
     status: str = "pending"
     notes: list[str] = field(default_factory=list)
     output: str = ""
+    state: dict = field(default_factory=dict)
+    artifacts: list[dict] = field(default_factory=list)
     started_at: str = ""
     completed_at: str = ""
 
@@ -84,6 +86,10 @@ class WorkflowRun:
     current_step_index: int = 0
     created_by: str = ""
     context: dict = field(default_factory=dict)
+    execution_context: dict = field(default_factory=dict)
+    linked_decisions: list[str] = field(default_factory=list)
+    linked_discussions: list[str] = field(default_factory=list)
+    linked_memory_entries: list[str] = field(default_factory=list)
     steps: list[WorkflowStepRun] = field(default_factory=list)
     created_at: str = ""
     updated_at: str = ""
@@ -154,6 +160,7 @@ class WorkflowOrchestrator:
         topic: str,
         created_by: str = "",
         context: dict | None = None,
+        execution_context: dict | None = None,
     ) -> dict:
         template = self.templates.get(template_id)
         if not template:
@@ -184,6 +191,7 @@ class WorkflowOrchestrator:
             topic=topic,
             created_by=created_by,
             context=context or {},
+            execution_context=execution_context or {},
             steps=steps,
         )
         self.runs[run_id] = run
@@ -221,6 +229,45 @@ class WorkflowOrchestrator:
         else:
             run.current_step_index = len(run.steps) - 1 if run.steps else 0
             run.status = "completed"
+
+        run.updated_at = datetime.now().isoformat()
+        self._save_runs()
+        return asdict(run)
+
+    def update_context(self, run_id: str, context_patch: dict | None = None, note: str = "") -> dict:
+        run = self.runs.get(run_id)
+        if not run:
+            raise ValueError(f"未知 workflow run: {run_id}")
+        if context_patch:
+            run.execution_context.update(context_patch)
+        if note and run.steps:
+            current_index = min(run.current_step_index, len(run.steps) - 1)
+            run.steps[current_index].notes.append(note)
+        run.updated_at = datetime.now().isoformat()
+        self._save_runs()
+        return asdict(run)
+
+    def link_artifact(self, run_id: str, artifact_type: str, artifact_id: str, summary: str = "") -> dict:
+        run = self.runs.get(run_id)
+        if not run:
+            raise ValueError(f"未知 workflow run: {run_id}")
+
+        artifact = {
+            "type": artifact_type,
+            "id": artifact_id,
+            "summary": summary,
+            "linked_at": datetime.now().isoformat(),
+        }
+        if run.steps:
+            current_index = min(run.current_step_index, len(run.steps) - 1)
+            run.steps[current_index].artifacts.append(artifact)
+
+        if artifact_type == "decision" and artifact_id not in run.linked_decisions:
+            run.linked_decisions.append(artifact_id)
+        elif artifact_type == "discussion" and artifact_id not in run.linked_discussions:
+            run.linked_discussions.append(artifact_id)
+        elif artifact_type == "memory" and artifact_id not in run.linked_memory_entries:
+            run.linked_memory_entries.append(artifact_id)
 
         run.updated_at = datetime.now().isoformat()
         self._save_runs()
