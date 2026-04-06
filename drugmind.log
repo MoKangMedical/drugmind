@@ -1,20 +1,19 @@
-2026-04-06 09:04:11,499 [INFO] digital_twin.engine: ✅ MIMO LLM已连接
-2026-04-06 09:04:11,500 [INFO] digital_twin.personality: 创建数字分身: 张化学家 (药物化学家)
-2026-04-06 09:04:11,500 [INFO] digital_twin.personality: 创建数字分身: 李生物 (生物学家)
-2026-04-06 09:04:11,500 [INFO] digital_twin.personality: 创建数字分身: 王药理 (药理学家)
-2026-04-06 09:04:11,501 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
-2026-04-06 09:04:11,501 [INFO] digital_twin.personality: 创建数字分身: 刘项目 (项目负责人)
-2026-04-06 09:04:11,501 [INFO] drugmind: ✅ 默认团队创建: 5个分身
-2026-04-06 09:04:11,501 [INFO] drugmind: 🚀 DrugMind API启动: 0.0.0.0:8096
-2026-04-06 09:04:11,501 [INFO] drugmind: 📚 API文档: http://0.0.0.0:8096/docs
-INFO:     Started server process [984232]
+2026-04-06 09:11:52,583 [INFO] digital_twin.engine: ✅ MIMO LLM已连接
+2026-04-06 09:11:52,584 [INFO] digital_twin.personality: 创建数字分身: 张化学家 (药物化学家)
+2026-04-06 09:11:52,584 [INFO] digital_twin.personality: 创建数字分身: 李生物 (生物学家)
+2026-04-06 09:11:52,585 [INFO] digital_twin.personality: 创建数字分身: 王药理 (药理学家)
+2026-04-06 09:11:52,585 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
+2026-04-06 09:11:52,585 [INFO] digital_twin.personality: 创建数字分身: 刘项目 (项目负责人)
+2026-04-06 09:11:52,585 [INFO] drugmind: ✅ 默认团队: 5个分身就绪
+2026-04-06 09:11:52,585 [INFO] drugmind: 🚀 DrugMind v2.0: http://0.0.0.0:8096
+INFO:     Started server process [986228]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8096 (Press CTRL+C to quit)
-INFO:     127.0.0.1:55458 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33720 - "GET /api/v1/twins HTTP/1.1" 200 OK
-2026-04-06 09:04:54,322 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     127.0.0.1:33726 - "POST /api/v1/twins/ask HTTP/1.1" 200 OK
-2026-04-06 09:05:01,269 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     127.0.0.1:49620 - "POST /api/v1/twins/ask HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48692 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46006 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48120 - "GET /api/v2/second-me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48128 - "GET /api/v2/roles HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48138 - "POST /api/v2/second-me/create HTTP/1.1" 200 OK
+2026-04-06 09:12:22,098 [ERROR] second_me.integration: Second Me云端API调用失败: 'ascii' codec can't encode characters in position 33-35: ordinal not in range(128)
+2026-04-06 09:12:40,553 [INFO] httpx: HTTP Request: POST https://api.xiaomimimo.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:48152 - "POST /api/v2/second-me/medicinal_chemist_%E9%99%88%E5%8D%9A%E5%A3%AB/chat HTTP/1.1" 200 OK
