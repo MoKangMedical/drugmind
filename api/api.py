@@ -5,10 +5,12 @@ DrugMind REST API
 
 import logging
 from datetime import datetime
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
 
 from .models import (
     CreateTwinRequest, AskTwinRequest, TeachTwinRequest,
@@ -286,3 +288,15 @@ async def websocket_discussion(websocket: WebSocket, session_id: str):
                 })
     except WebSocketDisconnect:
         logger.info(f"WebSocket断开: {session_id}")
+
+
+# ===== 前端页面 =====
+FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
+
+@app.get("/", response_class=HTMLResponse)
+async def index():
+    """前端首页"""
+    index_file = FRONTEND_DIR / "index.html"
+    if index_file.exists():
+        return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
+    return HTMLResponse(content="<h1>DrugMind</h1><p>前端文件未找到</p>")

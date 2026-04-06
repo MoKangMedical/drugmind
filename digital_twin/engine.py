@@ -7,8 +7,6 @@ import logging
 from typing import Optional
 from dataclasses import dataclass, asdict
 
-from openai import OpenAI
-
 from .personality import PersonalityManager, PersonalityProfile
 from .memory import HierarchicalMemory
 from .roles import get_role, list_roles
@@ -25,7 +23,7 @@ class TwinResponse:
     emoji: str
     message: str
     confidence: float
-    reasoning: str  # 推理过程
+    reasoning: str
 
 
 class DigitalTwinEngine:
@@ -36,27 +34,35 @@ class DigitalTwinEngine:
 
     def __init__(
         self,
-        llm_client: Optional[OpenAI] = None,
-        llm_model: str = "mimo-v2-pro",
-        storage_dir: str = "./drugmind_data"
+        storage_dir: str = "./drugmind_data",
+        use_llm: bool = True,
     ):
-        self.llm = llm_client
-        self.model = llm_model
         self.personality = PersonalityManager(f"{storage_dir}/profiles")
         self.memories: dict[str, HierarchicalMemory] = {}
         self.storage_dir = storage_dir
+        self.use_llm = use_llm
+        self._llm_fn = None
+
+        if use_llm:
+            try:
+                from llm import chat
+                self._llm_fn = chat
+                logger.info("✅ MIMO LLM已连接")
+            except Exception as e:
+                logger.warning(f"⚠️ LLM未配置，使用模板: {e}")
+                self.use_llm = False
 
     def create_twin(
         self,
         role_id: str,
         name: str,
-        custom_expertise: Optional[list[str]] = None
+        custom_expertise: Optional[list[str]] = None,
     ) -> dict:
         """创建数字分身"""
         profile = self.personality.create_twin(
             role_id=role_id,
             name=name,
-            custom_expertise=custom_expertise
+            custom_expertise=custom_expertise,
         )
 
         twin_id = f"{role_id}_{name}"
@@ -69,7 +75,7 @@ class DigitalTwinEngine:
             "name": name,
             "role": role.display_name,
             "emoji": role.emoji,
-            "status": "created"
+            "status": "created",
         }
 
     def ask_twin(
@@ -77,22 +83,14 @@ class DigitalTwinEngine:
         twin_id: str,
         question: str,
         context: str = "",
-        include_reasoning: bool = True
+        temperature: float = 0.4,
     ) -> TwinResponse:
-        """
-        向数字分身提问
-
-        Args:
-            twin_id: 分身ID
-            question: 问题/议题
-            context: 额外上下文
-            include_reasoning: 是否包含推理过程
-        """
+        """向数字分身提问"""
         profile_data = self.personality._profiles.get(twin_id)
         if not profile_data:
             return TwinResponse(
                 twin_id=twin_id, name="Unknown", role="Unknown", emoji="❓",
-                message=f"找不到分身 {twin_id}", confidence=0, reasoning=""
+                message=f"找不到分身 {twin_id}", confidence=0, reasoning="",
             )
 
         role = get_role(profile_data.role_id)
@@ -103,34 +101,29 @@ class DigitalTwinEngine:
         if twin_id in self.memories:
             memory_context = self.memories[twin_id].get_context_for_discussion(question)
 
-        # 构建完整上下文
-        full_context = ""
+        # 构建完整提示
+        full_prompt = question
         if context:
-            full_context += f"\n\n当前讨论背景：\n{context}"
+            full_prompt += f"\n\n【讨论背景】\n{context}"
         if memory_context:
-            full_context += f"\n\n{memory_context}"
+            full_prompt += f"\n\n【相关经验】\n{memory_context}"
 
-        if self.llm:
+        if self.use_llm and self._llm_fn:
             try:
-                messages = [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"{question}{full_context}"}
-                ]
-
-                resp = self.llm.chat.completions.create(
-                    model=self.model,
-                    messages=messages,
-                    temperature=0.4
+                message = self._llm_fn(
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": full_prompt},
+                    ],
+                    temperature=temperature,
                 )
-
-                message = resp.choices[0].message.content
 
                 # 记录到记忆
                 if twin_id in self.memories:
                     self.memories[twin_id].add_decision(
                         decision=message[:100],
                         rationale=message,
-                        context=question
+                        context=question,
                     )
 
                 return TwinResponse(
@@ -139,22 +132,21 @@ class DigitalTwinEngine:
                     role=role.display_name,
                     emoji=role.emoji,
                     message=message,
-                    confidence=0.8,
-                    reasoning=f"基于{role.display_name}专业判断"
+                    confidence=0.85,
+                    reasoning=f"基于{role.display_name}专业知识和AI推理",
                 )
-
             except Exception as e:
                 logger.error(f"LLM调用失败: {e}")
 
-        # Fallback: 基于角色的模板回复
+        # Fallback: 模板回复
         return TwinResponse(
             twin_id=twin_id,
             name=profile_data.name,
             role=role.display_name,
             emoji=role.emoji,
-            message=f"[{role.display_name}视角] {self._template_response(role_id=profile_data.role_id, question=question)}",
-            confidence=0.5,
-            reasoning="模板回复（LLM未配置）"
+            message=self._template_response(profile_data.role_id, question),
+            confidence=0.3,
+            reasoning="模板回复（LLM未连接）",
         )
 
     def teach_twin(self, twin_id: str, content: str, source: str = ""):
@@ -162,7 +154,6 @@ class DigitalTwinEngine:
         if twin_id in self.memories:
             self.memories[twin_id].add_knowledge(content, source)
             self.memories[twin_id].save(twin_id)
-
         self.personality.add_knowledge(twin_id, source, content)
 
     def get_twin_memory(self, twin_id: str, query: str = "") -> list[dict]:
