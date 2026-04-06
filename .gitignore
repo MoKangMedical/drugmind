@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.drugmind_data/
+.env
+node_modules/

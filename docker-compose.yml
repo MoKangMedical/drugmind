@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  drugmind-api:
+    build: .
+    ports:
+      - "8096:8096"
+    volumes:
+      - ./drugmind_data:/app/drugmind_data
+    environment:
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.xiaomi.com/v1}
+      - LLM_API_KEY=${LLM_API_KEY:-placeholder}
+      - LLM_MODEL=${LLM_MODEL:-mimo-v2-pro}
+    command: python main.py serve --port 8096
+    restart: unless-stopped
+
+  # 可选: Second Me集成
+  # second-me:
+  #   image: mindverse/second-me:latest
+  #   ports:
+  #     - "8082:8082"
+  #   volumes:
+  #     - second_me_data:/app/data
+  #   restart: unless-stopped
+
+volumes:
+  drugmind_data:
