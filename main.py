@@ -4,9 +4,13 @@ DrugMind v2.0 — 药物研发人员的数字分身协作平台
 """
 
 import sys
+import os
 import logging
 import argparse
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("drugmind")
@@ -16,6 +20,7 @@ STORAGE_DIR = str(Path(__file__).parent / "drugmind_data")
 
 def get_engines(use_llm=True):
     from collaboration.decision_log import DecisionLogger
+    from collaboration.h2a import H2AThreadStore
     from agents.registry import AgentRegistry
     from digital_twin.engine import DigitalTwinEngine
     from collaboration.discussion import DiscussionEngine
@@ -25,6 +30,7 @@ def get_engines(use_llm=True):
     from auth.user import UserManager
     from community.hub import DiscussionHub
     from memory.project_memory import ProjectMemoryStore
+    from second_me.bindings import SecondMeBindingStore
     from second_me.integration import SecondMeIntegration
     from skills.registry import SkillRegistry
     from tools.registry import ToolRegistry
@@ -38,7 +44,14 @@ def get_engines(use_llm=True):
     tracker = CompoundTracker(f"{STORAGE_DIR}/compounds")
     users = UserManager(f"{STORAGE_DIR}/users")
     hub = DiscussionHub(f"{STORAGE_DIR}/discussions")
-    sm = SecondMeIntegration(mode="cloud")
+    h2a_threads = H2AThreadStore(f"{STORAGE_DIR}/platform/h2a")
+    second_me_bindings = SecondMeBindingStore(f"{STORAGE_DIR}/platform/second_me")
+    sm = SecondMeIntegration(
+        mode=os.getenv("SECOND_ME_MODE", "cloud"),
+        local_url=os.getenv("SECOND_ME_URL", "http://localhost:8002"),
+        storage_dir=f"{STORAGE_DIR}/second_me",
+        registry_url=os.getenv("SECOND_ME_REGISTRY_URL", "https://app.secondme.io"),
+    )
     agent_registry = AgentRegistry(f"{STORAGE_DIR}/platform/agents")
     skill_registry = SkillRegistry(f"{STORAGE_DIR}/platform/skills")
     tool_registry = ToolRegistry(f"{STORAGE_DIR}/platform/tools")
@@ -48,6 +61,15 @@ def get_engines(use_llm=True):
         agent_registry=agent_registry,
         skill_registry=skill_registry,
         tool_registry=tool_registry,
+        twin_engine=twin,
+        discussion_engine=discussion,
+        decision_logger=decisions,
+        workspace_store=workspace_store,
+        project_memory=project_memory,
+        kanban=kanban,
+        compound_tracker=tracker,
+        second_me=sm,
+        second_me_bindings=second_me_bindings,
     )
 
     return (
@@ -60,11 +82,13 @@ def get_engines(use_llm=True):
         users,
         hub,
         sm,
+        second_me_bindings,
         agent_registry,
         skill_registry,
         tool_registry,
         project_memory,
         workflow_orchestrator,
+        h2a_threads,
     )
 
 
@@ -82,11 +106,13 @@ def cmd_serve(args):
         users,
         hub,
         sm,
+        second_me_bindings,
         agent_registry,
         skill_registry,
         tool_registry,
         project_memory,
         workflow_orchestrator,
+        h2a_threads,
     ) = get_engines(use_llm=True)
     init_engines(
         twin,
@@ -98,11 +124,13 @@ def cmd_serve(args):
         users,
         hub,
         sm,
+        second_me_bindings,
         agent_registry,
         skill_registry,
         tool_registry,
         project_memory,
         workflow_orchestrator,
+        h2a_threads,
     )
 
     # 创建默认团队
@@ -137,11 +165,13 @@ def cmd_test(args):
         users,
         hub,
         sm,
+        second_me_bindings,
         agent_registry,
         skill_registry,
         tool_registry,
         project_memory,
         workflow_orchestrator,
+        h2a_threads,
     ) = get_engines(use_llm=False)
     print(f"  引擎: ✅ 数字分身/协作/项目/化合物/用户/社区")
     print(
@@ -156,7 +186,9 @@ def cmd_test(args):
         f"workspaces={workspace_store.count()} "
         f"decisions={decisions.count()} "
         f"projects={kanban.count()} "
-        f"compounds={tracker.count()}"
+        f"compounds={tracker.count()} "
+        f"second_me_bindings={second_me_bindings.count()} "
+        f"h2a_threads={h2a_threads.count()}"
     )
 
     try:

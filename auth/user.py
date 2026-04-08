@@ -22,6 +22,9 @@ class UserProfile:
     avatar_emoji: str = "👨‍🔬"
     organization: str = ""
     title: str = ""
+    system_role: str = "member"
+    status: str = "active"
+    permissions: list[str] = field(default_factory=list)
     expertise: list[str] = field(default_factory=list)
     bio: str = ""
     papers: list[str] = field(default_factory=list)
@@ -34,6 +37,42 @@ class UserProfile:
     def __post_init__(self):
         if not self.created_at:
             self.created_at = datetime.now().isoformat()
+        if not self.last_active:
+            self.last_active = self.created_at
+        if not self.permissions:
+            self.permissions = default_permissions_for_role(self.system_role)
+
+
+def default_permissions_for_role(system_role: str) -> list[str]:
+    role_permissions = {
+        "admin": [
+            "project.read",
+            "project.write",
+            "workflow.view",
+            "workflow.execute",
+            "workflow.approve",
+            "workspace.manage",
+            "h2a.chat",
+        ],
+        "lead": [
+            "project.read",
+            "project.write",
+            "workflow.view",
+            "workflow.execute",
+            "workflow.approve",
+            "h2a.chat",
+        ],
+        "member": [
+            "project.read",
+            "workflow.view",
+            "h2a.chat",
+        ],
+        "viewer": [
+            "project.read",
+            "workflow.view",
+        ],
+    }
+    return list(role_permissions.get(system_role or "member", role_permissions["member"]))
 
 
 class UserManager:
@@ -64,10 +103,22 @@ class UserManager:
             organization=kwargs.get("organization", ""),
             title=kwargs.get("title", ""),
             avatar_emoji=kwargs.get("avatar_emoji", "👨‍🔬"),
+            system_role=kwargs.get("system_role", "member"),
+            status=kwargs.get("status", "active"),
+            permissions=kwargs.get("permissions", []),
+            expertise=kwargs.get("expertise", []),
+            bio=kwargs.get("bio", ""),
         )
         self.users[user_id] = user
         self._save()
-        return {"user_id": user_id, "username": username, "status": "ok"}
+        return {
+            "user_id": user_id,
+            "username": username,
+            "display_name": user.display_name,
+            "system_role": user.system_role,
+            "permissions": user.permissions,
+            "status": "ok",
+        }
 
     def login(self, username: str, password: str) -> dict:
         """登录"""
@@ -75,7 +126,14 @@ class UserManager:
             if u.username == username and u.password_hash == self._hash(password):
                 u.last_active = datetime.now().isoformat()
                 self._save()
-                return {"user_id": u.user_id, "username": u.username, "status": "ok"}
+                return {
+                    "user_id": u.user_id,
+                    "username": u.username,
+                    "display_name": u.display_name,
+                    "system_role": u.system_role,
+                    "permissions": u.permissions,
+                    "status": "ok",
+                }
         return {"error": "用户名或密码错误"}
 
     def get_profile(self, user_id: str) -> dict | None:
@@ -104,7 +162,8 @@ class UserManager:
         return [
             {"user_id": u.user_id, "username": u.username, "display_name": u.display_name,
              "avatar_emoji": u.avatar_emoji, "organization": u.organization,
-             "title": u.title, "expertise": u.expertise, "reputation": u.reputation}
+             "title": u.title, "system_role": u.system_role, "status": u.status,
+             "permissions": u.permissions, "expertise": u.expertise, "reputation": u.reputation}
             for u in users[:limit]
         ]
 
