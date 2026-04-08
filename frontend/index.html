@@ -14,6 +14,7 @@
     <div class="nav-links" id="navLinks">
       <a href="#" class="nav-link active" data-page="home" onclick="showPage('home')">首页</a>
       <a href="#" class="nav-link" data-page="discuss" onclick="showPage('discuss')">讨论</a>
+      <a href="#" class="nav-link" data-page="workbench" onclick="showPage('workbench')">工作台</a>
       <a href="#" class="nav-link" data-page="team" onclick="showPage('team')">AI团队</a>
       <a href="#" class="nav-link" data-page="tools" onclick="showPage('tools')">分子工具</a>
       <a href="#" class="nav-link" data-page="about" onclick="showPage('about')">关于</a>
@@ -75,15 +76,240 @@
     <div class="hero">
       <div class="hero-glow"></div>
       <h1>AI驱动的<br><span class="gradient-text">药物研发协作平台</span></h1>
-      <p class="hero-sub">让所有想制药的人，有一个专业的地方讨论、协作、推进项目</p>
+      <p class="hero-sub">把项目工作台、AI 团队、业务流和 H2A 会话直接放在首页，让真人和 agent 在同一个表面上协作推进。</p>
       <div class="hero-actions">
-        <button class="btn btn-primary btn-lg" onclick="showPage('discuss')">📖 浏览讨论</button>
-        <button class="btn btn-outline btn-lg" onclick="showPage('tools')">🤖 AI提问</button>
+        <button class="btn btn-primary btn-lg" onclick="showPage('workbench')">🛰️ 进入工作台</button>
+        <button class="btn btn-outline btn-lg" onclick="scrollToH2A()">💬 发起 H2A</button>
+        <button class="btn btn-outline btn-lg" onclick="scrollToStoryDemo()">🎬 观看 Demo</button>
       </div>
       <div class="hero-stats" id="heroStats">
         <div class="stat"><span class="stat-num" id="statTwins">--</span><span class="stat-label">AI分身</span></div>
         <div class="stat"><span class="stat-num" id="statDisc">--</span><span class="stat-label">讨论</span></div>
         <div class="stat"><span class="stat-num">5</span><span class="stat-label">专业角色</span></div>
+      </div>
+    </div>
+
+    <div class="section home-business-section">
+      <div class="section-heading">
+        <p class="section-kicker">Business Flow</p>
+        <h2 class="section-title-left">把药物研发业务流搭成一条可执行的轨道。</h2>
+        <p class="section-copy">从项目立项到 H2A 问答、workflow 分派、artifact 沉淀再到 reviewer gate，首页直接把整条流展示出来。</p>
+      </div>
+      <div class="business-flow">
+        <div class="flow-step">
+          <span class="flow-step-index">01</span>
+          <strong>项目立项</strong>
+          <p>先定义靶点、疾病、owner 和默认 agent 阵列，把项目工作区拉起来。</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-step-index">02</span>
+          <strong>H2A 协作</strong>
+          <p>真实成员先找对的 agent 对话，让问题在进入流程前先被拆成判断和动作。</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-step-index">03</span>
+          <strong>Workflow 执行</strong>
+          <p>orchestrator 把步骤分给 AI agent 或 human owner，直到遇到门控。</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-step-index">04</span>
+          <strong>Artifact 沉淀</strong>
+          <p>memory、decision、discussion、Second Me sync 全部挂回同一条时间线。</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-step-index">05</span>
+          <strong>审批与推进</strong>
+          <p>reviewer 放行后，再进入下一轮实验、下一轮讨论或下一轮 sprint。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section home-ops-section">
+      <div class="home-ops-grid">
+        <div class="home-ops-panel">
+          <div class="section-heading compact">
+            <p class="section-kicker">Workbench On Home</p>
+            <h2 class="section-title-left">首页直接看当前项目工作台。</h2>
+          </div>
+          <div class="home-workbench-toolbar">
+            <select id="homeProjectSelect" class="input" onchange="selectHomeProject(this.value)"></select>
+            <button class="btn btn-outline" type="button" onclick="showPage('workbench')">打开完整工作台</button>
+          </div>
+          <div id="homeWorkbenchSnapshot" class="home-workbench-snapshot empty-state">暂无项目</div>
+          <div id="homeRunPreview" class="home-run-preview empty-state">暂无 active workflow</div>
+        </div>
+
+        <div class="home-ops-panel">
+          <div class="section-heading compact">
+            <p class="section-kicker">AI Team</p>
+            <h2 class="section-title-left">首页直接看到 AI 团队与平台 agent。</h2>
+          </div>
+          <div class="team-showcase" id="teamShowcase"></div>
+          <div class="home-agent-deck" id="homeAgentDeck"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section home-h2a-section" id="homeH2ASection">
+      <div class="section-heading">
+        <p class="section-kicker">H2A</p>
+        <h2 class="section-title-left">让 Human 和 Agent 在首页直接对话。</h2>
+        <p class="section-copy">不是把人丢给一个总入口大模型，而是让真实工作人员登录后，以自己的身份点名一个或多个 agent，形成可追踪的项目线程。</p>
+      </div>
+      <div class="h2a-shell">
+        <aside class="h2a-sidebar">
+          <div class="tool-card h2a-card">
+            <h2>真实用户身份</h2>
+            <div id="currentUserCard" class="h2a-user-card empty-state">当前未登录</div>
+            <div class="workbench-form-grid" id="homeLoginForm">
+              <input type="text" id="loginUsername" class="input" placeholder="用户名">
+              <input type="password" id="loginPassword" class="input" placeholder="密码">
+              <div class="story-controls">
+                <button class="btn btn-primary" type="button" onclick="loginHomeUser()">登录</button>
+                <button class="btn btn-outline" type="button" onclick="toggleRegisterForm()">注册新用户</button>
+                <button class="btn btn-outline" type="button" onclick="logoutHomeUser()">退出</button>
+              </div>
+            </div>
+            <div class="workbench-form-grid" id="homeRegisterForm" style="display:none">
+              <input type="text" id="registerDisplayName" class="input" placeholder="显示名，例如：Lin">
+              <input type="text" id="registerUsername" class="input" placeholder="用户名">
+              <input type="email" id="registerEmail" class="input" placeholder="邮箱">
+              <input type="password" id="registerPassword" class="input" placeholder="密码">
+              <button class="btn btn-primary full" type="button" onclick="registerHomeUser()">注册并登录</button>
+            </div>
+          </div>
+          <div class="tool-card h2a-card">
+            <h2>会话配置</h2>
+            <div class="workbench-form-grid">
+              <select id="homeH2AProjectSelect" class="input" onchange="changeH2AProject(this.value)"></select>
+              <select id="homeHumanSelect" class="input"></select>
+              <div id="homeAgentSelector" class="role-selector"></div>
+              <div id="homeAgentSelectionSummary" class="h2a-selection-summary">至少选择一个 agent</div>
+              <button class="btn btn-outline full" type="button" onclick="createH2AThread()">创建多 Agent 群聊线程</button>
+            </div>
+            <div id="homeH2AStatus" class="workbench-message" style="display:none"></div>
+          </div>
+          <div class="tool-card h2a-card">
+            <h2>对话线程</h2>
+            <div id="homeThreadList" class="h2a-thread-list empty-state">还没有 H2A 线程</div>
+          </div>
+        </aside>
+        <div class="tool-card h2a-card h2a-main">
+          <div class="h2a-main-header">
+            <div>
+              <h2>H2A Conversation</h2>
+              <p>Human 先发问，多个 Agent 会基于同一项目上下文并行响应，再把每一轮对话沉淀回时间线。</p>
+            </div>
+            <button class="btn btn-sm btn-outline" type="button" onclick="refreshH2AThread()">刷新线程</button>
+          </div>
+          <div id="homeConversation" class="h2a-conversation empty-state">先创建或选择一个线程</div>
+          <div class="h2a-composer">
+            <textarea id="homeH2AMessage" class="textarea" rows="4" placeholder="例如：请以药物化学家的角度，判断这个项目当前最该推进什么实验？"></textarea>
+            <div class="story-controls">
+              <button class="btn btn-primary" type="button" onclick="sendH2AMessage()">发送给 Agent</button>
+              <button class="btn btn-outline" type="button" onclick="showPage('team')">查看完整 AI 团队</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-demo" id="storyDemoSection">
+      <div class="story-demo">
+        <div class="story-copy">
+          <p class="story-kicker">Cinematic Demo</p>
+          <h2 class="story-title">把深夜无人应答的药研项目，拍成一支会自己推进的短片。</h2>
+          <p class="story-body">
+            现在首页放的是一支真正导出的宣传短片，不再是假装在播放。
+            它从失败结果开始拍起，把“没人一起判断”的那一刻，拍到五个数字分身接住项目、工具合流、结论落地。
+          </p>
+          <div class="story-points">
+            <div class="story-point">
+              <span>01</span>
+              <strong>镜头从压力开始</strong>
+              <p>不是讲功能，而是先拍那个最真实的深夜：实验失败、风险升高、团队无人回复。</p>
+            </div>
+            <div class="story-point">
+              <span>02</span>
+              <strong>角色被同时召回</strong>
+              <p>药化、生物、药理、数据、项目管理五个分身，在同一问题上同步给出判断。</p>
+            </div>
+            <div class="story-point">
+              <span>03</span>
+              <strong>工具直接进剧情</strong>
+              <p>ADMET、场景模板、化合物策略和项目板不是旁白，它们直接进入镜头中心。</p>
+            </div>
+            <div class="story-point">
+              <span>04</span>
+              <strong>结尾必须带推进</strong>
+              <p>最后落下来的不是一句答案，而是下一轮实验、下一次周会和下一步 sprint。</p>
+            </div>
+          </div>
+          <div class="story-controls">
+            <button class="btn btn-primary" id="storyToggleBtn" type="button" onclick="toggleStoryVideo()">暂停短片</button>
+            <button class="btn btn-outline" type="button" onclick="restartStoryVideo()">重新播放</button>
+            <button class="btn btn-outline" type="button" onclick="openDemoReel()">打开分镜页</button>
+          </div>
+          <div class="story-dots story-dots-text">
+            <span>24 秒 / 5 幕 / 导出为 MP4 + WebM</span>
+          </div>
+        </div>
+
+        <div class="story-player" id="storyPlayer" aria-live="polite">
+          <div class="story-player-bar">
+            <div class="story-player-meta">
+              <span class="story-player-pill">DrugMind Promo Film</span>
+              <span class="story-player-name">导出成片，回嵌首页，作为产品 Demo 播放</span>
+            </div>
+            <span class="story-player-status" id="storyPlaybackState">视频播放中</span>
+          </div>
+
+          <div class="story-video-shell">
+            <video
+              class="story-video"
+              id="storyVideo"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              poster="media/drugmind-demo-poster.png"
+            >
+              <source src="media/drugmind-demo.webm" type="video/webm">
+              <source src="media/drugmind-demo.mp4" type="video/mp4">
+            </video>
+            <div class="story-video-overlay">
+              <div class="story-video-badge">DrugMind / Demo Reel</div>
+              <div class="story-video-caption">
+                <strong>从失败结果，到下一轮实验。</strong>
+                <p>一支真正导出的首页宣传短片，讲完整个药研协作闭环。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-video-chapters">
+            <div class="story-video-chapter">
+              <span>01</span>
+              <p>深夜失败结果</p>
+            </div>
+            <div class="story-video-chapter">
+              <span>02</span>
+              <p>问题进入平台</p>
+            </div>
+            <div class="story-video-chapter">
+              <span>03</span>
+              <p>五角度同步讨论</p>
+            </div>
+            <div class="story-video-chapter">
+              <span>04</span>
+              <p>工具与判断合流</p>
+            </div>
+            <div class="story-video-chapter">
+              <span>05</span>
+              <p>项目推进落地</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -93,11 +319,6 @@
         <div class="skeleton" style="height:100px"></div>
         <div class="skeleton" style="height:100px"></div>
       </div>
-    </div>
-
-    <div class="section">
-      <h2 class="section-title">🤖 AI团队</h2>
-      <div class="team-showcase" id="teamShowcase"></div>
     </div>
   </section>
 
@@ -122,6 +343,120 @@
       <p>5个专业数字分身，从不同角度分析药物研发问题</p>
     </div>
     <div class="team-grid" id="teamGrid"></div>
+  </section>
+
+  <section class="page" id="page-workbench">
+    <div class="page-header">
+      <h1>🛰️ Workflow Workbench</h1>
+      <p>可视化执行、审批和交接项目流程，把 AI agent、人工 owner 和产物时间线放在一个界面里。</p>
+    </div>
+
+    <div class="workbench-topbar">
+      <div class="workbench-project-switcher">
+        <label for="workbenchProjectSelect">项目</label>
+        <select id="workbenchProjectSelect" class="input" onchange="selectWorkbenchProject(this.value)"></select>
+      </div>
+      <div class="workbench-top-actions">
+        <button class="btn btn-outline" type="button" onclick="refreshWorkbench()">刷新工作台</button>
+        <button class="btn btn-primary" type="button" onclick="showWorkbenchCreateProject()">新建项目</button>
+      </div>
+    </div>
+
+    <div id="workbenchMessage" class="workbench-message" style="display:none"></div>
+
+    <div class="workbench-shell">
+      <aside class="workbench-sidebar">
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>项目概览</h2>
+              <p>工作区成员、AI agent、Second Me 绑定和关键指标。</p>
+            </div>
+            <span class="workbench-badge" id="workbenchProjectStage">未选择</span>
+          </div>
+          <div id="workbenchProjectSummary" class="workbench-summary empty-state">请选择一个项目</div>
+        </div>
+
+        <div class="tool-card workbench-card" id="workbenchCreateProjectCard" style="display:none">
+          <div class="workbench-card-header">
+            <div>
+              <h2>创建项目</h2>
+              <p>快速起一个工作区，然后马上拉起 workflow。</p>
+            </div>
+            <button class="btn btn-sm btn-outline" type="button" onclick="hideWorkbenchCreateProject()">收起</button>
+          </div>
+          <div class="workbench-form-grid">
+            <input type="text" id="workbenchProjectName" class="input" placeholder="项目名称，例如：KRAS Sprint">
+            <input type="text" id="workbenchProjectTarget" class="input" placeholder="靶点，例如：KRAS G12D">
+            <input type="text" id="workbenchProjectDisease" class="input" placeholder="疾病，例如：PDAC">
+            <button class="btn btn-primary full" type="button" onclick="createWorkbenchProject()">创建项目</button>
+          </div>
+        </div>
+
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>成员与 Owner</h2>
+              <p>让 workflow step 在 AI agent 和人工 owner 之间切换。</p>
+            </div>
+          </div>
+          <div class="workbench-form-grid">
+            <input type="text" id="workspaceMemberName" class="input" placeholder="成员名称，例如：Lin">
+            <input type="text" id="workspaceMemberRole" class="input" placeholder="角色，例如：Medicinal Chemist">
+            <button class="btn btn-outline full" type="button" onclick="addWorkspaceMember()">添加成员</button>
+          </div>
+          <div id="workspaceMembersList" class="workbench-members empty-state">暂无成员</div>
+        </div>
+
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>Artifact Timeline</h2>
+              <p>把 decision、discussion、memory、Second Me sync 拉成一条项目时间线。</p>
+            </div>
+          </div>
+          <div id="artifactTimeline" class="artifact-timeline">
+            <div class="empty-state">暂无时间线数据</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="workbench-main">
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>Workflow Launcher</h2>
+              <p>选择模板、输入议题、决定是否自动推进到审批门。</p>
+            </div>
+          </div>
+          <div class="workbench-form-grid">
+            <select id="workflowTemplateSelect" class="input"></select>
+            <textarea id="workflowTopicInput" class="textarea small" rows="3" placeholder="输入本轮 workflow 的议题，例如：Evaluate EGFR target package for the next sprint"></textarea>
+            <label class="checkbox-row">
+              <input type="checkbox" id="workflowAutoExecute" checked>
+              <span>启动后自动执行，直到遇到人工 owner 或审批门</span>
+            </label>
+            <button class="btn btn-primary full" type="button" onclick="startWorkbenchWorkflow()">启动 Workflow</button>
+          </div>
+        </div>
+
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>Execution Board</h2>
+              <p>逐步执行、切换 owner、人工完成、审批放行、查看每步产物。</p>
+            </div>
+            <div class="workbench-inline-actions">
+              <button class="btn btn-sm btn-outline" type="button" onclick="executeSelectedRun()">执行当前步</button>
+              <button class="btn btn-sm btn-outline" type="button" onclick="executeSelectedRun(6)">推进到门控</button>
+            </div>
+          </div>
+          <div id="workflowRunsPanel" class="workflow-runs">
+            <div class="empty-state">还没有 workflow run</div>
+          </div>
+        </div>
+      </section>
+    </div>
   </section>
 
   <!-- 分子工具 & AI提问 -->
@@ -156,6 +491,29 @@
       <h2>📋 药物研发场景模板</h2>
       <div class="scenario-tabs" id="scenarioTabs"></div>
       <div class="scenario-content" id="scenarioContent"></div>
+    </div>
+
+    <div class="tool-card">
+      <h2>🔗 Second Me 数字分身</h2>
+      <p class="tool-subtitle">把用户级 persona 接进 DrugMind 项目工作区，用于人格一致性、项目上下文同步和对外分享。</p>
+      <div class="secondme-status" id="secondMeStatus">检测中...</div>
+      <div class="input-row">
+        <input type="text" id="secondMeName" class="input" placeholder="分身名称，例如：林药研">
+        <select id="secondMeRole" class="input">
+          <option value="medicinal_chemist">药物化学</option>
+          <option value="biologist">生物学</option>
+          <option value="pharmacologist">药理学</option>
+          <option value="data_scientist">数据科学</option>
+          <option value="project_lead">项目管理</option>
+        </select>
+      </div>
+      <textarea id="secondMeExpertise" class="textarea small" placeholder="专业标签，用逗号分隔。例如：GLP-1, 小分子, SAR"></textarea>
+      <div class="story-controls">
+        <button class="btn btn-primary" type="button" onclick="createSecondMeInstance()">创建分身</button>
+        <button class="btn btn-outline" type="button" onclick="loadSecondMeStatus()">刷新状态</button>
+        <button class="btn btn-outline" type="button" onclick="loadSecondMeInstances()">刷新列表</button>
+      </div>
+      <div class="responses" id="secondMeInstances"></div>
     </div>
   </section>
 
