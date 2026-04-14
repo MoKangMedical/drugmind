@@ -1,0 +1,26 @@
+{
+  "decision_id": "dec_b6aabcdae2",
+  "project_id": "phase2_api_smoke",
+  "topic": "Advance CMP-001",
+  "decision": "CONDITIONAL",
+  "rationale": "Proceed after more ADMET data.",
+  "participants": [
+    "agent.project_lead",
+    "agent.pharmacologist"
+  ],
+  "opinions": [
+    {
+      "agent_id": "agent.project_lead",
+      "stance": "conditional"
+    }
+  ],
+  "dissenting": [],
+  "conditions": [],
+  "confidence": 0.72,
+  "created_by": "",
+  "timestamp": "2026-04-06T20:30:36.168692",
+  "session_id": "",
+  "workflow_run_id": "wf_3c98e73435",
+  "related_memory_entries": [],
+  "related_discussions": []
+}

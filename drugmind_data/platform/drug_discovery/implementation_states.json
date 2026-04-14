@@ -1,0 +1,82 @@
+{
+  "browser_h2a_1775526449": {
+    "project_id": "browser_h2a_1775526449",
+    "blueprint_id": "blueprint.small_molecule_ai_discovery",
+    "current_phase_id": "phase.target_assessment",
+    "active_capabilities": [
+      "capability.structural_research",
+      "capability.medi_pharma_target_discovery",
+      "capability.target_landscape",
+      "capability.assay_strategy",
+      "capability.biomarker_strategy",
+      "capability.medi_pharma_knowledge_report"
+    ],
+    "phase_history": [
+      {
+        "phase_id": "phase.target_assessment",
+        "entered_at": "2026-04-10T22:23:08.500730",
+        "reason": "project_bootstrap",
+        "activated_by": ""
+      }
+    ],
+    "last_capability_execution_ids": [],
+    "notes": [],
+    "status": "active",
+    "created_at": "2026-04-10T22:23:08.500742",
+    "updated_at": "2026-04-10T22:23:08.500742"
+  },
+  "phase2_api_smoke": {
+    "project_id": "phase2_api_smoke",
+    "blueprint_id": "blueprint.small_molecule_ai_discovery",
+    "current_phase_id": "phase.target_assessment",
+    "active_capabilities": [
+      "capability.structural_research",
+      "capability.medi_pharma_target_discovery",
+      "capability.target_landscape",
+      "capability.assay_strategy",
+      "capability.biomarker_strategy",
+      "capability.medi_pharma_knowledge_report"
+    ],
+    "phase_history": [
+      {
+        "phase_id": "phase.target_assessment",
+        "entered_at": "2026-04-10T22:23:30.495316",
+        "reason": "project_bootstrap",
+        "activated_by": ""
+      }
+    ],
+    "last_capability_execution_ids": [
+      "cap_aa4dccff00"
+    ],
+    "notes": [],
+    "status": "active",
+    "created_at": "2026-04-10T22:23:30.495325",
+    "updated_at": "2026-04-10T22:24:17.274484"
+  },
+  "proj_secondme_arch": {
+    "project_id": "proj_secondme_arch",
+    "blueprint_id": "blueprint.small_molecule_ai_discovery",
+    "current_phase_id": "phase.target_assessment",
+    "active_capabilities": [
+      "capability.structural_research",
+      "capability.medi_pharma_target_discovery",
+      "capability.target_landscape",
+      "capability.assay_strategy",
+      "capability.biomarker_strategy",
+      "capability.medi_pharma_knowledge_report"
+    ],
+    "phase_history": [
+      {
+        "phase_id": "phase.target_assessment",
+        "entered_at": "2026-04-10T22:23:30.498464",
+        "reason": "project_bootstrap",
+        "activated_by": ""
+      }
+    ],
+    "last_capability_execution_ids": [],
+    "notes": [],
+    "status": "active",
+    "created_at": "2026-04-10T22:23:30.498467",
+    "updated_at": "2026-04-10T22:23:30.498467"
+  }
+}

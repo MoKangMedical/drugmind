@@ -58,7 +58,7 @@
 
 | 字段 | 值 |
 |------|----|
-| MCP Endpoint | `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp` |
+| MCP Endpoint | `https://drugmind.cloud/api/mcp` |
 | Timeout (ms) | `60000` |
 | Auth Mode | `none` |
 | Allowed Tools | `drugmind_ask, drugmind_discuss, drugmind_admet, drugmind_scenario, drugmind_compound` |
@@ -74,21 +74,21 @@
 
 | 环境 | Enabled | Endpoint Override |
 |------|---------|-------------------|
-| `pre` | ✅ | `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp` |
-| `prod` | ✅ | `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp` |
+| `pre` | ✅ | `https://drugmind.cloud/api/mcp` |
+| `prod` | ✅ | `https://drugmind.cloud/api/mcp` |
 
 ### 推荐填写顺序
 
 1. 先创建 OAuth App，拿到 App ID。
 2. 再创建 Integration，填入上面的 Skill Metadata、Prompts、Actions 和 MCP 配置。
-3. 如果正式服务暂时只有 HTTP，可先用临时 HTTPS 隧道，例如 `https://testing-pixels-homepage-son.trycloudflare.com/api/mcp`。
+3. 当前正式 HTTPS MCP 请直接使用 `https://drugmind.cloud/api/mcp`。
 4. Auth Mode 先选 `none`，后续如果要接入用户级别授权，再切换为 `bearer_token`。
 
-### 临时联调说明
+### 当前联调说明
 
-- 当前 Second Me 验证通过依赖 `cloudflared tunnel --url http://43.128.114.201:8096` 暴露出来的临时 HTTPS 地址。
-- 这个 `trycloudflare.com` 地址不是永久域名，`cloudflared` 进程退出后会失效。
-- 正式发布前，建议把 `43.128.114.201:8096` 放到固定 HTTPS 反向代理或命名 Cloudflare Tunnel 后面，再把 Integration 的 MCP Endpoint 改成正式域名。
+- 当前正式 MCP 地址是 `https://drugmind.cloud/api/mcp`。
+- 不要再使用临时 `trycloudflare.com` 隧道地址做 Integration 验证。
+- 如果验证报告里仍然出现 `Name or service not known`，优先检查 Second Me 控制台当前保存的 MCP Endpoint 是否还是旧隧道地址或其它拼写错误的域名。
 
 ### OAuth Secret
 
@@ -159,6 +159,45 @@ curl -X POST http://43.128.114.201:8096/api/v2/second-me/create \
 - 加入项目团队讨论
 - 被其他用户"提问"
 - 自动学习讨论中的新知识
+
+## 新增运行时 API
+
+这一版 DrugMind 已经把 Second Me 从“单次调用”升级成“平台资源”，可直接通过下面这些接口管理：
+
+### 状态与实例
+
+- `GET /api/v2/second-me/status`
+- `GET /api/v2/second-me`
+- `POST /api/v2/second-me/create`
+- `POST /api/v2/second-me/{instance_id}/chat`
+- `GET /api/v2/second-me/{instance_id}/export`
+- `GET /api/v2/second-me/{instance_id}/share`
+
+### 绑定层
+
+- `POST /api/v2/second-me/bindings`
+- `GET /api/v2/second-me/bindings`
+- `GET /api/v2/second-me/bindings/{binding_id}`
+
+### 项目上下文同步
+
+- `GET /api/v2/projects/{project_id}/second-me`
+- `POST /api/v2/projects/{project_id}/second-me/sync`
+
+`sync` 接口会把以下内容整理后推到目标 Second Me 实例：
+
+- 项目基础信息
+- 项目工作区状态
+- 最近项目记忆
+- 最近决策
+- 可选 workflow run 上下文
+
+并同时把同步结果回写到：
+
+- Project Workspace
+- Project Memory
+- Second Me Binding Store
+- Workflow Artifact（如果传了 `workflow_run_id`）
 
 ## 故障排除
 

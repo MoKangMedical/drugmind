@@ -8,9 +8,9 @@ services:
     volumes:
       - ./drugmind_data:/app/drugmind_data
     environment:
-      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.xiaomi.com/v1}
-      - LLM_API_KEY=${LLM_API_KEY:-placeholder}
-      - LLM_MODEL=${LLM_MODEL:-mimo-v2-pro}
+      - MIMO_BASE_URL=${MIMO_BASE_URL:-https://api.xiaomimimo.com/v1}
+      - MIMO_API_KEY=${MIMO_API_KEY:-}
+      - MIMO_MODEL=${MIMO_MODEL:-mimo-v2-pro}
     command: python main.py serve --port 8096
     restart: unless-stopped
 

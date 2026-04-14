@@ -1,0 +1,289 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img "SecondMe Logo" [ref=e8]
+        - generic [ref=e9]:
+          - generic [ref=e10]: Second Me
+          - generic [ref=e11]: DEVELOPER
+      - menu [ref=e12]:
+        - menuitem "home 控制台" [ref=e13] [cursor=pointer]:
+          - img "home" [ref=e14]:
+            - img [ref=e15]
+          - generic [ref=e17]: 控制台
+        - menuitem "appstore 我的应用" [expanded] [ref=e18] [cursor=pointer]:
+          - img "appstore" [ref=e19]:
+            - img [ref=e20]
+          - generic [ref=e22]: 我的应用
+        - menu [ref=e23]:
+          - menuitem "应用列表" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]: 应用列表
+        - menuitem "shop 应用商店" [ref=e26] [cursor=pointer]:
+          - img "shop" [ref=e27]:
+            - img [ref=e28]
+          - generic [ref=e30]: 应用商店
+        - menuitem "api 集成管理" [expanded] [ref=e31] [cursor=pointer]:
+          - img "api" [ref=e32]:
+            - img [ref=e33]
+          - generic [ref=e35]: 集成管理
+        - menu [ref=e167]:
+          - menuitem "集成列表" [ref=e168] [cursor=pointer]:
+            - generic [ref=e169]: 集成列表
+        - menuitem "book 文档中心" [ref=e36] [cursor=pointer]:
+          - img "book" [ref=e37]:
+            - img [ref=e38]
+          - generic [ref=e40]: 文档中心
+        - menuitem "rocket Developer Skill" [ref=e41] [cursor=pointer]:
+          - img "rocket" [ref=e42]:
+            - img [ref=e43]
+          - generic [ref=e45]: Developer Skill
+      - button "menu-fold" [ref=e47] [cursor=pointer]:
+        - img "menu-fold" [ref=e49]:
+          - img [ref=e50]
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - generic [ref=e54]:
+        - navigation [ref=e56]:
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - generic [ref=e60] [cursor=pointer]: 首页
+            - listitem [ref=e61]: /
+            - listitem [ref=e62]: 集成管理
+            - listitem [ref=e170]: /
+            - listitem [ref=e171]: 新建集成
+        - generic [ref=e63]:
+          - button "global 中" [ref=e64] [cursor=pointer]:
+            - img "global" [ref=e66]:
+              - img [ref=e67]
+            - generic [ref=e69]: 中
+          - button "moon" [ref=e70] [cursor=pointer]:
+            - img "moon" [ref=e72]:
+              - img [ref=e73]
+          - button "bell" [ref=e75] [cursor=pointer]:
+            - img "bell" [ref=e77]:
+              - img [ref=e78]
+          - button "question-circle" [ref=e80] [cursor=pointer]:
+            - img "question-circle" [ref=e82]:
+              - img [ref=e83]
+          - img [ref=e87] [cursor=pointer]
+    - main [ref=e88]:
+      - generic [ref=e382]:
+        - generic [ref=e384]:
+          - button "arrow-left 返回" [ref=e385] [cursor=pointer]:
+            - img "arrow-left" [ref=e387]:
+              - img [ref=e388]
+            - generic [ref=e390]: 返回
+          - heading "新建集成" [level=3] [ref=e391]
+        - generic [ref=e394]:
+          - generic [ref=e395]:
+            - generic [ref=e399]:
+              - generic [ref=e400]: 技能元数据
+              - img "question-circle" [ref=e401]:
+                - img [ref=e402]
+            - generic [ref=e405]:
+              - generic [ref=e407]:
+                - generic "集成标识" [ref=e409]: "* 集成标识"
+                - generic [ref=e410]:
+                  - textbox "* 集成标识" [ref=e413]:
+                    - /placeholder: 例如 my-weather-service
+                  - generic [ref=e415]: 这是技能的稳定标识。创建后通常不再修改，建议使用清晰、可长期维护的名字。
+              - generic [ref=e417]:
+                - generic "显示名称" [ref=e419]: "* 显示名称"
+                - textbox "* 显示名称" [ref=e423]:
+                  - /placeholder: 例如 天气服务
+              - generic [ref=e425]:
+                - generic "描述" [ref=e427]: "* 描述"
+                - generic [ref=e428]:
+                  - generic [ref=e431]:
+                    - textbox "* 描述" [ref=e432]:
+                      - /placeholder: 简要描述此集成的功能
+                    - generic:
+                      - generic: 0 / 500
+                  - generic [ref=e434]: 重点写清它解决什么问题、适用于什么场景，不要写成营销文案。
+              - generic [ref=e436]:
+                - generic "关键词" [ref=e438]
+                - generic [ref=e442]:
+                  - generic [ref=e443]:
+                    - generic:
+                      - generic: 输入后按回车添加关键词
+                    - combobox "关键词" [ref=e445]
+                  - img "down" [ref=e447]:
+                    - img [ref=e448]
+          - generic [ref=e450]:
+            - generic [ref=e454]:
+              - generic [ref=e455]: 提示词
+              - img "question-circle" [ref=e456]:
+                - img [ref=e457]
+            - generic [ref=e460]:
+              - generic [ref=e462]:
+                - generic "简短激活语" [ref=e464]: "* 简短激活语"
+                - generic [ref=e465]:
+                  - generic [ref=e468]:
+                    - textbox "* 简短激活语" [ref=e469]:
+                      - /placeholder: 简短的激活提示（1-2句话）
+                    - generic:
+                      - generic: 0 / 200
+                  - generic [ref=e471]: 用于短注入。重点告诉 Agent 什么时候该用这个技能，什么时候先追问。
+              - generic [ref=e473]:
+                - generic "详细激活语" [ref=e475]: "* 详细激活语"
+                - generic [ref=e476]:
+                  - generic [ref=e479]:
+                    - textbox "* 详细激活语" [ref=e480]:
+                      - /placeholder: 详细的激活描述
+                    - generic:
+                      - generic: 0 / 1000
+                  - generic [ref=e482]: 用于长注入。重点写清动作选择、缺参处理、结果边界和禁止事项。
+              - generic [ref=e484]:
+                - generic "系统摘要" [ref=e486]: "* 系统摘要"
+                - generic [ref=e487]:
+                  - generic [ref=e490]:
+                    - textbox "* 系统摘要" [ref=e491]:
+                      - /placeholder: 供 Agent 使用的系统级摘要
+                    - generic:
+                      - generic: 0 / 2000
+                  - generic [ref=e493]: 用 1 到 2 句话写清这个技能负责什么、什么时候该用、什么时候不该用。
+          - generic [ref=e494]:
+            - generic [ref=e498]:
+              - generic [ref=e499]: 动作
+              - img "question-circle" [ref=e500]:
+                - img [ref=e501]
+            - generic [ref=e504]:
+              - generic [ref=e505]:
+                - button "delete 移除" [disabled] [ref=e506]:
+                  - generic:
+                    - img "delete":
+                      - img
+                  - generic: 移除
+                - generic [ref=e508]:
+                  - generic "动作名称" [ref=e510]: "* 动作名称"
+                  - textbox "* 动作名称" [ref=e514]:
+                    - /placeholder: 例如 get_weather
+                - generic [ref=e516]:
+                  - generic "描述" [ref=e518]: "* 描述"
+                  - textbox "* 描述" [ref=e522]:
+                    - /placeholder: 此动作的功能说明
+                - generic [ref=e523]:
+                  - generic [ref=e526]:
+                    - generic "工具名称" [ref=e528]: "* 工具名称"
+                    - generic [ref=e529]:
+                      - textbox "* 工具名称" [ref=e532]:
+                        - /placeholder: 要调用的 MCP 工具名称
+                      - generic [ref=e534]: 填写实际要调用的 MCP tool 名称，必须和服务暴露出的名称一致。
+                  - generic [ref=e537]:
+                    - generic "显示提示" [ref=e539]
+                    - generic [ref=e540]:
+                      - textbox "显示提示" [ref=e543]:
+                        - /placeholder: 可选的 UI 显示提示
+                      - generic [ref=e545]: 这是执行时给用户看的短提示，建议自然、简短、口语化。
+                - generic [ref=e547]:
+                  - generic "载荷模板 (JSON)" [ref=e549]
+                  - textbox "载荷模板 (JSON)" [ref=e553]:
+                    - /placeholder: 可选的 JSON 载荷模板
+              - button "plus 添加动作" [ref=e554] [cursor=pointer]:
+                - img "plus" [ref=e556]:
+                  - img [ref=e557]
+                - generic [ref=e560]: 添加动作
+          - generic [ref=e561]:
+            - generic [ref=e565]:
+              - generic [ref=e566]: MCP 配置
+              - img "question-circle" [ref=e567]:
+                - img [ref=e568]
+            - generic [ref=e571]:
+              - generic [ref=e573]:
+                - generic "MCP 端点" [ref=e575]: "* MCP 端点"
+                - textbox "* MCP 端点" [ref=e579]:
+                  - /placeholder: https://your-mcp-server.example.com/mcp
+              - generic [ref=e581]:
+                - generic "超时时间 (ms)" [ref=e583]
+                - generic [ref=e584]:
+                  - generic [ref=e587]:
+                    - spinbutton "超时时间 (ms)" [ref=e588]: "12000"
+                    - generic:
+                      - button "Increase Value" [ref=e589] [cursor=pointer]:
+                        - img "up" [ref=e590]:
+                          - img [ref=e591]
+                      - button "Decrease Value" [ref=e593] [cursor=pointer]:
+                        - img "down" [ref=e594]:
+                          - img [ref=e595]
+                  - generic [ref=e598]: 连接超时时间，单位毫秒（1000-120000）
+              - generic [ref=e600]:
+                - generic "认证模式" [ref=e602]
+                - generic [ref=e606] [cursor=pointer]:
+                  - generic "无" [ref=e607]:
+                    - text: 无
+                    - combobox "认证模式" [ref=e608]
+                  - img "down" [ref=e610]:
+                    - img [ref=e611]
+              - generic [ref=e614]:
+                - generic "允许的工具" [ref=e616]
+                - generic [ref=e617]:
+                  - generic [ref=e620]:
+                    - generic [ref=e621]:
+                      - generic:
+                        - generic: 输入工具名称后按回车
+                      - combobox "允许的工具" [ref=e623]
+                    - img "down" [ref=e625]:
+                      - img [ref=e626]
+                  - generic [ref=e629]: 只暴露 Agent 真正需要的工具，避免把调试或管理工具带进来。
+              - generic [ref=e630]:
+                - generic [ref=e631]: 请求头模板
+                - generic [ref=e632]: "使用 {{token}} 这类占位符引用密钥，不要直接写死敏感信息。"
+                - button "plus 添加请求头" [ref=e633] [cursor=pointer]:
+                  - img "plus" [ref=e635]:
+                    - img [ref=e636]
+                  - generic [ref=e639]: 添加请求头
+          - generic [ref=e640]:
+            - generic [ref=e644]:
+              - generic [ref=e645]: OAuth 绑定
+              - img "question-circle" [ref=e646]:
+                - img [ref=e647]
+            - generic [ref=e650]:
+              - generic [ref=e652]:
+                - generic "OAuth 应用 ID" [ref=e654]: "* OAuth 应用 ID"
+                - generic [ref=e655]:
+                  - textbox "* OAuth 应用 ID" [ref=e658]:
+                    - /placeholder: 填写绑定的 Labs OAuth app_id
+                  - generic [ref=e660]: 每个 MCP integration 都必须绑定到一个 Labs OAuth 应用。
+              - generic [ref=e662]:
+                - generic "必需作用域" [ref=e664]
+                - generic [ref=e665]:
+                  - generic [ref=e668]:
+                    - generic [ref=e669]:
+                      - generic:
+                        - generic: 输入 scope 后按回车
+                      - combobox "必需作用域" [ref=e671]
+                    - img "down" [ref=e673]:
+                      - img [ref=e674]
+                  - generic [ref=e677]: 调用 MCP 前，用户必须已经授权这些 scopes。
+          - generic [ref=e678]:
+            - generic [ref=e682]:
+              - generic [ref=e683]: 环境绑定
+              - img "question-circle" [ref=e684]:
+                - img [ref=e685]
+            - generic [ref=e689]:
+              - generic [ref=e690]: Release 通道
+              - generic [ref=e692]:
+                - generic "启用" [ref=e694]
+                - switch "启用" [ref=e698] [cursor=pointer]
+              - generic [ref=e702]:
+                - generic "端点覆盖" [ref=e704]
+                - textbox "端点覆盖" [ref=e708]:
+                  - /placeholder: 覆盖 release 通道的 MCP 端点
+              - generic [ref=e709]:
+                - generic [ref=e710]: 密钥
+                - generic [ref=e711]: 密钥为只写模式，已有值将以掩码显示。
+                - button "plus 添加密钥" [ref=e712] [cursor=pointer]:
+                  - img "plus" [ref=e714]:
+                    - img [ref=e715]
+                  - generic [ref=e718]: 添加密钥
+          - generic [ref=e719]:
+            - button "取 消" [ref=e720] [cursor=pointer]:
+              - generic [ref=e721]: 取 消
+            - button "save 新建集成" [ref=e722] [cursor=pointer]:
+              - img "save" [ref=e724]:
+                - img [ref=e725]
+              - generic [ref=e727]: 新建集成
+    - contentinfo [ref=e132]:
+      - img "SecondMe" [ref=e133]
+      - generic [ref=e134]: Copyright © 2026 SecondMe 开发者平台. All Rights Reserved.
+      - button "问题求助" [ref=e135] [cursor=pointer]

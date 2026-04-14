@@ -9,14 +9,32 @@ let allRoles = [];
 let selectedRoles = [];
 let allProjects = [];
 let platformAgents = [];
+let discoveryCapabilities = [];
+let discoveryBlueprints = [];
+let blatantWhyOverview = null;
+let blatantWhyMcpServers = [];
+let blatantWhyProviders = null;
+let mediPharmaOverview = null;
+let mediPharmaHealth = null;
+let mediPharmaEcosystem = null;
 let selectedWorkbenchProjectId = '';
 let selectedRunId = '';
 let workbenchData = null;
 let h2aThreads = [];
 let selectedH2AThreadId = '';
 let selectedHomeAgentIds = [];
+let selectedCapabilityId = '';
 let currentUser = null;
 let currentUserIdentity = null;
+let tamarindRuntimeStatus = null;
+let tamarindAvailableTools = [];
+let tamarindJobList = [];
+let lastStructuralResearchResult = null;
+let lastByScreeningResult = null;
+let lastBiologicsPipelineResult = null;
+let lastTamarindJobResult = null;
+let lastSecondMeSyncResult = null;
+let lastMediPharmaResult = null;
 let API = resolveApiBase();
 
 function normalizeApiBase(url) {
@@ -42,6 +60,15 @@ function apiUrl(path) {
   return `${base}${normalizedPath}`;
 }
 
+async function fetchJsonApi(path, options = {}) {
+  const response = await fetch(apiUrl(path), options);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.detail || payload.error || `HTTP ${response.status}`);
+  }
+  return payload;
+}
+
 function isGitHubPages() {
   return GITHUB_PAGES_HOST.test(window.location.hostname);
 }
@@ -59,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadSecondMeStatus();
   await loadSecondMeInstances();
   await loadPlatformAgents();
+  await loadDrugDiscoveryCatalogs();
   await loadProjects();
 });
 
@@ -493,6 +521,7 @@ function saveApiBase() {
   loadSecondMeStatus();
   loadSecondMeInstances();
   loadPlatformAgents();
+  loadDrugDiscoveryCatalogs();
   loadProjects();
 }
 
@@ -508,6 +537,7 @@ function clearApiBase() {
   loadSecondMeStatus();
   loadSecondMeInstances();
   loadPlatformAgents();
+  loadDrugDiscoveryCatalogs();
   loadProjects();
 }
 
@@ -771,6 +801,123 @@ async function loadPlatformAgents() {
   }
 }
 
+async function loadDrugDiscoveryCatalogs() {
+  const [
+    capabilitiesResult,
+    blueprintsResult,
+    byOverviewResult,
+    byServersResult,
+    mediOverviewResult,
+    mediHealthResult,
+  ] = await Promise.allSettled([
+    fetchJsonApi('/api/v2/drug-discovery/capabilities'),
+    fetchJsonApi('/api/v2/drug-discovery/blueprints'),
+    fetchJsonApi('/api/v2/integrations/blatant-why'),
+    fetchJsonApi('/api/v2/integrations/blatant-why/mcp-servers'),
+    fetchJsonApi('/api/v2/integrations/medi-pharma'),
+    fetchJsonApi('/api/v2/integrations/medi-pharma/health'),
+  ]);
+
+  discoveryCapabilities = capabilitiesResult.status === 'fulfilled'
+    ? (capabilitiesResult.value.capabilities || [])
+    : [];
+  discoveryBlueprints = blueprintsResult.status === 'fulfilled'
+    ? (blueprintsResult.value.blueprints || [])
+    : [];
+  blatantWhyOverview = byOverviewResult.status === 'fulfilled'
+    ? byOverviewResult.value
+    : null;
+  blatantWhyMcpServers = byServersResult.status === 'fulfilled'
+    ? (byServersResult.value.servers || [])
+    : [];
+  mediPharmaOverview = mediOverviewResult.status === 'fulfilled'
+    ? mediOverviewResult.value
+    : mediPharmaOverview;
+  mediPharmaHealth = mediHealthResult.status === 'fulfilled'
+    ? mediHealthResult.value
+    : mediPharmaHealth;
+
+  if (capabilitiesResult.status !== 'fulfilled') {
+    console.warn('Drug discovery capabilities load failed:', capabilitiesResult.reason);
+  }
+  if (blueprintsResult.status !== 'fulfilled') {
+    console.warn('Drug discovery blueprints load failed:', blueprintsResult.reason);
+  }
+  if (byOverviewResult.status !== 'fulfilled') {
+    console.warn('BY overview load failed:', byOverviewResult.reason);
+  }
+  if (byServersResult.status !== 'fulfilled') {
+    console.warn('BY MCP server load failed:', byServersResult.reason);
+  }
+  if (mediOverviewResult.status !== 'fulfilled') {
+    console.warn('MediPharma overview load failed:', mediOverviewResult.reason);
+  }
+  if (mediHealthResult.status !== 'fulfilled') {
+    console.warn('MediPharma health load failed:', mediHealthResult.reason);
+  }
+
+  await refreshBridgeRuntime({
+    projectId: selectedWorkbenchProjectId,
+    includeJobs: Boolean(selectedWorkbenchProjectId),
+    rerender: Boolean(workbenchData?.project),
+  });
+
+  if (workbenchData?.project) {
+    renderWorkbench();
+  }
+}
+
+async function refreshBridgeRuntime({ projectId = selectedWorkbenchProjectId, includeJobs = true, rerender = false } = {}) {
+  const requests = [
+    fetchJsonApi('/api/v2/integrations/blatant-why/providers'),
+    fetchJsonApi('/api/v2/integrations/tamarind/status'),
+    fetchJsonApi('/api/v2/integrations/tamarind/tools'),
+  ];
+  if (includeJobs) {
+    requests.push(
+      fetchJsonApi(
+        `/api/v2/integrations/tamarind/jobs?${new URLSearchParams({
+          job_name: projectId || '',
+          limit: '8',
+        }).toString()}`
+      )
+    );
+  }
+
+  const [providersResult, tamarindStatusResult, tamarindToolsResult, tamarindJobsResult] = await Promise.allSettled(requests);
+
+  blatantWhyProviders = providersResult.status === 'fulfilled' ? providersResult.value : blatantWhyProviders;
+  tamarindRuntimeStatus = tamarindStatusResult.status === 'fulfilled' ? tamarindStatusResult.value : tamarindRuntimeStatus;
+  tamarindAvailableTools = tamarindToolsResult.status === 'fulfilled'
+    ? (tamarindToolsResult.value.tools || [])
+    : tamarindAvailableTools;
+  tamarindJobList = includeJobs && tamarindJobsResult?.status === 'fulfilled'
+    ? (tamarindJobsResult.value.jobs || [])
+    : (includeJobs ? tamarindJobList : []);
+
+  if (providersResult.status !== 'fulfilled') {
+    console.warn('BY providers load failed:', providersResult.reason);
+  }
+  if (tamarindStatusResult.status !== 'fulfilled') {
+    console.warn('Tamarind status load failed:', tamarindStatusResult.reason);
+  }
+  if (tamarindToolsResult.status !== 'fulfilled') {
+    console.warn('Tamarind tools load failed:', tamarindToolsResult.reason);
+  }
+  if (includeJobs && tamarindJobsResult?.status !== 'fulfilled') {
+    console.warn('Tamarind jobs load failed:', tamarindJobsResult.reason);
+  }
+
+  if (rerender) {
+    renderByBridgePanel();
+  }
+}
+
+async function refreshDrugDiscoveryCatalogs() {
+  await loadDrugDiscoveryCatalogs();
+  showWorkbenchMessage('Drug discovery 目录已刷新', 'ok');
+}
+
 async function loadProjects() {
   try {
     const payload = await fetch(apiUrl('/api/v2/projects')).then(r => r.json());
@@ -832,6 +979,14 @@ async function loadWorkbench(projectId) {
     renderEmptyWorkbench();
     return;
   }
+  if (selectedWorkbenchProjectId && selectedWorkbenchProjectId !== projectId) {
+    lastStructuralResearchResult = null;
+    lastByScreeningResult = null;
+    lastBiologicsPipelineResult = null;
+    lastTamarindJobResult = null;
+    lastSecondMeSyncResult = null;
+    tamarindJobList = [];
+  }
   selectedWorkbenchProjectId = projectId;
   renderProjectSelect();
   setWorkbenchLoading();
@@ -846,6 +1001,7 @@ async function loadWorkbench(projectId) {
     if (!selectedRunId || !runs.some((run) => run.run_id === selectedRunId)) {
       selectedRunId = runs[0]?.run_id || '';
     }
+    await refreshBridgeRuntime({ projectId, includeJobs: true });
     renderWorkbench();
     await loadH2AThreads(projectId);
   } catch (error) {
@@ -1142,10 +1298,20 @@ async function manualCompleteWorkflowStep(runId, stepId) {
 function setWorkbenchLoading() {
   const skeleton = '<div class="skeleton" style="height:120px"></div>';
   const summary = document.getElementById('workbenchProjectSummary');
+  const implementation = document.getElementById('workbenchImplementationPanel');
+  const secondMe = document.getElementById('workbenchSecondMePanel');
+  const capability = document.getElementById('workbenchCapabilityPanel');
+  const byBridge = document.getElementById('workbenchByBridgePanel');
+  const mediPharma = document.getElementById('workbenchMediPharmaPanel');
   const members = document.getElementById('workspaceMembersList');
   const timeline = document.getElementById('artifactTimeline');
   const runs = document.getElementById('workflowRunsPanel');
   if (summary) summary.innerHTML = skeleton;
+  if (implementation) implementation.innerHTML = skeleton + skeleton;
+  if (secondMe) secondMe.innerHTML = skeleton;
+  if (capability) capability.innerHTML = skeleton + skeleton;
+  if (byBridge) byBridge.innerHTML = skeleton + skeleton;
+  if (mediPharma) mediPharma.innerHTML = skeleton + skeleton;
   if (members) members.innerHTML = skeleton;
   if (timeline) timeline.innerHTML = skeleton + skeleton;
   if (runs) runs.innerHTML = skeleton + skeleton;
@@ -1153,16 +1319,35 @@ function setWorkbenchLoading() {
 
 function renderEmptyWorkbench(message = '请选择一个项目') {
   const summary = document.getElementById('workbenchProjectSummary');
+  const implementation = document.getElementById('workbenchImplementationPanel');
+  const secondMe = document.getElementById('workbenchSecondMePanel');
+  const capability = document.getElementById('workbenchCapabilityPanel');
+  const byBridge = document.getElementById('workbenchByBridgePanel');
+  const mediPharma = document.getElementById('workbenchMediPharmaPanel');
   const members = document.getElementById('workspaceMembersList');
   const timeline = document.getElementById('artifactTimeline');
   const runs = document.getElementById('workflowRunsPanel');
   const stage = document.getElementById('workbenchProjectStage');
   if (summary) summary.innerHTML = `<div class="empty-state">${escapeHtml(message)}</div>`;
+  if (implementation) implementation.innerHTML = '<div class="empty-state">暂无 implementation 数据</div>';
+  if (secondMe) secondMe.innerHTML = '<div class="empty-state">暂无 Second Me 绑定</div>';
+  if (capability) capability.innerHTML = '<div class="empty-state">暂无 capability 数据</div>';
+  if (byBridge) byBridge.innerHTML = '<div class="empty-state">暂无 BY 桥接数据</div>';
+  if (mediPharma) mediPharma.innerHTML = '<div class="empty-state">暂无 MediPharma 数据</div>';
   if (members) members.innerHTML = '<div class="empty-state">暂无成员</div>';
   if (timeline) timeline.innerHTML = '<div class="empty-state">暂无时间线数据</div>';
   if (runs) runs.innerHTML = '<div class="empty-state">还没有 workflow run</div>';
   if (stage) stage.textContent = '未选择';
   workbenchData = null;
+  blatantWhyProviders = null;
+  tamarindRuntimeStatus = null;
+  tamarindAvailableTools = [];
+  tamarindJobList = [];
+  mediPharmaHealth = null;
+  mediPharmaEcosystem = null;
+  lastStructuralResearchResult = null;
+  lastTamarindJobResult = null;
+  lastMediPharmaResult = null;
   h2aThreads = [];
   selectedH2AThreadId = '';
   renderHomeSurface();
@@ -1173,6 +1358,11 @@ function renderEmptyWorkbench(message = '请选择一个项目') {
 
 function renderWorkbench() {
   renderProjectSummary();
+  renderImplementationPanel();
+  renderCapabilityPanel();
+  renderSecondMePanel();
+  renderByBridgePanel();
+  renderMediPharmaPanel();
   renderWorkspaceMembers();
   renderWorkflowTemplateSelect();
   renderArtifactTimeline();
@@ -1191,8 +1381,11 @@ function renderProjectSummary() {
     return;
   }
 
-  const { project, workspace = {}, compounds = [], workflow_runs: runs = [], second_me_bindings: bindings = [], timeline = [] } = workbenchData;
+  const { project, workspace = {}, compounds = [], workflow_runs: runs = [], second_me_bindings: bindings = [], timeline = [], implementation = {} } = workbenchData;
   const currentRun = getSelectedRun();
+  const implementationState = implementation.state || {};
+  const currentPhase = implementation.current_phase || {};
+  const recentExecutions = implementation.recent_executions || [];
   const memoryCount = timeline.filter((item) => item.item_type === 'memory').length;
   const decisionCount = timeline.filter((item) => item.item_type === 'decision').length;
   const humanMembers = (workspace.members || []).filter((member) => (member.type || 'human') === 'human');
@@ -1226,6 +1419,14 @@ function renderProjectSummary() {
         <div class="workbench-metric-label">关键决策</div>
         <div class="workbench-metric-value">${decisionCount}</div>
       </div>
+      <div class="workbench-metric">
+        <div class="workbench-metric-label">Capabilities</div>
+        <div class="workbench-metric-value">${(implementation.available_capabilities || []).length}</div>
+      </div>
+      <div class="workbench-metric">
+        <div class="workbench-metric-label">Executions</div>
+        <div class="workbench-metric-value">${recentExecutions.length}</div>
+      </div>
     </div>
     <div class="workbench-meta-list">
       <div class="workbench-meta-row"><span>Workspace Owner</span><strong>${escapeHtml(workspace.owner_id || '未设置')}</strong></div>
@@ -1233,9 +1434,1014 @@ function renderProjectSummary() {
       <div class="workbench-meta-row"><span>默认 AI Agent</span><strong>${(workspace.default_agents || []).length}</strong></div>
       <div class="workbench-meta-row"><span>Second Me Bindings</span><strong>${bindings.length}</strong></div>
       <div class="workbench-meta-row"><span>当前 Run</span><strong>${escapeHtml(currentRun?.template_name || '暂无')}</strong></div>
+      <div class="workbench-meta-row"><span>Blueprint</span><strong>${escapeHtml(implementation.blueprint?.name || '未激活')}</strong></div>
+      <div class="workbench-meta-row"><span>当前 Phase</span><strong>${escapeHtml(currentPhase.name || formatStageLabel(project.stage))}</strong></div>
+      <div class="workbench-meta-row"><span>Phase Status</span><strong>${escapeHtml(formatStatus(implementationState.status || project.status || 'active'))}</strong></div>
+      <div class="workbench-meta-row"><span>项目模态</span><strong>${escapeHtml(project.modality || 'small_molecule')}</strong></div>
       <div class="workbench-meta-row"><span>预算</span><strong>${Number(project.budget_total || 0).toLocaleString()}</strong></div>
     </div>
   `;
+}
+
+function renderImplementationPanel() {
+  const container = document.getElementById('workbenchImplementationPanel');
+  if (!container) return;
+  if (!workbenchData?.project) {
+    container.innerHTML = '<div class="empty-state">请选择一个项目</div>';
+    return;
+  }
+
+  const implementation = workbenchData.implementation || {};
+  const blueprint = implementation.blueprint || {};
+  const currentPhase = implementation.current_phase || {};
+  const state = implementation.state || {};
+  const phases = blueprint.phases || [];
+  const availableCapabilities = implementation.available_capabilities || [];
+  const recentExecutions = implementation.recent_executions || [];
+  const selectedBlueprint = blueprint.blueprint_id || discoveryBlueprints[0]?.blueprint_id || '';
+  const progress = phases.length
+    ? Math.round(((Number(implementation.phase_index || 0) + 1) / phases.length) * 100)
+    : 0;
+
+  container.innerHTML = `
+    <div class="workbench-panel-stack">
+      <div class="workbench-form-grid compact">
+        <select id="implementationBlueprintSelect" class="input">
+          ${(discoveryBlueprints.length ? discoveryBlueprints : [blueprint]).filter((item) => item && item.blueprint_id).map((item) => `
+            <option value="${escapeHtml(item.blueprint_id)}" ${item.blueprint_id === selectedBlueprint ? 'selected' : ''}>
+              ${escapeHtml(item.name || item.blueprint_id)}
+            </option>
+          `).join('')}
+        </select>
+        <textarea id="implementationBootstrapNote" class="textarea small" rows="2" placeholder="可选说明，例如：切换到 biologics 蓝图，准备进入结构研究。"></textarea>
+        <button class="btn btn-outline full" type="button" onclick="bootstrapProjectImplementation()">重新激活 Implementation</button>
+      </div>
+
+      <div class="capability-highlight">
+        <div class="workbench-capability-head">
+          <div>
+            <strong>${escapeHtml(currentPhase.name || '未激活 Phase')}</strong>
+            <p>${escapeHtml(currentPhase.description || blueprint.description || '暂无 implementation 描述')}</p>
+          </div>
+          <span class="status-badge ${statusClass(state.status || 'active')}">${escapeHtml(formatStatus(state.status || 'active'))}</span>
+        </div>
+        <div class="workbench-progress-rail">
+          <div class="workbench-progress-fill" style="width:${progress}%"></div>
+        </div>
+        <div class="timeline-meta">
+          <span class="artifact-pill">blueprint · ${escapeHtml(blueprint.name || blueprint.blueprint_id || 'N/A')}</span>
+          <span class="artifact-pill">phase · ${escapeHtml(currentPhase.phase_id || 'N/A')}</span>
+          <span class="artifact-pill">progress · ${progress}%</span>
+          <span class="artifact-pill">recent executions · ${recentExecutions.length}</span>
+        </div>
+      </div>
+
+      <div class="phase-strip">
+        ${phases.length ? phases.map((phase, index) => `
+          <article class="phase-chip ${phase.phase_id === currentPhase.phase_id ? 'active' : ''}">
+            <span>${String(index + 1).padStart(2, '0')}</span>
+            <strong>${escapeHtml(phase.name)}</strong>
+            <p>${escapeHtml(phase.objective || phase.description || '')}</p>
+          </article>
+        `).join('') : '<div class="empty-state">暂无 phase 配置</div>'}
+      </div>
+
+      <div class="workbench-meta-list">
+        <div class="workbench-meta-row"><span>Active Capabilities</span><strong>${availableCapabilities.length}</strong></div>
+        <div class="workbench-meta-row"><span>Exit Criteria</span><strong>${(currentPhase.exit_criteria || []).length}</strong></div>
+        <div class="workbench-meta-row"><span>Recommended Workflows</span><strong>${(currentPhase.recommended_workflows || []).length}</strong></div>
+        <div class="workbench-meta-row"><span>Success Metrics</span><strong>${(currentPhase.success_metrics || []).length}</strong></div>
+      </div>
+
+      <div class="timeline-meta">
+        ${(availableCapabilities || []).slice(0, 8).map((capability) => `
+          <span class="artifact-pill">capability · ${escapeHtml(capability.name)}</span>
+        `).join('') || '<span class="artifact-pill">暂无激活 capability</span>'}
+      </div>
+
+      <div class="workbench-checklist">
+        ${(currentPhase.exit_criteria || []).map((item) => `<div>• ${escapeHtml(item)}</div>`).join('') || '<div>暂无 exit criteria</div>'}
+      </div>
+    </div>
+  `;
+}
+
+function renderCapabilityPanel() {
+  const container = document.getElementById('workbenchCapabilityPanel');
+  if (!container) return;
+  if (!workbenchData?.project) {
+    container.innerHTML = '<div class="empty-state">请选择一个项目</div>';
+    return;
+  }
+
+  const implementation = workbenchData.implementation || {};
+  const availableCapabilities = implementation.available_capabilities?.length
+    ? implementation.available_capabilities
+    : discoveryCapabilities;
+  const recentExecutions = implementation.recent_executions || [];
+  const currentPhase = implementation.current_phase || {};
+
+  if (!selectedCapabilityId || !availableCapabilities.some((item) => item.capability_id === selectedCapabilityId)) {
+    selectedCapabilityId = availableCapabilities[0]?.capability_id || '';
+  }
+
+  const capability = availableCapabilities.find((item) => item.capability_id === selectedCapabilityId)
+    || discoveryCapabilities.find((item) => item.capability_id === selectedCapabilityId)
+    || null;
+
+  container.innerHTML = `
+    <div class="workbench-panel-stack">
+      <div class="workbench-form-grid compact">
+        <select id="capabilitySelect" class="input" onchange="selectCapability(this.value)">
+          ${availableCapabilities.map((item) => `
+            <option value="${escapeHtml(item.capability_id)}" ${item.capability_id === selectedCapabilityId ? 'selected' : ''}>
+              ${escapeHtml(item.name)} · ${escapeHtml(item.category)}
+            </option>
+          `).join('') || '<option value="">暂无 capability</option>'}
+        </select>
+        <textarea id="capabilityPayloadInput" class="textarea small" rows="3" placeholder='可选 JSON input_payload，例如：{"compound_limit": 12, "compound_ids": ["cmpd_1"]}'></textarea>
+        <label class="checkbox-row">
+          <input type="checkbox" id="capabilitySyncToSecondMe">
+          <span>执行后同步到 Second Me</span>
+        </label>
+        <button class="btn btn-primary full" type="button" onclick="executeSelectedCapability()">执行 Capability</button>
+      </div>
+
+      ${capability ? `
+        <div class="capability-highlight">
+          <div class="workbench-capability-head">
+            <div>
+              <strong>${escapeHtml(capability.name)}</strong>
+              <p>${escapeHtml(capability.description || '暂无描述')}</p>
+            </div>
+            <span class="artifact-pill">${escapeHtml(capability.category)}</span>
+          </div>
+          <div class="timeline-meta">
+            <span class="artifact-pill">phase · ${escapeHtml(currentPhase.name || formatStageLabel(workbenchData.project.stage))}</span>
+            ${capability.stage_ids?.map((stageId) => `<span class="artifact-pill">${escapeHtml(stageId)}</span>`).join('') || ''}
+          </div>
+          <div class="timeline-meta">
+            ${(capability.required_inputs || []).map((item) => `<span class="artifact-pill">input · ${escapeHtml(item)}</span>`).join('') || '<span class="artifact-pill">input · none</span>'}
+            ${(capability.outputs || []).map((item) => `<span class="artifact-pill">output · ${escapeHtml(item)}</span>`).join('') || ''}
+          </div>
+          <div class="timeline-meta">
+            ${(capability.recommended_agents || []).map((item) => `<span class="artifact-pill">agent · ${escapeHtml(item)}</span>`).join('') || '<span class="artifact-pill">agent · auto</span>'}
+            ${(capability.tool_ids || []).map((item) => `<span class="artifact-pill">tool · ${escapeHtml(item)}</span>`).join('')}
+          </div>
+        </div>
+      ` : '<div class="empty-state">暂无 capability 详情</div>'}
+
+      <div class="execution-feed">
+        ${recentExecutions.length ? recentExecutions.slice(0, 6).map((execution) => `
+          <article class="execution-card">
+            <div class="execution-card-head">
+              <strong>${escapeHtml(execution.capability_name)}</strong>
+              <span class="status-badge ${statusClass(execution.status)}">${escapeHtml(formatStatus(execution.status))}</span>
+            </div>
+            <p>${escapeHtml(execution.summary || '暂无摘要')}</p>
+            <div class="timeline-meta">
+              <span class="artifact-pill">${escapeHtml(formatDateTime(execution.updated_at || execution.created_at))}</span>
+              ${execution.triggered_by ? `<span class="artifact-pill">by · ${escapeHtml(execution.triggered_by)}</span>` : ''}
+              ${(execution.related_agents || []).slice(0, 3).map((item) => `<span class="artifact-pill">agent · ${escapeHtml(item)}</span>`).join('')}
+              ${(execution.related_compounds || []).slice(0, 3).map((item) => `<span class="artifact-pill">compound · ${escapeHtml(item)}</span>`).join('')}
+              ${execution.second_me_sync?.status ? `<span class="artifact-pill">Second Me · ${escapeHtml(execution.second_me_sync.status)}</span>` : ''}
+            </div>
+          </article>
+        `).join('') : '<div class="empty-state">当前 phase 还没有 capability execution</div>'}
+      </div>
+    </div>
+  `;
+}
+
+function renderSecondMePanel() {
+  const container = document.getElementById('workbenchSecondMePanel');
+  if (!container) return;
+  if (!workbenchData?.project) {
+    container.innerHTML = '<div class="empty-state">请选择一个项目</div>';
+    return;
+  }
+
+  const bindings = workbenchData.second_me_bindings || [];
+  const selectedInstanceId = bindings[0]?.instance_id || '';
+  container.innerHTML = `
+    <div class="workbench-panel-stack">
+      <div class="workbench-form-grid compact">
+        <select id="secondMeInstanceSelect" class="input">
+          ${bindings.map((binding) => `
+            <option value="${escapeHtml(binding.instance_id)}" ${binding.instance_id === selectedInstanceId ? 'selected' : ''}>
+              ${escapeHtml(binding.instance_name || binding.instance_id)} · ${escapeHtml(binding.status || 'linked')}
+            </option>
+          `).join('') || '<option value="">暂无绑定实例</option>'}
+        </select>
+        <button class="btn btn-outline full" type="button" onclick="syncProjectSecondMe()">同步项目到 Second Me</button>
+      </div>
+
+      ${lastSecondMeSyncResult ? `
+        <div class="capability-highlight">
+          <div class="workbench-capability-head">
+            <div>
+              <strong>最近一次同步</strong>
+              <p>${escapeHtml(lastSecondMeSyncResult.summary || lastSecondMeSyncResult.message || '同步已完成')}</p>
+            </div>
+            <span class="status-badge ${statusClass(lastSecondMeSyncResult.status || 'synced')}">${escapeHtml(formatStatus(lastSecondMeSyncResult.status || 'synced'))}</span>
+          </div>
+        </div>
+      ` : ''}
+
+      <div class="execution-feed">
+        ${bindings.length ? bindings.map((binding) => `
+          <article class="execution-card">
+            <div class="execution-card-head">
+              <strong>${escapeHtml(binding.instance_name || binding.instance_id)}</strong>
+              <span class="status-badge ${statusClass(binding.status)}">${escapeHtml(formatStatus(binding.status || 'linked'))}</span>
+            </div>
+            <p>${escapeHtml(binding.last_sync_summary || '该绑定已准备好接收项目上下文同步。')}</p>
+            <div class="timeline-meta">
+              <span class="artifact-pill">instance · ${escapeHtml(binding.instance_id)}</span>
+              ${binding.last_synced_at ? `<span class="artifact-pill">last sync · ${escapeHtml(formatDateTime(binding.last_synced_at))}</span>` : ''}
+              ${(binding.linked_workflows || []).slice(0, 2).map((item) => `<span class="artifact-pill">workflow · ${escapeHtml(item)}</span>`).join('')}
+              ${(binding.linked_memory_entries || []).slice(0, 2).map((item) => `<span class="artifact-pill">memory · ${escapeHtml(item)}</span>`).join('')}
+              ${binding.share_url ? `<a class="artifact-pill artifact-link" href="${escapeHtml(binding.share_url)}" target="_blank" rel="noopener noreferrer">share url</a>` : ''}
+            </div>
+          </article>
+        `).join('') : '<div class="empty-state">当前项目还没有 Second Me binding，请先到工具页创建并绑定实例。</div>'}
+      </div>
+    </div>
+  `;
+}
+
+function getByBridgeFormState() {
+  const project = workbenchData?.project || {};
+  return {
+    target: document.getElementById('byResearchTargetInput')?.value.trim() || project.target || project.name || '',
+    modality: document.getElementById('byModalitySelect')?.value || project.modality || 'small_molecule',
+    pdbRows: Math.max(1, Number(document.getElementById('byPdbRowsInput')?.value || 4)),
+    sabdabLimit: Math.max(1, Number(document.getElementById('bySabdabLimitInput')?.value || 4)),
+    complexity: document.getElementById('byComplexitySelect')?.value || 'standard',
+    seeds: Math.max(1, Number(document.getElementById('bySeedsInput')?.value || 8)),
+    designsPerSeed: Math.max(1, Number(document.getElementById('byDesignsInput')?.value || 8)),
+    scaffolds: (document.getElementById('byScaffoldsInput')?.value || '')
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean),
+    waitForCompletion: Boolean(document.getElementById('byWaitForCompletion')?.checked),
+  };
+}
+
+function tamarindJobName(job = {}) {
+  return job.jobName || job.job_name || job.name || job.id || 'unknown_job';
+}
+
+function tamarindJobStatus(job = {}) {
+  return job.status || job.jobStatus || job.state || job.phase || 'unknown';
+}
+
+function tamarindToolLabel(tool) {
+  if (!tool) return 'unknown';
+  if (typeof tool === 'string') return tool;
+  return tool.name || tool.id || tool.tool || 'tool';
+}
+
+function renderByBridgePanel() {
+  const container = document.getElementById('workbenchByBridgePanel');
+  if (!container) return;
+  if (!workbenchData?.project) {
+    container.innerHTML = '<div class="empty-state">请选择一个项目</div>';
+    return;
+  }
+
+  const implementation = workbenchData.implementation || {};
+  const byProject = implementation.blatant_why || {};
+  const project = workbenchData.project || {};
+  const compute = tamarindRuntimeStatus || blatantWhyOverview?.compute || {};
+  const providerCatalog = blatantWhyProviders?.live_providers || blatantWhyOverview?.mcp_bridge?.live_providers || {};
+  const modality = project.modality || byProject.modality || 'small_molecule';
+  const pipelineSteps = Array.isArray(byProject.pipeline)
+    ? byProject.pipeline.map((step) => ({
+        title: step.phase,
+        copy: `${step.owner} · ${step.focus}`,
+      }))
+    : (byProject.research_plan?.queries || []).map((query) => ({
+        title: query.tool,
+        copy: `${query.server_id} · ${query.objective}`,
+      }));
+  const researchResult = lastStructuralResearchResult || null;
+  const pipelineResult = lastBiologicsPipelineResult?.campaign || lastBiologicsPipelineResult || null;
+  const recentJobs = tamarindJobList || [];
+
+  container.innerHTML = `
+    <div class="workbench-panel-stack">
+      <div class="workbench-form-grid compact">
+        <input type="text" id="byResearchTargetInput" class="input" value="${escapeHtml(project.target || project.name || '')}" placeholder="Research target，例如 EGFR / ERBB2">
+        <div class="input-row">
+          <input type="number" id="byPdbRowsInput" class="input" min="1" value="4" placeholder="PDB hits">
+          <input type="number" id="bySabdabLimitInput" class="input" min="1" value="4" placeholder="SAbDab hits">
+        </div>
+        <select id="byModalitySelect" class="input">
+          ${['small_molecule', 'nanobody', 'antibody', 'protein'].map((item) => `
+            <option value="${item}" ${item === modality ? 'selected' : ''}>${item}</option>
+          `).join('')}
+        </select>
+        <div class="input-row">
+          <input type="number" id="bySeedsInput" class="input" min="1" value="8" placeholder="Seeds">
+          <input type="number" id="byDesignsInput" class="input" min="1" value="8" placeholder="Designs / Seed">
+        </div>
+        <input type="text" id="byScaffoldsInput" class="input" placeholder="可选 scaffold，逗号分隔">
+        <select id="byComplexitySelect" class="input">
+          <option value="light">light</option>
+          <option value="standard" selected>standard</option>
+          <option value="heavy">heavy</option>
+        </select>
+        <label class="checkbox-row">
+          <input type="checkbox" id="byWaitForCompletion">
+          <span>提交 Tamarind 后等待任务完成并尝试回收 result</span>
+        </label>
+        <div class="workbench-inline-actions">
+          <button class="btn btn-outline" type="button" onclick="runStructuralResearchPreview()">Research Preview</button>
+          <button class="btn btn-outline" type="button" onclick="executeStructuralResearchStep()">执行 Research Step</button>
+          <button class="btn btn-outline" type="button" onclick="runBlatantWhyScreening()">运行 BY Screening</button>
+        </div>
+        <div class="workbench-inline-actions">
+          <button class="btn btn-outline" type="button" onclick="runBlatantWhyBiologicsPipeline()">生成 Biologics Pipeline</button>
+          <button class="btn btn-primary" type="button" onclick="submitTamarindBiologicsJob()">提交 Tamarind Job</button>
+          <button class="btn btn-outline" type="button" onclick="refreshBridgeRuntimeManual()">刷新 Runtime</button>
+        </div>
+      </div>
+
+      <div class="workbench-metric-grid">
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Research Providers</div>
+          <div class="workbench-metric-value">${Object.keys(providerCatalog).length}</div>
+        </div>
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Tamarind Status</div>
+          <div class="workbench-metric-value">${escapeHtml(formatStatus(compute.status || (compute.enabled ? 'configured' : 'not_configured')))}</div>
+        </div>
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Recent Jobs</div>
+          <div class="workbench-metric-value">${recentJobs.length}</div>
+        </div>
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Latest SAbDab Hits</div>
+          <div class="workbench-metric-value">${researchResult?.sabdab?.count || 0}</div>
+        </div>
+      </div>
+
+      <div class="capability-highlight">
+        <div class="workbench-capability-head">
+          <div>
+            <strong>BY Adapter · ${escapeHtml(project.name)}</strong>
+            <p>${escapeHtml(blatantWhyOverview?.runtime_adaptation?.campaign_model || '把 research → design → screening → ranking 适配到 DrugMind implementation。')}</p>
+          </div>
+          <span class="artifact-pill">${escapeHtml(modality)}</span>
+        </div>
+        <div class="timeline-meta">
+          <span class="artifact-pill">compute · ${escapeHtml(compute.provider || 'tamarind')}</span>
+          <span class="artifact-pill">status · ${escapeHtml(compute.status || (compute.enabled ? 'configured' : 'dry-run'))}</span>
+          <span class="artifact-pill">servers · ${blatantWhyMcpServers.length}</span>
+          <span class="artifact-pill">tools · ${tamarindAvailableTools.length}</span>
+          <span class="artifact-pill">source · BY</span>
+        </div>
+        <div class="timeline-meta">
+          ${Object.entries(providerCatalog).map(([providerId, provider]) => `
+            <span class="artifact-pill">${escapeHtml(providerId)} · ${escapeHtml((provider.capabilities || []).length.toString())} caps</span>
+          `).join('') || '<span class="artifact-pill">实时 provider 信息加载中</span>'}
+          ${tamarindAvailableTools.slice(0, 6).map((tool) => `
+            <span class="artifact-pill">tool · ${escapeHtml(tamarindToolLabel(tool))}</span>
+          `).join('') || ''}
+        </div>
+      </div>
+
+      <div class="phase-strip">
+        ${pipelineSteps.length ? pipelineSteps.slice(0, 6).map((step, index) => `
+          <article class="phase-chip ${index === 0 ? 'active' : ''}">
+            <span>${String(index + 1).padStart(2, '0')}</span>
+            <strong>${escapeHtml(step.title)}</strong>
+            <p>${escapeHtml(step.copy)}</p>
+          </article>
+        `).join('') : '<div class="empty-state">暂无 BY pipeline 映射</div>'}
+      </div>
+
+      <div class="timeline-meta">
+        ${blatantWhyMcpServers.slice(0, 5).map((server) => `<span class="artifact-pill">${escapeHtml(server.name)} · ${escapeHtml(server.domain)}</span>`).join('') || '<span class="artifact-pill">暂无 MCP server</span>'}
+      </div>
+
+      ${researchResult ? `
+        <article class="execution-card">
+          <div class="execution-card-head">
+            <strong>Structural Research Bundle</strong>
+            <span class="status-badge ${statusClass('completed')}">completed</span>
+          </div>
+          <p>${escapeHtml(researchResult.evidence_summary?.headline || '已完成结构研究检索')}</p>
+          <div class="timeline-meta">
+            <span class="artifact-pill">target · ${escapeHtml(researchResult.target || project.target || 'N/A')}</span>
+            <span class="artifact-pill">UniProt · ${escapeHtml(researchResult.top_recommendation?.uniprot_accession || 'N/A')}</span>
+            <span class="artifact-pill">PDB · ${(researchResult.pdb?.structures || []).length}</span>
+            <span class="artifact-pill">SAbDab · ${researchResult.sabdab?.count || 0}</span>
+          </div>
+          <div class="timeline-meta">
+            ${(researchResult.evidence_summary?.top_structure_titles || []).slice(0, 3).map((title) => `
+              <span class="artifact-pill">structure · ${escapeHtml(title)}</span>
+            `).join('') || '<span class="artifact-pill">暂无结构标题</span>'}
+          </div>
+        </article>
+      ` : ''}
+
+      ${lastByScreeningResult ? `
+        <article class="execution-card">
+          <div class="execution-card-head">
+            <strong>BY Screening Result</strong>
+            <span class="status-badge ${statusClass(lastByScreeningResult.campaign_recommendation?.gate || 'completed')}">${escapeHtml(lastByScreeningResult.campaign_recommendation?.gate || 'completed')}</span>
+          </div>
+          <p>${escapeHtml(lastByScreeningResult.campaign_recommendation?.rationale || '已完成小分子筛选')}</p>
+          <div class="timeline-meta">
+            <span class="artifact-pill">ranked · ${(lastByScreeningResult.screening?.ranked || []).length}</span>
+            <span class="artifact-pill">pareto · ${(lastByScreeningResult.pareto_front || []).length}</span>
+          </div>
+        </article>
+      ` : ''}
+
+      ${pipelineResult ? `
+        <article class="execution-card">
+          <div class="execution-card-head">
+            <strong>Biologics Pipeline Contract</strong>
+            <span class="status-badge ${statusClass(pipelineResult.design_estimate?.tier || 'planned')}">${escapeHtml(pipelineResult.design_estimate?.tier || 'planned')}</span>
+          </div>
+          <p>${escapeHtml(pipelineResult.screening_contract?.ranking_rule || 'Biologics pipeline 已生成')}</p>
+          <div class="timeline-meta">
+            <span class="artifact-pill">modality · ${escapeHtml(pipelineResult.modality || 'N/A')}</span>
+            <span class="artifact-pill">designs · ${pipelineResult.design_estimate?.total_designs || 0}</span>
+            <span class="artifact-pill">runtime · ${pipelineResult.design_estimate?.estimated_minutes || 0} min</span>
+          </div>
+        </article>
+      ` : ''}
+
+      ${lastTamarindJobResult ? `
+        <article class="execution-card">
+          <div class="execution-card-head">
+            <strong>Tamarind Job Runtime</strong>
+            <span class="status-badge ${statusClass(lastTamarindJobResult.status || 'running')}">${escapeHtml(lastTamarindJobResult.status || 'running')}</span>
+          </div>
+          <p>${escapeHtml(lastTamarindJobResult.note || lastTamarindJobResult.error || '任务已提交或已刷新状态')}</p>
+          <div class="timeline-meta">
+            ${lastTamarindJobResult.job_name ? `<span class="artifact-pill">job · ${escapeHtml(lastTamarindJobResult.job_name)}</span>` : ''}
+            ${lastTamarindJobResult.job_type ? `<span class="artifact-pill">type · ${escapeHtml(lastTamarindJobResult.job_type)}</span>` : ''}
+            ${lastTamarindJobResult.provider ? `<span class="artifact-pill">provider · ${escapeHtml(lastTamarindJobResult.provider)}</span>` : ''}
+          </div>
+        </article>
+      ` : ''}
+
+      <div class="execution-feed">
+        ${recentJobs.length ? recentJobs.map((job) => `
+          <article class="execution-card">
+            <div class="execution-card-head">
+              <strong>${escapeHtml(tamarindJobName(job))}</strong>
+              <span class="status-badge ${statusClass(tamarindJobStatus(job))}">${escapeHtml(tamarindJobStatus(job))}</span>
+            </div>
+            <p>${escapeHtml(job.jobType || job.job_type || job.type || 'Tamarind job')}</p>
+            <div class="timeline-meta">
+              ${(job.createdAt || job.created_at) ? `<span class="artifact-pill">created · ${escapeHtml(formatDateTime(job.createdAt || job.created_at))}</span>` : ''}
+              ${(job.updatedAt || job.updated_at) ? `<span class="artifact-pill">updated · ${escapeHtml(formatDateTime(job.updatedAt || job.updated_at))}</span>` : ''}
+            </div>
+            <div class="workbench-inline-actions">
+              <button class="btn btn-sm btn-outline" type="button" onclick='pollTamarindJob(${JSON.stringify(tamarindJobName(job))})'>轮询</button>
+              <button class="btn btn-sm btn-outline" type="button" onclick='loadTamarindJobResult(${JSON.stringify(tamarindJobName(job))})'>结果</button>
+            </div>
+          </article>
+        `).join('') : '<div class="empty-state">暂无 Tamarind job。没有 API Key 时这里会保持为空。</div>'}
+      </div>
+    </div>
+  `;
+}
+
+function mediPharmaDefaultPayload(action) {
+  const project = workbenchData?.project || {};
+  const compounds = workbenchData?.compounds || [];
+  const firstCompound = compounds[0] || {};
+  switch (action) {
+    case 'discover_targets':
+      return {
+        disease: project.disease || '',
+        max_papers: 30,
+        top_n: 8,
+        disease_burden: 0.8,
+        unmet_need: 0.8,
+      };
+    case 'run_screening':
+      return {
+        target_chembl_id: project.target_chembl_id || '',
+        max_compounds: Math.max(compounds.length, 100),
+        top_n: 20,
+        use_docking: false,
+      };
+    case 'generate':
+      return {
+        target_name: project.target || project.name || '',
+        scaffold: firstCompound.smiles || '',
+        n_generate: 120,
+        top_n: 12,
+        target_mw: 400,
+        target_logp: 2.5,
+      };
+    case 'predict_admet':
+      return {
+        smiles: firstCompound.smiles || '',
+      };
+    case 'batch_predict_admet':
+      return {
+        smiles_list: compounds.map((item) => item.smiles).filter(Boolean).slice(0, 12),
+      };
+    case 'optimize':
+      return {
+        smiles: firstCompound.smiles || '',
+        max_generations: 12,
+        population_size: 24,
+      };
+    case 'run_pipeline':
+      return {
+        disease: project.disease || '',
+        target: project.target || '',
+        target_chembl_id: project.target_chembl_id || '',
+        max_papers: 20,
+        max_compounds: 200,
+        n_generate: 80,
+        top_n: 10,
+        auto_mode: true,
+      };
+    case 'knowledge_report':
+      return {
+        target: project.target || '',
+        disease: project.disease || '',
+        include_patents: true,
+        include_clinical: true,
+      };
+    default:
+      return {};
+  }
+}
+
+function syncMediPharmaPayloadTemplate(force = false) {
+  const action = document.getElementById('mediPharmaActionSelect')?.value || 'discover_targets';
+  const input = document.getElementById('mediPharmaPayloadInput');
+  if (!input) return;
+  if (!force && input.value.trim()) return;
+  input.value = JSON.stringify(mediPharmaDefaultPayload(action), null, 2);
+}
+
+function summarizeMediPharmaResult(result) {
+  if (!result) return '暂无结果';
+  if (result.note) return result.note;
+  if (result.error) return result.error;
+  const response = result.response || {};
+  if (response.summary) return response.summary;
+  if (response.report) return response.report;
+  if (Array.isArray(response.key_insights) && response.key_insights.length) {
+    return response.key_insights.slice(0, 2).join('；');
+  }
+  if (Array.isArray(response.stages_completed) && response.stages_completed.length) {
+    return `已完成 ${response.stages_completed.length} 个 pipeline stages`;
+  }
+  if (response.content) {
+    return String(response.content).slice(0, 160);
+  }
+  return '调用已完成';
+}
+
+function renderMediPharmaPanel() {
+  const container = document.getElementById('workbenchMediPharmaPanel');
+  if (!container) return;
+  if (!workbenchData?.project) {
+    container.innerHTML = '<div class="empty-state">请选择一个项目</div>';
+    return;
+  }
+
+  const project = workbenchData.project || {};
+  const mediPharma = workbenchData.medi_pharma || mediPharmaOverview || {};
+  const status = mediPharmaHealth?.status || mediPharma?.status?.status || 'unknown';
+  const baseUrl = mediPharmaHealth?.base_url || mediPharma?.client?.base_url || '';
+  const features = mediPharma?.client?.features || [];
+  const latest = lastMediPharmaResult || null;
+
+  container.innerHTML = `
+    <div class="workbench-panel-stack">
+      <div class="workbench-metric-grid">
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Runtime</div>
+          <div class="workbench-metric-value">${escapeHtml(formatStatus(status))}</div>
+        </div>
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Endpoints</div>
+          <div class="workbench-metric-value">${features.length || 10}</div>
+        </div>
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Project</div>
+          <div class="workbench-metric-value">${escapeHtml(project.modality || 'small_molecule')}</div>
+        </div>
+        <div class="workbench-metric">
+          <div class="workbench-metric-label">Compounds</div>
+          <div class="workbench-metric-value">${(workbenchData.compounds || []).length}</div>
+        </div>
+      </div>
+
+      <div class="capability-highlight">
+        <div class="workbench-capability-head">
+          <div>
+            <strong>MediPharma v2.0.0</strong>
+            <p>通过 DrugMind 统一桥接靶点发现、筛选、分子生成、ADMET、优化和知识引擎。</p>
+          </div>
+          <span class="status-badge ${statusClass(status)}">${escapeHtml(formatStatus(status))}</span>
+        </div>
+        <div class="timeline-meta">
+          <span class="artifact-pill">base · ${escapeHtml(baseUrl || '未配置')}</span>
+          <span class="artifact-pill">source · medi-pharma</span>
+          ${(features || []).slice(0, 6).map((item) => `<span class="artifact-pill">${escapeHtml(item)}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="workbench-form-grid compact">
+        <select id="mediPharmaActionSelect" class="input" onchange="syncMediPharmaPayloadTemplate(true)">
+          ${[
+            ['discover_targets', 'Target Discovery'],
+            ['run_screening', 'Virtual Screening'],
+            ['generate', 'Molecule Generation'],
+            ['predict_admet', 'ADMET Single'],
+            ['batch_predict_admet', 'ADMET Batch'],
+            ['optimize', 'Lead Optimization'],
+            ['run_pipeline', 'Pipeline Run'],
+            ['knowledge_report', 'Knowledge Report'],
+            ['ecosystem', 'Ecosystem'],
+            ['health', 'Health'],
+          ].map(([value, label]) => `<option value="${value}">${escapeHtml(label)}</option>`).join('')}
+        </select>
+        <textarea id="mediPharmaPayloadInput" class="textarea small" rows="6" placeholder='可选 JSON input_payload'></textarea>
+        <div class="workbench-inline-actions">
+          <button class="btn btn-primary" type="button" onclick="executeMediPharmaAction()">执行 MediPharma</button>
+          <button class="btn btn-outline" type="button" onclick="refreshMediPharmaRuntimeManual()">刷新状态</button>
+          <button class="btn btn-outline" type="button" onclick="loadMediPharmaEcosystem()">生态概览</button>
+        </div>
+      </div>
+
+      ${latest ? `
+        <article class="execution-card">
+          <div class="execution-card-head">
+            <strong>Latest MediPharma Result</strong>
+            <span class="status-badge ${statusClass(latest.status || 'completed')}">${escapeHtml(formatStatus(latest.status || 'completed'))}</span>
+          </div>
+          <p>${escapeHtml(summarizeMediPharmaResult(latest))}</p>
+          <div class="timeline-meta">
+            ${latest.response?.total_candidates !== undefined ? `<span class="artifact-pill">targets · ${latest.response.total_candidates}</span>` : ''}
+            ${latest.response?.hits_found !== undefined ? `<span class="artifact-pill">hits · ${latest.response.hits_found}</span>` : ''}
+            ${latest.response?.valid_molecules !== undefined ? `<span class="artifact-pill">valid · ${latest.response.valid_molecules}</span>` : ''}
+            ${latest.response?.candidates_found !== undefined ? `<span class="artifact-pill">optimized · ${latest.response.candidates_found}</span>` : ''}
+            ${Array.isArray(latest.response?.stages_completed) ? `<span class="artifact-pill">stages · ${latest.response.stages_completed.length}</span>` : ''}
+            ${Array.isArray(latest.response?.key_insights) ? `<span class="artifact-pill">insights · ${latest.response.key_insights.length}</span>` : ''}
+          </div>
+        </article>
+      ` : ''}
+
+      ${mediPharmaEcosystem ? `
+        <article class="execution-card">
+          <div class="execution-card-head">
+            <strong>MediPharma Ecosystem</strong>
+            <span class="status-badge ${statusClass(mediPharmaEcosystem.status || 'ready')}">${escapeHtml(formatStatus(mediPharmaEcosystem.status || 'ready'))}</span>
+          </div>
+          <p>${escapeHtml(summarizeMediPharmaResult(mediPharmaEcosystem))}</p>
+        </article>
+      ` : ''}
+    </div>
+  `;
+
+  syncMediPharmaPayloadTemplate();
+}
+
+async function runStructuralResearchPreview() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const form = getByBridgeFormState();
+  try {
+    lastStructuralResearchResult = await fetchJsonApi('/api/v2/integrations/blatant-why/research', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        project_id: selectedWorkbenchProjectId,
+        target: form.target,
+        modality: form.modality,
+        pdb_rows: form.pdbRows,
+        sabdab_limit: form.sabdabLimit,
+      }),
+    });
+    renderByBridgePanel();
+    showWorkbenchMessage(
+      `Structural research 完成：UniProt=${lastStructuralResearchResult.top_recommendation?.uniprot_accession || 'N/A'}`,
+      'ok'
+    );
+  } catch (error) {
+    console.warn('Structural research preview failed:', error);
+    showWorkbenchMessage(`Structural research 失败：${error.message}`, 'error');
+  }
+}
+
+async function executeStructuralResearchStep() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const form = getByBridgeFormState();
+  try {
+    const execution = await fetchJsonApi(
+      `/api/v2/projects/${selectedWorkbenchProjectId}/capabilities/capability.structural_research/execute`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input_payload: {
+            target: form.target,
+            modality: form.modality,
+            pdb_rows: form.pdbRows,
+            sabdab_limit: form.sabdabLimit,
+          },
+          triggered_by: 'web.workbench.by_bridge',
+        }),
+      }
+    );
+    lastStructuralResearchResult = execution.structured_output || null;
+    await loadWorkbench(selectedWorkbenchProjectId);
+    showWorkbenchMessage(`Research step 已写入 artifact：${execution.capability_name || 'Structural Research'}`, 'ok');
+  } catch (error) {
+    console.warn('Structural research capability failed:', error);
+    showWorkbenchMessage(`Research step 执行失败：${error.message}`, 'error');
+  }
+}
+
+function selectCapability(capabilityId) {
+  selectedCapabilityId = capabilityId || '';
+  renderCapabilityPanel();
+}
+
+function parseWorkbenchJsonInput(inputId) {
+  const raw = document.getElementById(inputId)?.value.trim() || '';
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') {
+      throw new Error('必须是 JSON object');
+    }
+    return parsed;
+  } catch (error) {
+    throw new Error(`JSON 输入无效：${error.message}`);
+  }
+}
+
+async function bootstrapProjectImplementation() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const blueprintId = document.getElementById('implementationBlueprintSelect')?.value || '';
+  const note = document.getElementById('implementationBootstrapNote')?.value.trim() || '';
+  try {
+    await fetchJsonApi(`/api/v2/projects/${selectedWorkbenchProjectId}/implementation/bootstrap`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        blueprint_id: blueprintId,
+        activated_by: 'web.workbench',
+        note,
+      }),
+    });
+    showWorkbenchMessage('Implementation blueprint 已激活', 'ok');
+    await loadWorkbench(selectedWorkbenchProjectId);
+  } catch (error) {
+    console.warn('Bootstrap implementation failed:', error);
+    showWorkbenchMessage(`激活 implementation 失败：${error.message}`, 'error');
+  }
+}
+
+async function executeSelectedCapability() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const capabilityId = document.getElementById('capabilitySelect')?.value || selectedCapabilityId;
+  if (!capabilityId) {
+    alert('请选择一个 capability');
+    return;
+  }
+  let inputPayload = {};
+  try {
+    inputPayload = parseWorkbenchJsonInput('capabilityPayloadInput');
+  } catch (error) {
+    showWorkbenchMessage(error.message, 'error');
+    return;
+  }
+  const syncToSecondMe = Boolean(document.getElementById('capabilitySyncToSecondMe')?.checked);
+  try {
+    const execution = await fetchJsonApi(`/api/v2/projects/${selectedWorkbenchProjectId}/capabilities/${encodeURIComponent(capabilityId)}/execute`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input_payload: inputPayload,
+        triggered_by: 'web.workbench.capability',
+        sync_to_second_me: syncToSecondMe,
+      }),
+    });
+    showWorkbenchMessage(`Capability 已执行：${execution.capability_name || capabilityId}`, 'ok');
+    await loadWorkbench(selectedWorkbenchProjectId);
+  } catch (error) {
+    console.warn('Execute capability failed:', error);
+    showWorkbenchMessage(`执行 capability 失败：${error.message}`, 'error');
+  }
+}
+
+async function syncProjectSecondMe() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const instanceId = document.getElementById('secondMeInstanceSelect')?.value || '';
+  if (!instanceId) {
+    showWorkbenchMessage('当前项目还没有可用的 Second Me 实例', 'error');
+    return;
+  }
+  try {
+    lastSecondMeSyncResult = await fetchJsonApi(`/api/v2/projects/${selectedWorkbenchProjectId}/second-me/sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instance_id: instanceId,
+        workflow_run_id: selectedRunId || undefined,
+      }),
+    });
+    showWorkbenchMessage('Second Me 项目同步已完成', 'ok');
+    await loadWorkbench(selectedWorkbenchProjectId);
+  } catch (error) {
+    console.warn('Second Me sync failed:', error);
+    showWorkbenchMessage(`Second Me 同步失败：${error.message}`, 'error');
+  }
+}
+
+async function runBlatantWhyScreening() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  try {
+    lastByScreeningResult = await fetchJsonApi('/api/v2/integrations/blatant-why/screening', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project_id: selectedWorkbenchProjectId }),
+    });
+    renderByBridgePanel();
+    showWorkbenchMessage(`BY screening 完成，gate = ${lastByScreeningResult.campaign_recommendation?.gate || 'N/A'}`, 'ok');
+  } catch (error) {
+    console.warn('BY screening failed:', error);
+    showWorkbenchMessage(`BY screening 失败：${error.message}`, 'error');
+  }
+}
+
+async function runBlatantWhyBiologicsPipeline() {
+  return runBlatantWhyBiologicsPipelineWithMode(false);
+}
+
+async function submitTamarindBiologicsJob() {
+  return runBlatantWhyBiologicsPipelineWithMode(true);
+}
+
+async function runBlatantWhyBiologicsPipelineWithMode(submitJob) {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const form = getByBridgeFormState();
+  try {
+    const payload = await fetchJsonApi('/api/v2/integrations/blatant-why/biologics-pipeline', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        project_id: selectedWorkbenchProjectId,
+        modality: form.modality,
+        scaffolds: form.scaffolds.length ? form.scaffolds : undefined,
+        seeds: form.seeds,
+        designs_per_seed: form.designsPerSeed,
+        complexity: form.complexity,
+        submit_job: submitJob,
+        wait_for_completion: form.waitForCompletion,
+      }),
+    });
+    lastBiologicsPipelineResult = payload.campaign || payload;
+    lastTamarindJobResult = payload.tamarind_job || null;
+    await refreshBridgeRuntime({ projectId: selectedWorkbenchProjectId, includeJobs: true });
+    renderByBridgePanel();
+    showWorkbenchMessage(
+      submitJob
+        ? `Tamarind job 已提交：${lastTamarindJobResult?.job_name || 'submitted'}`
+        : `Biologics pipeline 已生成：${lastBiologicsPipelineResult.modality}`,
+      'ok'
+    );
+  } catch (error) {
+    console.warn('BY biologics pipeline failed:', error);
+    showWorkbenchMessage(`${submitJob ? 'Tamarind 提交' : 'Biologics pipeline'} 失败：${error.message}`, 'error');
+  }
+}
+
+async function refreshBridgeRuntimeManual() {
+  try {
+    await refreshBridgeRuntime({ projectId: selectedWorkbenchProjectId, includeJobs: true, rerender: true });
+    showWorkbenchMessage('BY / Tamarind runtime 已刷新', 'ok');
+  } catch (error) {
+    console.warn('Bridge runtime refresh failed:', error);
+    showWorkbenchMessage(`刷新 runtime 失败：${error.message}`, 'error');
+  }
+}
+
+async function executeMediPharmaAction() {
+  if (!selectedWorkbenchProjectId) {
+    alert('请先选择项目');
+    return;
+  }
+  const action = document.getElementById('mediPharmaActionSelect')?.value || 'discover_targets';
+  let inputPayload = {};
+  try {
+    inputPayload = parseWorkbenchJsonInput('mediPharmaPayloadInput');
+  } catch (error) {
+    showWorkbenchMessage(error.message, 'error');
+    return;
+  }
+  try {
+    lastMediPharmaResult = await fetchJsonApi('/api/v2/integrations/medi-pharma/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action,
+        project_id: selectedWorkbenchProjectId,
+        input_payload: inputPayload,
+      }),
+    });
+    renderMediPharmaPanel();
+    showWorkbenchMessage(`MediPharma 已执行：${action}`, 'ok');
+  } catch (error) {
+    console.warn('MediPharma execution failed:', error);
+    showWorkbenchMessage(`MediPharma 执行失败：${error.message}`, 'error');
+  }
+}
+
+async function refreshMediPharmaRuntimeManual() {
+  try {
+    mediPharmaHealth = await fetchJsonApi('/api/v2/integrations/medi-pharma/health');
+    renderMediPharmaPanel();
+    showWorkbenchMessage('MediPharma 状态已刷新', 'ok');
+  } catch (error) {
+    console.warn('MediPharma runtime refresh failed:', error);
+    showWorkbenchMessage(`MediPharma 状态刷新失败：${error.message}`, 'error');
+  }
+}
+
+async function loadMediPharmaEcosystem() {
+  try {
+    mediPharmaEcosystem = await fetchJsonApi('/api/v2/integrations/medi-pharma/ecosystem');
+    renderMediPharmaPanel();
+    showWorkbenchMessage('MediPharma 生态概览已加载', 'ok');
+  } catch (error) {
+    console.warn('MediPharma ecosystem load failed:', error);
+    showWorkbenchMessage(`MediPharma 生态概览失败：${error.message}`, 'error');
+  }
+}
+
+async function pollTamarindJob(jobName) {
+  try {
+    lastTamarindJobResult = await fetchJsonApi(`/api/v2/integrations/tamarind/jobs/${encodeURIComponent(jobName)}/poll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        interval_seconds: 5,
+        timeout_seconds: 30,
+        include_result: true,
+      }),
+    });
+    await refreshBridgeRuntime({ projectId: selectedWorkbenchProjectId, includeJobs: true });
+    renderByBridgePanel();
+    showWorkbenchMessage(`Tamarind job 已轮询：${jobName}`, 'ok');
+  } catch (error) {
+    console.warn('Tamarind poll failed:', error);
+    showWorkbenchMessage(`Tamarind 轮询失败：${error.message}`, 'error');
+  }
+}
+
+async function loadTamarindJobResult(jobName) {
+  try {
+    lastTamarindJobResult = await fetchJsonApi(`/api/v2/integrations/tamarind/jobs/${encodeURIComponent(jobName)}/result`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+    renderByBridgePanel();
+    showWorkbenchMessage(`已尝试读取 Tamarind result：${jobName}`, 'ok');
+  } catch (error) {
+    console.warn('Tamarind result load failed:', error);
+    showWorkbenchMessage(`读取 Tamarind result 失败：${error.message}`, 'error');
+  }
 }
 
 function renderWorkspaceMembers() {
@@ -1468,15 +2674,17 @@ function renderHomeWorkbenchSnapshot() {
     return;
   }
 
-  const { project, workspace = {}, timeline = [], h2a_threads: threads = [] } = workbenchData;
+  const { project, workspace = {}, timeline = [], h2a_threads: threads = [], implementation = {} } = workbenchData;
   const currentRun = getSelectedRun();
   const humanMembers = (workspace.members || []).filter((member) => (member.type || 'human') !== 'agent');
+  const currentPhase = implementation.current_phase || {};
+  const recentExecutions = implementation.recent_executions || [];
   snapshot.innerHTML = `
     <div class="home-workbench-summary">
       <div class="home-workbench-head">
         <div>
           <div class="home-workbench-title">${escapeHtml(project.name)}</div>
-          <div class="home-workbench-copy">${escapeHtml(project.target || '未设置靶点')} · ${escapeHtml(project.disease || '未设置疾病')} · ${escapeHtml(formatStageLabel(project.stage))}</div>
+          <div class="home-workbench-copy">${escapeHtml(project.target || '未设置靶点')} · ${escapeHtml(project.disease || '未设置疾病')} · ${escapeHtml(currentPhase.name || formatStageLabel(project.stage))}</div>
         </div>
         <span class="status-badge ${statusClass(project.status)}">${escapeHtml(formatStatus(project.status))}</span>
       </div>
@@ -1485,6 +2693,8 @@ function renderHomeWorkbenchSnapshot() {
         <div class="home-workbench-metric"><span>Workflow Runs</span><strong>${(workbenchData.workflow_runs || []).length}</strong></div>
         <div class="home-workbench-metric"><span>Timeline Items</span><strong>${timeline.length}</strong></div>
         <div class="home-workbench-metric"><span>H2A Threads</span><strong>${threads.length}</strong></div>
+        <div class="home-workbench-metric"><span>Capabilities</span><strong>${(implementation.available_capabilities || []).length}</strong></div>
+        <div class="home-workbench-metric"><span>Executions</span><strong>${recentExecutions.length}</strong></div>
       </div>
     </div>
   `;
@@ -1506,6 +2716,7 @@ function renderHomeWorkbenchSnapshot() {
         <span class="status-badge ${statusClass(currentRun.status)}">${escapeHtml(formatStatus(currentRun.status))}</span>
         ${currentStep ? `<span class="artifact-pill">current · ${escapeHtml(currentStep.name)}</span>` : ''}
         ${currentStep?.owner_label ? `<span class="artifact-pill">owner · ${escapeHtml(currentStep.owner_label)}</span>` : ''}
+        ${currentPhase?.name ? `<span class="artifact-pill">phase · ${escapeHtml(currentPhase.name)}</span>` : ''}
       </div>
       <div class="home-run-steps">${recentTimeline || '<span class="artifact-pill">暂无最近 artifact</span>'}</div>
     </div>

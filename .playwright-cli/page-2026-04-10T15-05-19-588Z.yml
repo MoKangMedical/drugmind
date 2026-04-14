@@ -1,0 +1,445 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "🧬 DrugMind" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e5]:
+        - link "首页" [ref=e6] [cursor=pointer]:
+          - /url: "#"
+        - link "讨论" [ref=e7] [cursor=pointer]:
+          - /url: "#"
+        - link "工作台" [active] [ref=e8] [cursor=pointer]:
+          - /url: "#"
+        - link "AI团队" [ref=e9] [cursor=pointer]:
+          - /url: "#"
+        - link "分子工具" [ref=e10] [cursor=pointer]:
+          - /url: "#"
+        - link "关于" [ref=e11] [cursor=pointer]:
+          - /url: "#"
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e15]: Local / Custom Host
+      - generic [ref=e16]:
+        - text: "API:"
+        - code [ref=e17]: http://127.0.0.1:8097
+      - generic [ref=e18]: 未检测
+    - generic [ref=e19]:
+      - button "调试配置" [ref=e20] [cursor=pointer]
+      - button "检测 API" [ref=e21] [cursor=pointer]
+  - main [ref=e22]:
+    - generic [ref=e385]:
+      - generic [ref=e386]:
+        - heading "🛰️ Workflow Workbench" [level=1] [ref=e387]
+        - paragraph [ref=e388]: 可视化执行、审批和交接项目流程，把 AI agent、人工 owner 和产物时间线放在一个界面里。
+      - generic [ref=e389]:
+        - generic [ref=e390]:
+          - generic [ref=e391]: 项目
+          - combobox "项目" [ref=e392]:
+            - option "Browser H2A 526449 · 靶点确认" [selected]
+            - option "SecondMe Architecture Program · 靶点确认"
+            - option "Phase2 API Smoke · 靶点确认"
+            - option "API Skeleton Smoke · 靶点确认"
+        - generic [ref=e393]:
+          - button "刷新工作台" [ref=e394] [cursor=pointer]
+          - button "新建项目" [ref=e395] [cursor=pointer]
+      - generic [ref=e396]:
+        - complementary [ref=e397]:
+          - generic [ref=e398]:
+            - generic [ref=e399]:
+              - generic [ref=e400]:
+                - heading "项目概览" [level=2] [ref=e401]
+                - paragraph [ref=e402]: 工作区成员、AI agent、Second Me 绑定和关键指标。
+              - generic [ref=e403]: 靶点确认
+            - generic [ref=e404]:
+              - generic [ref=e405]:
+                - generic [ref=e406]:
+                  - generic [ref=e407]: Browser H2A 526449
+                  - generic [ref=e408]:
+                    - text: KRAS · CRC
+                    - text: "项目 ID: browser_h2a_1775526449"
+                - generic [ref=e409]: active
+              - generic [ref=e410]:
+                - generic [ref=e411]:
+                  - generic [ref=e412]: 活跃流程
+                  - generic [ref=e413]: "0"
+                - generic [ref=e414]:
+                  - generic [ref=e415]: 化合物
+                  - generic [ref=e416]: "0"
+                - generic [ref=e417]:
+                  - generic [ref=e418]: 记忆条目
+                  - generic [ref=e419]: "3"
+                - generic [ref=e420]:
+                  - generic [ref=e421]: 关键决策
+                  - generic [ref=e422]: "0"
+                - generic [ref=e423]:
+                  - generic [ref=e424]: Capabilities
+                  - generic [ref=e425]: "4"
+                - generic [ref=e426]:
+                  - generic [ref=e427]: Executions
+                  - generic [ref=e428]: "0"
+              - generic [ref=e429]:
+                - generic [ref=e430]:
+                  - generic [ref=e431]: Workspace Owner
+                  - strong [ref=e432]: 未设置
+                - generic [ref=e433]:
+                  - generic [ref=e434]: 人工成员
+                  - strong [ref=e435]: "0"
+                - generic [ref=e436]:
+                  - generic [ref=e437]: 默认 AI Agent
+                  - strong [ref=e438]: "5"
+                - generic [ref=e439]:
+                  - generic [ref=e440]: Second Me Bindings
+                  - strong [ref=e441]: "0"
+                - generic [ref=e442]:
+                  - generic [ref=e443]: 当前 Run
+                  - strong [ref=e444]: 暂无
+                - generic [ref=e445]:
+                  - generic [ref=e446]: Blueprint
+                  - strong [ref=e447]: AI-First Small Molecule Discovery
+                - generic [ref=e448]:
+                  - generic [ref=e449]: 当前 Phase
+                  - strong [ref=e450]: Target Assessment
+                - generic [ref=e451]:
+                  - generic [ref=e452]: Phase Status
+                  - strong [ref=e453]: active
+                - generic [ref=e454]:
+                  - generic [ref=e455]: 项目模态
+                  - strong [ref=e456]: small_molecule
+                - generic [ref=e457]:
+                  - generic [ref=e458]: 预算
+                  - strong [ref=e459]: "0"
+          - generic [ref=e460]:
+            - generic [ref=e461]:
+              - generic [ref=e462]:
+                - heading "Implementation Blueprint" [level=2] [ref=e463]
+                - paragraph [ref=e464]: 把项目阶段、默认 capability、退出标准和 BY 映射放到同一块控制面板。
+              - button "刷新目录" [ref=e466] [cursor=pointer]
+            - generic [ref=e468]:
+              - generic [ref=e469]:
+                - combobox [ref=e470]:
+                  - option "AI-First Biologics Discovery"
+                  - option "AI-First Small Molecule Discovery" [selected]
+                - textbox "可选说明，例如：切换到 biologics 蓝图，准备进入结构研究。" [ref=e471]
+                - button "重新激活 Implementation" [ref=e472] [cursor=pointer]
+              - generic [ref=e473]:
+                - generic [ref=e474]:
+                  - generic [ref=e475]:
+                    - strong [ref=e476]: Target Assessment
+                    - paragraph [ref=e477]: Validate whether the program should be started at all.
+                  - generic [ref=e478]: active
+                - generic [ref=e481]:
+                  - generic [ref=e482]: blueprint · AI-First Small Molecule Discovery
+                  - generic [ref=e483]: phase · phase.target_assessment
+                  - generic [ref=e484]: progress · 17%
+                  - generic [ref=e485]: recent executions · 0
+              - generic [ref=e486]:
+                - article [ref=e487]:
+                  - generic [ref=e488]: "01"
+                  - strong [ref=e489]: Target Assessment
+                  - paragraph [ref=e490]: Lock target rationale, assay entry point, and translational anchor.
+                - article [ref=e491]:
+                  - generic [ref=e492]: "02"
+                  - strong [ref=e493]: Hit Generation
+                  - paragraph [ref=e494]: Convert screening output into a disciplined hit list.
+                - article [ref=e495]:
+                  - generic [ref=e496]: "03"
+                  - strong [ref=e497]: Hit to Lead
+                  - paragraph [ref=e498]: Build the first serious chemistry-learning loop.
+                - article [ref=e499]:
+                  - generic [ref=e500]: "04"
+                  - strong [ref=e501]: Lead Optimization
+                  - paragraph [ref=e502]: Create a nomination-ready lead series.
+                - article [ref=e503]:
+                  - generic [ref=e504]: "05"
+                  - strong [ref=e505]: Candidate Selection
+                  - paragraph [ref=e506]: Make the project explainable to humans and personas.
+                - article [ref=e507]:
+                  - generic [ref=e508]: "06"
+                  - strong [ref=e509]: Translational Execution
+                  - paragraph [ref=e510]: Maintain synchronized project memory across humans, agents, and external personas.
+              - generic [ref=e511]:
+                - generic [ref=e512]:
+                  - generic [ref=e513]: Active Capabilities
+                  - strong [ref=e514]: "4"
+                - generic [ref=e515]:
+                  - generic [ref=e516]: Exit Criteria
+                  - strong [ref=e517]: "3"
+                - generic [ref=e518]:
+                  - generic [ref=e519]: Recommended Workflows
+                  - strong [ref=e520]: "2"
+                - generic [ref=e521]:
+                  - generic [ref=e522]: Success Metrics
+                  - strong [ref=e523]: "3"
+              - generic [ref=e524]:
+                - generic [ref=e525]: capability · Structural Research
+                - generic [ref=e526]: capability · Target Landscape
+                - generic [ref=e527]: capability · Assay Strategy
+                - generic [ref=e528]: capability · Biomarker Strategy
+              - generic [ref=e529]:
+                - generic [ref=e530]: • target rationale and disease linkage documented
+                - generic [ref=e531]: • assay cascade and data quality gate defined
+                - generic [ref=e532]: • initial biomarker plan agreed
+          - generic [ref=e533]:
+            - generic [ref=e535]:
+              - heading "成员与 Owner" [level=2] [ref=e536]
+              - paragraph [ref=e537]: 让 workflow step 在 AI agent 和人工 owner 之间切换。
+            - generic [ref=e538]:
+              - textbox "成员名称，例如：Lin" [ref=e539]
+              - textbox "角色，例如：Medicinal Chemist" [ref=e540]
+              - button "添加成员" [ref=e541] [cursor=pointer]
+            - generic [ref=e543]:
+              - generic [ref=e544]:
+                - generic [ref=e545]: Browser 526467
+                - generic [ref=e546]: Project Scientist
+              - generic [ref=e547]: User
+          - generic [ref=e548]:
+            - generic [ref=e550]:
+              - heading "Second Me Sync" [level=2] [ref=e551]
+              - paragraph [ref=e552]: 查看绑定、挑选实例并把 implementation、workflow 和 memory 同步出去。
+            - generic [ref=e554]:
+              - generic [ref=e555]:
+                - combobox [ref=e556]:
+                  - option "暂无绑定实例" [selected]
+                - button "同步项目到 Second Me" [ref=e557] [cursor=pointer]
+              - generic [ref=e559]: 当前项目还没有 Second Me binding，请先到工具页创建并绑定实例。
+          - generic [ref=e560]:
+            - generic [ref=e562]:
+              - heading "Artifact Timeline" [level=2] [ref=e563]
+              - paragraph [ref=e564]: 把 decision、discussion、memory、Second Me sync 拉成一条项目时间线。
+            - generic [ref=e565]:
+              - article [ref=e566]:
+                - generic [ref=e567]:
+                  - generic [ref=e568]: 🧠 Implementation bootstrap · Target Assessment
+                  - generic [ref=e569]: 04/10 22:23
+                - generic [ref=e570]: Blueprint=AI-First Small Molecule Discovery; phase=Target Assessment; objective=Lock target rationale, assay entry point, and translational anchor.; capabilities=capability.structural_research, capability.target_landscape, capability.assay_strategy, capability.biomarker_strategy; activated_by=
+                - generic [ref=e571]:
+                  - generic [ref=e572]: implementation bootstrap
+                  - generic [ref=e573]: memory
+                  - generic [ref=e574]: memory · implementation_bootstrap
+              - article [ref=e575]:
+                - generic [ref=e576]:
+                  - generic [ref=e577]: 🧠 H2A · Browser 526467 ↔ 数据科学家, 生物学家
+                  - generic [ref=e578]: 04/07 09:48
+                - generic [ref=e579]: "Human: 请两位一起判断这个新项目下一周应该优先做什么。 数据科学家: 从数据驱动的角度来看，当前项目处于靶点识别（target_id）阶段，针对KRAS突变型结直肠癌（CRC）。基于现有信息和药物发现的一般流程，我建议下一周优先执行以下任务： 1. **数据收集与整合** - 立即系统收集KRAS在CRC中的突变频率、亚型分布（如G12C、G12D、G13D等）及现有抑制剂数据（如sotorasib、adagrasib的活性数据）。 - 整合公开数据库（如TCGA、COSMIC）的突变谱与临床预后关联数据，通过生存分析（Kaplan-Meier、Cox回归）量化不同突变的预后价值。 - **目"
+                - generic [ref=e580]:
+                  - generic [ref=e581]: h2a group exchange
+                  - generic [ref=e582]: actor · agent.data_scientist, agent.biologist
+                  - generic [ref=e583]: memory
+                  - generic [ref=e584]: memory · h2a_group_exchange
+              - article [ref=e585]:
+                - generic [ref=e586]:
+                  - generic [ref=e587]: 💭 H2A · 生物学家
+                  - generic [ref=e588]: 04/07 09:48
+                - generic [ref=e589]: "基于我的专业判断（生物学家/药理学家视角），数据科学家的建议在**数据整合与计算建模**方面是全面且合理的起点。然而，从**靶点验证和活性评估的生物学严谨性**出发，我认为当前阶段（target_id）的核心风险在于**过早陷入计算模拟而缺乏关键的实验锚点**。KRAS是一个已有大量研究但仍有重大挑战的靶点，单纯的计算预测若无生物学验证，极易产生误导。 因此，我建议下一周的优先事项应**更侧重于建立生物学基础和实验验证框架**，具体如下： ### **第一优先：深入的文献挖掘与遗传学证据分析（奠定生物学合理性）** * **任务**：系统性地收集并分析KRAS在CRC中的**遗传学证据"
+                - generic [ref=e590]:
+                  - generic [ref=e591]: agent
+                  - generic [ref=e592]: actor · 生物学家
+                  - generic [ref=e593]: h2a_message
+                  - generic [ref=e594]: sender · agent
+                  - generic [ref=e595]: mode · group
+                  - generic [ref=e596]: agents · 2
+              - article [ref=e597]:
+                - generic [ref=e598]:
+                  - generic [ref=e599]: 💭 H2A · 数据科学家
+                  - generic [ref=e600]: 04/07 09:48
+                - generic [ref=e601]: 从数据驱动的角度来看，当前项目处于靶点识别（target_id）阶段，针对KRAS突变型结直肠癌（CRC）。基于现有信息和药物发现的一般流程，我建议下一周优先执行以下任务： 1. **数据收集与整合** - 立即系统收集KRAS在CRC中的突变频率、亚型分布（如G12C、G12D、G13D等）及现有抑制剂数据（如sotorasib、adagrasib的活性数据）。 - 整合公开数据库（如TCGA、COSMIC）的突变谱与临床预后关联数据，通过生存分析（Kaplan-Meier、Cox回归）量化不同突变的预后价值。 - **目标**：建立结构化数据集，为后续建模提供基础。 2. **靶点可药性评估**
+                - generic [ref=e602]:
+                  - generic [ref=e603]: agent
+                  - generic [ref=e604]: actor · 数据科学家
+                  - generic [ref=e605]: h2a_message
+                  - generic [ref=e606]: sender · agent
+                  - generic [ref=e607]: mode · group
+                  - generic [ref=e608]: agents · 2
+              - article [ref=e609]:
+                - generic [ref=e610]:
+                  - generic [ref=e611]: 💭 H2A · Browser 526467
+                  - generic [ref=e612]: 04/07 09:47
+                - generic [ref=e613]: 请两位一起判断这个新项目下一周应该优先做什么。
+                - generic [ref=e614]:
+                  - generic [ref=e615]: human
+                  - generic [ref=e616]: actor · Browser 526467
+                  - generic [ref=e617]: h2a_message
+                  - generic [ref=e618]: sender · human
+                  - generic [ref=e619]: mode · group
+                  - generic [ref=e620]: agents · 2
+              - article [ref=e621]:
+                - generic [ref=e622]:
+                  - generic [ref=e623]: 🤝 H2A Group · Browser 526467 ↔ 2 Agents
+                  - generic [ref=e624]: 04/07 09:47
+                - generic [ref=e625]: Browser 526467 ↔ 2 Agents
+                - generic [ref=e626]:
+                  - generic [ref=e627]: active
+                  - generic [ref=e628]: actor · Browser 526467
+                  - generic [ref=e629]: h2a_thread
+                  - generic [ref=e630]: mode · group
+                  - generic [ref=e631]: messages · 3
+                  - generic [ref=e632]: agents · 2
+              - article [ref=e633]:
+                - generic [ref=e634]:
+                  - generic [ref=e635]: 🧠 Browser H2A 526449 bootstrap
+                  - generic [ref=e636]: 04/07 09:47
+                - generic [ref=e637]: Project created for target=KRAS; disease=CRC; budget=0
+                - generic [ref=e638]:
+                  - generic [ref=e639]: project brief
+                  - generic [ref=e640]: memory
+                  - generic [ref=e641]: memory · project_brief
+        - generic [ref=e642]:
+          - generic [ref=e643]:
+            - generic [ref=e644]:
+              - generic [ref=e646]:
+                - heading "Capability Launcher" [level=2] [ref=e647]
+                - paragraph [ref=e648]: 直接执行 DrugMind capability，并把结果推回 artifact 和 Second Me。
+              - generic [ref=e650]:
+                - generic [ref=e651]:
+                  - combobox [ref=e652]:
+                    - option "Structural Research · biology" [selected]
+                    - option "Target Landscape · biology"
+                    - option "Assay Strategy · biology"
+                    - option "Biomarker Strategy · translational"
+                  - 'textbox "可选 JSON input_payload，例如：{\"compound_limit\": 12, \"compound_ids\": [\"cmpd_1\"]}" [ref=e653]'
+                  - generic [ref=e654]:
+                    - checkbox "执行后同步到 Second Me" [ref=e655]
+                    - generic [ref=e656]: 执行后同步到 Second Me
+                  - button "执行 Capability" [ref=e657] [cursor=pointer]
+                - generic [ref=e658]:
+                  - generic [ref=e659]:
+                    - generic [ref=e660]:
+                      - strong [ref=e661]: Structural Research
+                      - paragraph [ref=e662]: Use PDB, UniProt, SAbDab, and knowledge traces to frame target feasibility.
+                    - generic [ref=e663]: biology
+                  - generic [ref=e664]:
+                    - generic [ref=e665]: phase · Target Assessment
+                    - generic [ref=e666]: target_id
+                    - generic [ref=e667]: screening
+                  - generic [ref=e668]:
+                    - generic [ref=e669]: input · target
+                    - generic [ref=e670]: input · modality
+                    - generic [ref=e671]: output · target_structure_plan
+                    - generic [ref=e672]: output · prior_art_summary
+                  - generic [ref=e673]:
+                    - generic [ref=e674]: agent · agent.biologist
+                    - generic [ref=e675]: agent · agent.discovery_strategist
+                    - generic [ref=e676]: tool · tool.by_mcp_bridge
+                    - generic [ref=e677]: tool · tool.project_memory
+                - generic [ref=e679]: 当前 phase 还没有 capability execution
+            - generic [ref=e680]:
+              - generic [ref=e682]:
+                - heading "BY / Structural Biology Bridge" [level=2] [ref=e683]
+                - paragraph [ref=e684]: 把 BY 的结构研究、Tamarind submit/status/poll 和 biologics pipeline 放进同一个可执行面板。
+              - generic [ref=e686]:
+                - generic [ref=e687]:
+                  - textbox "Research target，例如 EGFR / ERBB2" [ref=e688]: KRAS
+                  - generic [ref=e689]:
+                    - spinbutton [ref=e690]: "4"
+                    - spinbutton [ref=e691]: "4"
+                  - combobox [ref=e692]:
+                    - option "small_molecule" [selected]
+                    - option "nanobody"
+                    - option "antibody"
+                    - option "protein"
+                  - generic [ref=e693]:
+                    - spinbutton [ref=e694]: "8"
+                    - spinbutton [ref=e695]: "8"
+                  - textbox "可选 scaffold，逗号分隔" [ref=e696]
+                  - combobox [ref=e697]:
+                    - option "light"
+                    - option "standard" [selected]
+                    - option "heavy"
+                  - generic [ref=e698]:
+                    - checkbox "提交 Tamarind 后等待任务完成并尝试回收 result" [ref=e699]
+                    - generic [ref=e700]: 提交 Tamarind 后等待任务完成并尝试回收 result
+                  - generic [ref=e701]:
+                    - button "Research Preview" [ref=e702] [cursor=pointer]
+                    - button "执行 Research Step" [ref=e703] [cursor=pointer]
+                    - button "运行 BY Screening" [ref=e704] [cursor=pointer]
+                  - generic [ref=e705]:
+                    - button "生成 Biologics Pipeline" [ref=e706] [cursor=pointer]
+                    - button "提交 Tamarind Job" [ref=e707] [cursor=pointer]
+                    - button "刷新 Runtime" [ref=e708] [cursor=pointer]
+                - generic [ref=e709]:
+                  - generic [ref=e710]:
+                    - generic [ref=e711]: Research Providers
+                    - generic [ref=e712]: "3"
+                  - generic [ref=e713]:
+                    - generic [ref=e714]: Tamarind Status
+                    - generic [ref=e715]: not configured
+                  - generic [ref=e716]:
+                    - generic [ref=e717]: Recent Jobs
+                    - generic [ref=e718]: "0"
+                  - generic [ref=e719]:
+                    - generic [ref=e720]: Latest SAbDab Hits
+                    - generic [ref=e721]: "0"
+                - generic [ref=e722]:
+                  - generic [ref=e723]:
+                    - generic [ref=e724]:
+                      - strong [ref=e725]: BY Adapter · Browser H2A 526449
+                      - paragraph [ref=e726]: implementation state + workflow runs + memory
+                    - generic [ref=e727]: small_molecule
+                  - generic [ref=e728]:
+                    - generic [ref=e729]: compute · tamarind
+                    - generic [ref=e730]: status · not_configured
+                    - generic [ref=e731]: servers · 5
+                    - generic [ref=e732]: tools · 0
+                    - generic [ref=e733]: source · BY
+                  - generic [ref=e734]:
+                    - generic [ref=e735]: uniprot · 3 caps
+                    - generic [ref=e736]: pdb · 3 caps
+                    - generic [ref=e737]: sabdab · 2 caps
+                - generic [ref=e738]:
+                  - article [ref=e739]:
+                    - generic [ref=e740]: "01"
+                    - strong [ref=e741]: research
+                    - paragraph [ref=e742]: agent.biologist · target biology, structure, prior art, assay entry points
+                  - article [ref=e743]:
+                    - generic [ref=e744]: "02"
+                    - strong [ref=e745]: design
+                    - paragraph [ref=e746]: agent.medicinal_chemist · compound ideation, series strategy, next-cycle design
+                  - article [ref=e747]:
+                    - generic [ref=e748]: "03"
+                    - strong [ref=e749]: screening
+                    - paragraph [ref=e750]: agent.pharmacologist · ADMET-aware triage and developability gating
+                  - article [ref=e751]:
+                    - generic [ref=e752]: "04"
+                    - strong [ref=e753]: ranking
+                    - paragraph [ref=e754]: agent.data_scientist · portfolio ranking, Pareto front, backup selection
+                - generic [ref=e755]:
+                  - generic [ref=e756]: PDB · structural_biology
+                  - generic [ref=e757]: UniProt · target_biology
+                  - generic [ref=e758]: SAbDab · biologics_prior_art
+                  - generic [ref=e759]: Campaign State · campaign_management
+                  - generic [ref=e760]: Knowledge · learning_system
+                - generic [ref=e762]: 暂无 Tamarind job。没有 API Key 时这里会保持为空。
+          - generic [ref=e763]:
+            - generic [ref=e765]:
+              - heading "Workflow Launcher" [level=2] [ref=e766]
+              - paragraph [ref=e767]: 选择模板、输入议题、决定是否自动推进到审批门。
+            - generic [ref=e768]:
+              - combobox [ref=e769]:
+                - option "Biologics Campaign Workflow · drug_discovery" [selected]
+                - option "Candidate Nomination Workflow · drug_discovery"
+                - option "Discovery Bootstrap Workflow · drug_discovery"
+                - option "Hit Triage Workflow · drug_discovery"
+                - option "Integration Delivery Workflow · platform"
+                - option "Lead Optimization Workflow · drug_discovery"
+                - option "Second Me Enablement Workflow · platform"
+                - option "Target Evaluation Workflow · drug_discovery"
+              - textbox "输入本轮 workflow 的议题，例如：Evaluate EGFR target package for the next sprint" [ref=e770]
+              - generic [ref=e771]:
+                - checkbox "启动后自动执行，直到遇到人工 owner 或审批门" [checked] [ref=e772]
+                - generic [ref=e773]: 启动后自动执行，直到遇到人工 owner 或审批门
+              - button "启动 Workflow" [ref=e774] [cursor=pointer]
+          - generic [ref=e775]:
+            - generic [ref=e776]:
+              - generic [ref=e777]:
+                - heading "Execution Board" [level=2] [ref=e778]
+                - paragraph [ref=e779]: 逐步执行、切换 owner、人工完成、审批放行、查看每步产物。
+              - generic [ref=e780]:
+                - button "执行当前步" [ref=e781] [cursor=pointer]
+                - button "推进到门控" [ref=e782] [cursor=pointer]
+            - generic [ref=e784]: 还没有 workflow run
+    - text: ☐ ☐ ☐ ☐ ☐ ☐
+  - contentinfo [ref=e382]:
+    - paragraph [ref=e383]:
+      - text: © 2026 DrugMind · AI驱动的药物研发协作平台 ·
+      - link "GitHub" [ref=e384] [cursor=pointer]:
+        - /url: https://github.com/MoKangMedical/drugmind

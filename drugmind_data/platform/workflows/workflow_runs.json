@@ -1,0 +1,746 @@
+{
+  "wf_3b97c98fed": {
+    "run_id": "wf_3b97c98fed",
+    "template_id": "workflow.target_evaluation",
+    "template_name": "Target Evaluation Workflow",
+    "project_id": "platform_skeleton_smoke",
+    "topic": "Evaluate STAT3 as a target",
+    "status": "running",
+    "current_step_index": 1,
+    "created_by": "codex",
+    "context": {},
+    "execution_context": {},
+    "linked_decisions": [],
+    "linked_discussions": [],
+    "linked_memory_entries": [],
+    "steps": [
+      {
+        "step_id": "collect_evidence",
+        "name": "Collect Evidence",
+        "description": "Gather the current biology and disease rationale.",
+        "agent_id": "agent.biologist",
+        "required_skills": [
+          "skill.target_evaluation",
+          "skill.evidence_review"
+        ],
+        "tool_ids": [
+          "tool.project_memory",
+          "tool.drugmind_scenario"
+        ],
+        "outputs": [
+          "target_dossier"
+        ],
+        "capability_id": "capability.structural_research",
+        "status": "completed",
+        "notes": [
+          "Smoke completed first step"
+        ],
+        "output": "Evidence package created",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.biologist",
+        "owner_label": "生物学家",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "2026-04-06T20:24:16.889006",
+        "completed_at": "2026-04-06T20:24:16.889398"
+      },
+      {
+        "step_id": "project_triage",
+        "name": "Project Triage",
+        "description": "Frame the target against program constraints and milestones.",
+        "agent_id": "agent.project_lead",
+        "required_skills": [
+          "skill.project_triage"
+        ],
+        "tool_ids": [
+          "tool.project_kanban",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "priority_plan"
+        ],
+        "capability_id": "capability.target_landscape",
+        "status": "in_progress",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.project_lead",
+        "owner_label": "项目负责人",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "2026-04-06T20:24:16.889400",
+        "completed_at": ""
+      },
+      {
+        "step_id": "decision_review",
+        "name": "Decision Review",
+        "description": "Review the evidence package and produce a go-forward recommendation.",
+        "agent_id": "agent.reviewer",
+        "required_skills": [
+          "skill.go_nogo_review"
+        ],
+        "tool_ids": [
+          "tool.drugmind_discuss",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "decision_record"
+        ],
+        "capability_id": "",
+        "status": "pending",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.reviewer",
+        "owner_label": "Scientific Reviewer",
+        "approval_required": true,
+        "approval_status": "required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "",
+        "completed_at": ""
+      }
+    ],
+    "created_at": "2026-04-06T20:24:16.889011",
+    "updated_at": "2026-04-06T20:24:16.889401"
+  },
+  "wf_770af09255": {
+    "run_id": "wf_770af09255",
+    "template_id": "workflow.target_evaluation",
+    "template_name": "Target Evaluation Workflow",
+    "project_id": "api_skeleton_smoke",
+    "topic": "Evaluate EGFR",
+    "status": "running",
+    "current_step_index": 0,
+    "created_by": "",
+    "context": {},
+    "execution_context": {},
+    "linked_decisions": [],
+    "linked_discussions": [],
+    "linked_memory_entries": [],
+    "steps": [
+      {
+        "step_id": "collect_evidence",
+        "name": "Collect Evidence",
+        "description": "Gather the current biology and disease rationale.",
+        "agent_id": "agent.biologist",
+        "required_skills": [
+          "skill.target_evaluation",
+          "skill.evidence_review"
+        ],
+        "tool_ids": [
+          "tool.project_memory",
+          "tool.drugmind_scenario"
+        ],
+        "outputs": [
+          "target_dossier"
+        ],
+        "capability_id": "capability.structural_research",
+        "status": "in_progress",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.biologist",
+        "owner_label": "生物学家",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "2026-04-06T20:24:54.506450",
+        "completed_at": ""
+      },
+      {
+        "step_id": "project_triage",
+        "name": "Project Triage",
+        "description": "Frame the target against program constraints and milestones.",
+        "agent_id": "agent.project_lead",
+        "required_skills": [
+          "skill.project_triage"
+        ],
+        "tool_ids": [
+          "tool.project_kanban",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "priority_plan"
+        ],
+        "capability_id": "capability.target_landscape",
+        "status": "pending",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.project_lead",
+        "owner_label": "项目负责人",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "",
+        "completed_at": ""
+      },
+      {
+        "step_id": "decision_review",
+        "name": "Decision Review",
+        "description": "Review the evidence package and produce a go-forward recommendation.",
+        "agent_id": "agent.reviewer",
+        "required_skills": [
+          "skill.go_nogo_review"
+        ],
+        "tool_ids": [
+          "tool.drugmind_discuss",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "decision_record"
+        ],
+        "capability_id": "",
+        "status": "pending",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.reviewer",
+        "owner_label": "Scientific Reviewer",
+        "approval_required": true,
+        "approval_status": "required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "",
+        "completed_at": ""
+      }
+    ],
+    "created_at": "2026-04-06T20:24:54.506454",
+    "updated_at": "2026-04-06T20:24:54.506454"
+  },
+  "wf_3c98e73435": {
+    "run_id": "wf_3c98e73435",
+    "template_id": "workflow.lead_optimization",
+    "template_name": "Lead Optimization Workflow",
+    "project_id": "phase2_api_smoke",
+    "topic": "Optimize KRAS lead",
+    "status": "running",
+    "current_step_index": 0,
+    "created_by": "codex",
+    "context": {},
+    "execution_context": {
+      "memory_context": {
+        "project_id": "phase2_api_smoke",
+        "entries": [],
+        "context_blocks": []
+      },
+      "workspace": {
+        "project_id": "phase2_api_smoke",
+        "name": "Phase2 API Smoke",
+        "owner_id": "",
+        "status": "active",
+        "tags": [
+          "oncology",
+          "platform"
+        ],
+        "members": [],
+        "default_agents": [
+          "agent.data_scientist",
+          "agent.biologist",
+          "agent.medicinal_chemist",
+          "agent.pharmacologist",
+          "agent.project_lead"
+        ],
+        "enabled_skills": [
+          "skill.admet_assessment",
+          "skill.lead_optimization",
+          "skill.sar_review",
+          "skill.target_evaluation"
+        ],
+        "enabled_tools": [
+          "tool.drugmind_admet",
+          "tool.drugmind_ask",
+          "tool.drugmind_compound",
+          "tool.drugmind_discuss",
+          "tool.drugmind_scenario",
+          "tool.project_kanban",
+          "tool.project_memory",
+          "tool.second_me_sync"
+        ],
+        "linked_workflows": [],
+        "linked_discussions": [],
+        "linked_decisions": [],
+        "linked_compounds": [
+          "CMP-001"
+        ],
+        "notes": [
+          "[04-06 20:30] Project brief created: mem_cd451bd10b"
+        ],
+        "created_at": "2026-04-06T20:30:36.146521",
+        "updated_at": "2026-04-06T20:30:36.156487"
+      },
+      "assay_batch": "A1"
+    },
+    "linked_decisions": [
+      "dec_b6aabcdae2"
+    ],
+    "linked_discussions": [],
+    "linked_memory_entries": [
+      "mem_7fb0a81556"
+    ],
+    "steps": [
+      {
+        "step_id": "sar_review",
+        "name": "SAR Review",
+        "description": "Analyze compound series and propose the next chemistry moves.",
+        "agent_id": "agent.medicinal_chemist",
+        "required_skills": [
+          "skill.sar_review",
+          "skill.lead_optimization"
+        ],
+        "tool_ids": [
+          "tool.drugmind_compound",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "chemistry_hypotheses"
+        ],
+        "capability_id": "capability.series_design",
+        "status": "in_progress",
+        "notes": [
+          "Context updated"
+        ],
+        "output": "",
+        "state": {},
+        "artifacts": [
+          {
+            "type": "memory",
+            "id": "mem_7fb0a81556",
+            "summary": "Workflow started: Lead Optimization Workflow",
+            "linked_at": "2026-04-06T20:30:36.161337"
+          },
+          {
+            "type": "decision",
+            "id": "dec_b6aabcdae2",
+            "summary": "CONDITIONAL",
+            "linked_at": "2026-04-06T20:30:36.171539"
+          }
+        ],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.medicinal_chemist",
+        "owner_label": "药物化学家",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "2026-04-06T20:30:36.159714",
+        "completed_at": ""
+      },
+      {
+        "step_id": "admet_review",
+        "name": "ADMET Review",
+        "description": "Assess ADMET liabilities for the current candidates.",
+        "agent_id": "agent.pharmacologist",
+        "required_skills": [
+          "skill.admet_assessment"
+        ],
+        "tool_ids": [
+          "tool.drugmind_admet",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "admet_flags"
+        ],
+        "capability_id": "capability.admet_risk",
+        "status": "pending",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.pharmacologist",
+        "owner_label": "药理学家",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "",
+        "completed_at": ""
+      },
+      {
+        "step_id": "priority_decision",
+        "name": "Priority Decision",
+        "description": "Set the next sprint priorities for the project team.",
+        "agent_id": "agent.project_lead",
+        "required_skills": [
+          "skill.project_triage",
+          "skill.go_nogo_review"
+        ],
+        "tool_ids": [
+          "tool.project_kanban",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "priority_queue"
+        ],
+        "capability_id": "",
+        "status": "pending",
+        "notes": [],
+        "output": "",
+        "state": {},
+        "artifacts": [],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.project_lead",
+        "owner_label": "项目负责人",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "",
+        "last_error": "",
+        "execution_attempts": 0,
+        "started_at": "",
+        "completed_at": ""
+      }
+    ],
+    "created_at": "2026-04-06T20:30:36.159720",
+    "updated_at": "2026-04-06T20:30:36.171575"
+  },
+  "wf_16a44c159c": {
+    "run_id": "wf_16a44c159c",
+    "template_id": "workflow.integration_delivery",
+    "template_name": "Integration Delivery Workflow",
+    "project_id": "proj_secondme_arch",
+    "topic": "Smoke test workflow from local browser verification",
+    "status": "awaiting_approval",
+    "current_step_index": 1,
+    "created_by": "smoke",
+    "context": {},
+    "execution_context": {
+      "memory_context": {
+        "project_id": "proj_secondme_arch",
+        "entries": [],
+        "context_blocks": []
+      },
+      "workspace": {
+        "project_id": "proj_secondme_arch",
+        "name": "SecondMe Architecture Program",
+        "owner_id": "",
+        "status": "active",
+        "tags": [],
+        "members": [],
+        "default_agents": [
+          "agent.data_scientist",
+          "agent.biologist",
+          "agent.medicinal_chemist",
+          "agent.pharmacologist",
+          "agent.project_lead"
+        ],
+        "enabled_skills": [
+          "skill.admet_assessment",
+          "skill.lead_optimization",
+          "skill.sar_review",
+          "skill.target_evaluation"
+        ],
+        "enabled_tools": [
+          "tool.drugmind_admet",
+          "tool.drugmind_ask",
+          "tool.drugmind_compound",
+          "tool.drugmind_discuss",
+          "tool.drugmind_scenario",
+          "tool.project_kanban",
+          "tool.project_memory",
+          "tool.second_me_project_sync",
+          "tool.second_me_sync"
+        ],
+        "linked_workflows": [],
+        "linked_discussions": [],
+        "linked_decisions": [],
+        "linked_compounds": [],
+        "linked_second_me_instances": [
+          "medicinal_chemist_林药研"
+        ],
+        "notes": [
+          "[04-07 02:00] Project brief created: mem_dc3350a75e",
+          "[04-07 02:00] Second Me instance linked: medicinal_chemist_林药研",
+          "[04-07 02:00] Second Me synced: medicinal_chemist_林药研"
+        ],
+        "created_at": "2026-04-07T02:00:11.136099",
+        "updated_at": "2026-04-07T02:00:11.147909"
+      },
+      "step_outputs": {
+        "plan_integration": {
+          "name": "Plan Integration",
+          "agent_id": "agent.integration",
+          "summary": "Integration execution for Smoke test workflow from local browser verification - Step: Plan Integration - Workspace linked workflows: 0 - Required outputs: integration_plan - No Second Me sync was executed in this step...",
+          "output": "Integration execution for Smoke test workflow from local browser verification\n- Step: Plan Integration\n- Workspace linked workflows: 0\n- Required outputs: integration_plan\n- No Second Me sync was executed in this step.\n- Recommendation: preserve the current integration contract and capture any missing auth or data-shape requirements before release.",
+          "updated_at": "2026-04-07T09:14:07.298209"
+        },
+        "review_delivery": {
+          "name": "Review Delivery",
+          "agent_id": "agent.reviewer",
+          "summary": "Reviewer outcome: GO - Step: Review Delivery - Topic: Smoke test workflow from local browser verification - Upstream outputs reviewed: 1 - No material scientific blockers were detected in the current workflow context....",
+          "output": "Reviewer outcome: GO\n- Step: Review Delivery\n- Topic: Smoke test workflow from local browser verification\n- Upstream outputs reviewed: 1\n- No material scientific blockers were detected in the current workflow context.\n- Approval recommendation: approve and proceed to the next execution stage.",
+          "updated_at": "2026-04-07T09:14:07.299401"
+        }
+      },
+      "last_step_summary": {
+        "step_id": "review_delivery",
+        "name": "Review Delivery",
+        "summary": "Reviewer outcome: GO - Step: Review Delivery - Topic: Smoke test workflow from local browser verification - Upstream outputs reviewed: 1 - No material scientific blockers were detected in the current workflow context....",
+        "requested_by": "smoke"
+      }
+    },
+    "linked_decisions": [
+      "dec_b8e7d4edd1"
+    ],
+    "linked_discussions": [],
+    "linked_memory_entries": [
+      "mem_d6f1d4479e",
+      "mem_2f866e952d",
+      "mem_0671bb860c"
+    ],
+    "steps": [
+      {
+        "step_id": "plan_integration",
+        "name": "Plan Integration",
+        "description": "Outline deliverables, endpoints, and constraints.",
+        "agent_id": "agent.integration",
+        "required_skills": [
+          "skill.integration_delivery",
+          "skill.workflow_planning"
+        ],
+        "tool_ids": [
+          "tool.second_me_sync",
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "integration_plan"
+        ],
+        "capability_id": "",
+        "status": "completed",
+        "notes": [],
+        "output": "Integration execution for Smoke test workflow from local browser verification\n- Step: Plan Integration\n- Workspace linked workflows: 0\n- Required outputs: integration_plan\n- No Second Me sync was executed in this step.\n- Recommendation: preserve the current integration contract and capture any missing auth or data-shape requirements before release.",
+        "state": {
+          "tool_results": {
+            "memory_context": {
+              "project_id": "proj_secondme_arch",
+              "entries": [
+                {
+                  "entry_id": "mem_d6f1d4479e",
+                  "project_id": "proj_secondme_arch",
+                  "memory_type": "workflow",
+                  "title": "Workflow started: Integration Delivery Workflow",
+                  "content": "Workflow topic: Smoke test workflow from local browser verification",
+                  "tags": [
+                    "workflow",
+                    "workflow.integration_delivery"
+                  ],
+                  "source": "api.start_workflow_run",
+                  "author_id": "",
+                  "related_agents": [
+                    "agent.integration",
+                    "agent.reviewer"
+                  ],
+                  "related_compounds": [],
+                  "created_at": "2026-04-07T09:14:07.297385"
+                }
+              ],
+              "context_blocks": [
+                {
+                  "title": "Workflow started: Integration Delivery Workflow",
+                  "memory_type": "workflow",
+                  "content": "Workflow topic: Smoke test workflow from local browser verification",
+                  "tags": [
+                    "workflow",
+                    "workflow.integration_delivery"
+                  ]
+                }
+              ]
+            }
+          },
+          "generated_at": "2026-04-07T09:14:07.298210",
+          "requested_by": "smoke",
+          "agent_id": "agent.integration"
+        },
+        "artifacts": [
+          {
+            "type": "memory",
+            "id": "mem_d6f1d4479e",
+            "summary": "Workflow started: Integration Delivery Workflow",
+            "linked_at": "2026-04-07T09:14:07.297559"
+          },
+          {
+            "type": "memory",
+            "id": "mem_2f866e952d",
+            "summary": "Integration Delivery Workflow: Plan Integration",
+            "linked_at": "2026-04-07T09:14:07.298206"
+          }
+        ],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.integration",
+        "owner_label": "Integration Agent",
+        "approval_required": false,
+        "approval_status": "not_required",
+        "approvals": [],
+        "executor_summary": "Integration execution for Smoke test workflow from local browser verification - Step: Plan Integration - Workspace linked workflows: 0 - Required outputs: integration_plan - No Second Me sync was executed in this step...",
+        "last_error": "",
+        "execution_attempts": 1,
+        "started_at": "2026-04-07T09:14:07.296308",
+        "completed_at": "2026-04-07T09:14:07.297904"
+      },
+      {
+        "step_id": "review_delivery",
+        "name": "Review Delivery",
+        "description": "Review setup quality and release readiness.",
+        "agent_id": "agent.reviewer",
+        "required_skills": [
+          "skill.evidence_review"
+        ],
+        "tool_ids": [
+          "tool.project_memory"
+        ],
+        "outputs": [
+          "review_notes"
+        ],
+        "capability_id": "",
+        "status": "awaiting_approval",
+        "notes": [],
+        "output": "Reviewer outcome: GO\n- Step: Review Delivery\n- Topic: Smoke test workflow from local browser verification\n- Upstream outputs reviewed: 1\n- No material scientific blockers were detected in the current workflow context.\n- Approval recommendation: approve and proceed to the next execution stage.",
+        "state": {
+          "tool_results": {
+            "memory_context": {
+              "project_id": "proj_secondme_arch",
+              "entries": [
+                {
+                  "entry_id": "mem_2f866e952d",
+                  "project_id": "proj_secondme_arch",
+                  "memory_type": "workflow_execution",
+                  "title": "Integration Delivery Workflow: Plan Integration",
+                  "content": "Integration execution for Smoke test workflow from local browser verification\n- Step: Plan Integration\n- Workspace linked workflows: 0\n- Required outputs: integration_plan\n- No Second Me sync was executed in this step.\n- Recommendation: preserve the current integration contract and capture any missing auth or data-shape requirements before release.",
+                  "tags": [
+                    "workflow_execution",
+                    "workflow.integration_delivery",
+                    "plan_integration"
+                  ],
+                  "source": "workflow.execute_step",
+                  "author_id": "",
+                  "related_agents": [
+                    "agent.integration"
+                  ],
+                  "related_compounds": [],
+                  "created_at": "2026-04-07T09:14:07.297947"
+                },
+                {
+                  "entry_id": "mem_d6f1d4479e",
+                  "project_id": "proj_secondme_arch",
+                  "memory_type": "workflow",
+                  "title": "Workflow started: Integration Delivery Workflow",
+                  "content": "Workflow topic: Smoke test workflow from local browser verification",
+                  "tags": [
+                    "workflow",
+                    "workflow.integration_delivery"
+                  ],
+                  "source": "api.start_workflow_run",
+                  "author_id": "",
+                  "related_agents": [
+                    "agent.integration",
+                    "agent.reviewer"
+                  ],
+                  "related_compounds": [],
+                  "created_at": "2026-04-07T09:14:07.297385"
+                }
+              ],
+              "context_blocks": [
+                {
+                  "title": "Integration Delivery Workflow: Plan Integration",
+                  "memory_type": "workflow_execution",
+                  "content": "Integration execution for Smoke test workflow from local browser verification\n- Step: Plan Integration\n- Workspace linked workflows: 0\n- Required outputs: integration_plan\n- No Second Me sync was executed in this step.\n- Recommendation: preserve the current integration contract and capture any missing auth or data-shape requirements before release.",
+                  "tags": [
+                    "workflow_execution",
+                    "workflow.integration_delivery",
+                    "plan_integration"
+                  ]
+                },
+                {
+                  "title": "Workflow started: Integration Delivery Workflow",
+                  "memory_type": "workflow",
+                  "content": "Workflow topic: Smoke test workflow from local browser verification",
+                  "tags": [
+                    "workflow",
+                    "workflow.integration_delivery"
+                  ]
+                }
+              ]
+            }
+          },
+          "generated_at": "2026-04-07T09:14:07.299402",
+          "requested_by": "smoke",
+          "agent_id": "agent.reviewer"
+        },
+        "artifacts": [
+          {
+            "type": "memory",
+            "id": "mem_0671bb860c",
+            "summary": "Integration Delivery Workflow: Review Delivery",
+            "linked_at": "2026-04-07T09:14:07.298881"
+          },
+          {
+            "type": "decision",
+            "id": "dec_b8e7d4edd1",
+            "summary": "GO",
+            "linked_at": "2026-04-07T09:14:07.299399"
+          }
+        ],
+        "input_payload": {},
+        "owner_type": "agent",
+        "owner_id": "agent.reviewer",
+        "owner_label": "Scientific Reviewer",
+        "approval_required": true,
+        "approval_status": "pending",
+        "approvals": [],
+        "executor_summary": "Reviewer outcome: GO - Step: Review Delivery - Topic: Smoke test workflow from local browser verification - Upstream outputs reviewed: 1 - No material scientific blockers were detected in the current workflow context....",
+        "last_error": "",
+        "execution_attempts": 1,
+        "started_at": "2026-04-07T09:14:07.298214",
+        "completed_at": ""
+      }
+    ],
+    "created_at": "2026-04-07T09:14:07.296316",
+    "updated_at": "2026-04-07T09:14:07.299408"
+  }
+}

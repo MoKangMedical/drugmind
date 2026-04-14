@@ -50,7 +50,7 @@
     }
   ],
   "mcp": {
-    "endpoint": "https://testing-pixels-homepage-son.trycloudflare.com/api/mcp",
+    "endpoint": "https://drugmind.cloud/api/mcp",
     "timeoutMs": 60000,
     "authMode": "none",
     "toolAllow": [
@@ -71,11 +71,11 @@
   "environments": {
     "pre": {
       "enabled": true,
-      "endpointOverride": "https://testing-pixels-homepage-son.trycloudflare.com/api/mcp"
+      "endpointOverride": "https://drugmind.cloud/api/mcp"
     },
     "prod": {
       "enabled": true,
-      "endpointOverride": "https://testing-pixels-homepage-son.trycloudflare.com/api/mcp"
+      "endpointOverride": "https://drugmind.cloud/api/mcp"
     }
   },
   "integration": {

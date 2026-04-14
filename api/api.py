@@ -14,6 +14,7 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from .mcp_server import router as mcp_router, init_mcp
+from media import MimoMediaClient, MediaStore
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,11 @@ project_memory = None
 workflow_orchestrator = None
 second_me_bindings = None
 h2a_store = None
+drug_discovery_hub = None
+blatant_why_adapter = None
+medi_pharma_adapter = None
+media_client = MimoMediaClient()
+media_store = MediaStore()
 
 
 def init_engines(
@@ -66,12 +72,16 @@ def init_engines(
     skill_reg=None,
     tool_reg=None,
     project_memory_store=None,
+    drug_discovery_engine=None,
+    by_adapter=None,
+    medi_pharma_engine=None,
     workflow_engine=None,
     h2a_threads=None,
 ):
     global twin_engine, discussion_engine, kanban, compound_tracker, user_mgr, discussion_hub, second_me
     global decision_logger, workspace_store, second_me_bindings, h2a_store
     global agent_registry, skill_registry, tool_registry, project_memory, workflow_orchestrator
+    global drug_discovery_hub, blatant_why_adapter, medi_pharma_adapter
     twin_engine = twin
     discussion_engine = discussion
     decision_logger = decisions
@@ -86,10 +96,23 @@ def init_engines(
     skill_registry = skill_reg
     tool_registry = tool_reg
     project_memory = project_memory_store
+    drug_discovery_hub = drug_discovery_engine
+    blatant_why_adapter = by_adapter
+    medi_pharma_adapter = medi_pharma_engine
     workflow_orchestrator = workflow_engine
     h2a_store = h2a_threads
     # 初始化MCP Server
-    init_mcp(twin, discussion, hub, users)
+    init_mcp(
+        twin,
+        discussion,
+        hub,
+        users,
+        drug_discovery_engine,
+        board,
+        tracker,
+        by_adapter,
+        medi_pharma_engine,
+    )
 
 
 def _safe_timestamp(value: str) -> float:
@@ -209,6 +232,26 @@ def build_project_timeline(project_id: str, limit: int = 120) -> list[dict]:
                         }
                     )
 
+    if drug_discovery_hub:
+        for execution in drug_discovery_hub.list_executions(project_id=project_id, limit=limit):
+            timeline.append(
+                {
+                    "item_id": execution["execution_id"],
+                    "item_type": "capability_execution",
+                    "timestamp": execution.get("updated_at") or execution.get("created_at", ""),
+                    "title": f"Capability · {execution['capability_name']}",
+                    "summary": execution.get("summary", "")[:320],
+                    "status": execution.get("status", "completed"),
+                    "actor": ", ".join(execution.get("related_agents", [])[:3]) or execution.get("triggered_by", ""),
+                    "source_id": execution["execution_id"],
+                    "meta": {
+                        "capability_id": execution["capability_id"],
+                        "related_compounds": execution.get("related_compounds", []),
+                        "second_me_sync": execution.get("second_me_sync", {}),
+                    },
+                }
+            )
+
     if second_me_bindings:
         for binding in second_me_bindings.list_bindings(project_id=project_id):
             timestamp = binding.get("last_synced_at") or binding.get("updated_at") or binding.get("created_at", "")
@@ -311,6 +354,7 @@ def build_project_workbench(project_id: str, timeline_limit: int = 120) -> dict:
     return {
         "project": project,
         "workspace": workspace_store.get_workspace(project_id) if workspace_store else None,
+        "implementation": drug_discovery_hub.get_project_implementation(project_id) if drug_discovery_hub else {},
         "compounds": compound_tracker.list_compounds(project_id=project_id) if compound_tracker else [],
         "workflow_runs": workflow_orchestrator.list_runs(project_id=project_id) if workflow_orchestrator else [],
         "workflow_templates": workflow_orchestrator.list_templates() if workflow_orchestrator else [],
@@ -318,7 +362,69 @@ def build_project_workbench(project_id: str, timeline_limit: int = 120) -> dict:
         "h2a_threads": h2a_store.list_threads(project_id=project_id) if h2a_store else [],
         "timeline": build_project_timeline(project_id, limit=timeline_limit),
         "agents": agent_registry.list_agents(active_only=False) if agent_registry else [],
+        "medi_pharma": medi_pharma_adapter.describe() if medi_pharma_adapter else {},
     }
+
+
+def _build_bridge_project(data: dict) -> dict:
+    project_id = data.get("project_id", "")
+    project = kanban.get_project(project_id) if kanban and project_id else None
+    if project:
+        return project
+    return {
+        "project_id": project_id or "adhoc_medi_pharma",
+        "name": data.get("name") or data.get("target") or data.get("disease") or "Ad Hoc MediPharma Request",
+        "target": data.get("target", ""),
+        "disease": data.get("disease", ""),
+        "target_chembl_id": data.get("target_chembl_id", ""),
+        "modality": data.get("modality", "small_molecule"),
+    }
+
+
+def _collect_bridge_compounds(project_id: str, data: dict) -> list[dict]:
+    if project_id and compound_tracker:
+        compounds = compound_tracker.list_compounds(project_id=project_id)
+        if compounds:
+            return compounds
+    compounds = data.get("compounds", [])
+    return compounds if isinstance(compounds, list) else []
+
+
+def _run_medi_pharma_bridge(action: str, data: dict | None = None) -> dict:
+    if not medi_pharma_adapter:
+        raise HTTPException(503, "MediPharma adapter 未初始化")
+
+    data = data or {}
+    project_id = data.get("project_id", "")
+    input_payload = data.get("input_payload")
+    if not isinstance(input_payload, dict):
+        input_payload = data
+    project = _build_bridge_project({**data, **input_payload})
+    compounds = _collect_bridge_compounds(project_id, data)
+
+    if action in {"status", "probe_status"}:
+        return medi_pharma_adapter.probe_status()
+    if action == "health":
+        return medi_pharma_adapter.health()
+    if action == "ecosystem":
+        return medi_pharma_adapter.ecosystem()
+    if action in {"discover_targets", "target_discovery"}:
+        return medi_pharma_adapter.discover_targets(project=project, input_payload=input_payload)
+    if action in {"run_screening", "screening_run", "virtual_screening"}:
+        return medi_pharma_adapter.run_screening(project=project, compounds=compounds, input_payload=input_payload)
+    if action in {"generate", "molecule_generation"}:
+        return medi_pharma_adapter.generate(project=project, input_payload=input_payload)
+    if action in {"predict_admet", "admet_predict"}:
+        return medi_pharma_adapter.predict_admet(smiles=input_payload.get("smiles", ""))
+    if action in {"batch_predict_admet", "admet_batch"}:
+        return medi_pharma_adapter.batch_predict_admet(compounds=compounds, input_payload=input_payload)
+    if action in {"optimize", "lead_optimization"}:
+        return medi_pharma_adapter.optimize(compounds=compounds, input_payload=input_payload)
+    if action in {"run_pipeline", "pipeline_run"}:
+        return medi_pharma_adapter.run_pipeline(project=project, input_payload=input_payload)
+    if action in {"knowledge_report", "knowledge_engine"}:
+        return medi_pharma_adapter.knowledge_report(project=project, input_payload=input_payload)
+    raise HTTPException(400, f"未知 MediPharma action: {action}")
 
 
 def _compose_h2a_context(project_id: str, thread: dict, question: str) -> str:
@@ -478,6 +584,7 @@ def _run_h2a_exchange(thread_id: str, human_message: str) -> dict:
 # ──────────────────────────────────────────────
 @app.get("/health")
 async def health():
+    medi_pharma_status = medi_pharma_adapter.probe_status() if medi_pharma_adapter else {"status": "disabled"}
     return {
         "status": "healthy",
         "version": "2.0.0",
@@ -490,10 +597,13 @@ async def health():
         "registered_agents": agent_registry.count() if agent_registry else 0,
         "registered_skills": skill_registry.count() if skill_registry else 0,
         "registered_tools": tool_registry.count() if tool_registry else 0,
+        "registered_capabilities": drug_discovery_hub.count_capabilities() if drug_discovery_hub else 0,
         "workflow_runs": workflow_orchestrator.count_runs() if workflow_orchestrator else 0,
+        "capability_executions": drug_discovery_hub.count_executions() if drug_discovery_hub else 0,
         "second_me_instances": len(second_me.instances) if second_me else 0,
         "second_me_bindings": second_me_bindings.count() if second_me_bindings else 0,
         "h2a_threads": h2a_store.count() if h2a_store else 0,
+        "medi_pharma": medi_pharma_status,
     }
 
 
@@ -614,7 +724,9 @@ async def platform_stats():
         "registered_agents": agent_registry.count() if agent_registry else 0,
         "registered_skills": skill_registry.count() if skill_registry else 0,
         "registered_tools": tool_registry.count() if tool_registry else 0,
+        "registered_capabilities": drug_discovery_hub.count_capabilities() if drug_discovery_hub else 0,
         "workflow_runs": workflow_orchestrator.count_runs() if workflow_orchestrator else 0,
+        "capability_executions": drug_discovery_hub.count_executions() if drug_discovery_hub else 0,
         "second_me_instances": len(second_me.instances) if second_me else 0,
         "second_me_bindings": second_me_bindings.count() if second_me_bindings else 0,
         "h2a_threads": h2a_store.count() if h2a_store else 0,
@@ -630,8 +742,11 @@ async def platform_overview():
         "agents": agent_registry.list_agents(active_only=False) if agent_registry else [],
         "skills": skill_registry.list_skills() if skill_registry else [],
         "tools": tool_registry.list_tools(enabled_only=False) if tool_registry else [],
+        "drug_discovery": drug_discovery_hub.describe() if drug_discovery_hub else {},
         "workflow_templates": workflow_orchestrator.list_templates() if workflow_orchestrator else [],
         "workflow_runs": workflow_orchestrator.list_runs() if workflow_orchestrator else [],
+        "blatant_why": blatant_why_adapter.describe() if blatant_why_adapter else {},
+        "medi_pharma": medi_pharma_adapter.describe() if medi_pharma_adapter else {"status": "disabled"},
         "second_me": second_me.describe_capabilities() if second_me else {"mode": "disabled"},
         "second_me_bindings": second_me_bindings.list_bindings() if second_me_bindings else [],
     }
@@ -660,6 +775,339 @@ async def list_platform_skills(category: str = ""):
 @app.get("/api/v2/platform/tools")
 async def list_platform_tools(tag: str = "", enabled_only: bool = True):
     return {"tools": tool_registry.list_tools(tag=tag, enabled_only=enabled_only) if tool_registry else []}
+
+
+# ──────────────────────────────────────────────
+# Drug Discovery Implementation
+# ──────────────────────────────────────────────
+@app.get("/api/v2/drug-discovery/capabilities")
+async def list_drug_discovery_capabilities(stage_id: str = "", category: str = ""):
+    if not drug_discovery_hub:
+        raise HTTPException(503, "Drug discovery hub 未初始化")
+    return {"capabilities": drug_discovery_hub.list_capabilities(stage_id=stage_id, category=category)}
+
+
+@app.get("/api/v2/drug-discovery/blueprints")
+async def list_drug_discovery_blueprints():
+    if not drug_discovery_hub:
+        raise HTTPException(503, "Drug discovery hub 未初始化")
+    return {"blueprints": drug_discovery_hub.list_blueprints()}
+
+
+@app.get("/api/v2/projects/{project_id}/implementation")
+async def get_project_implementation(project_id: str):
+    if not drug_discovery_hub:
+        raise HTTPException(503, "Drug discovery hub 未初始化")
+    try:
+        return drug_discovery_hub.get_project_implementation(project_id)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
+
+
+@app.post("/api/v2/projects/{project_id}/implementation/bootstrap")
+async def bootstrap_project_implementation(project_id: str, data: dict = None):
+    if not drug_discovery_hub:
+        raise HTTPException(503, "Drug discovery hub 未初始化")
+    data = data or {}
+    try:
+        return drug_discovery_hub.bootstrap_project(
+            project_id,
+            blueprint_id=data.get("blueprint_id", ""),
+            activated_by=data.get("activated_by", ""),
+            note=data.get("note", ""),
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.get("/api/v2/projects/{project_id}/capabilities/executions")
+async def list_project_capability_executions(project_id: str, capability_id: str = "", limit: int = 50):
+    if not drug_discovery_hub:
+        raise HTTPException(503, "Drug discovery hub 未初始化")
+    return {
+        "project_id": project_id,
+        "executions": drug_discovery_hub.list_executions(project_id=project_id, capability_id=capability_id, limit=limit),
+    }
+
+
+@app.post("/api/v2/projects/{project_id}/capabilities/{capability_id}/execute")
+async def execute_project_capability(project_id: str, capability_id: str, data: dict = None):
+    if not drug_discovery_hub:
+        raise HTTPException(503, "Drug discovery hub 未初始化")
+    data = data or {}
+    try:
+        return drug_discovery_hub.execute_capability(
+            project_id,
+            capability_id,
+            input_payload=data.get("input_payload", {}),
+            triggered_by=data.get("triggered_by", ""),
+            sync_to_second_me=bool(data.get("sync_to_second_me", False)),
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+# ──────────────────────────────────────────────
+# BY Integration
+# ──────────────────────────────────────────────
+@app.get("/api/v2/integrations/blatant-why")
+async def blatant_why_overview():
+    if not blatant_why_adapter:
+        raise HTTPException(503, "blatant-why adapter 未初始化")
+    return blatant_why_adapter.describe()
+
+
+@app.get("/api/v2/integrations/blatant-why/mcp-servers")
+async def blatant_why_mcp_servers(domain: str = ""):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "blatant-why adapter 未初始化")
+    return {"servers": blatant_why_adapter.mcp_bridge.list_servers(domain=domain)}
+
+
+@app.get("/api/v2/integrations/blatant-why/providers")
+async def blatant_why_providers():
+    if not blatant_why_adapter:
+        raise HTTPException(503, "blatant-why adapter 未初始化")
+    return blatant_why_adapter.mcp_bridge.describe()
+
+
+@app.post("/api/v2/integrations/blatant-why/research")
+async def blatant_why_target_research(data: dict):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "blatant-why adapter 未初始化")
+    project_id = data.get("project_id", "")
+    project = kanban.get_project(project_id) if kanban and project_id else None
+    if not project:
+        target = data.get("target", "").strip()
+        if not target:
+            raise HTTPException(400, "需要 project_id 或 target")
+        project = {
+            "project_id": project_id or "adhoc_structural_research",
+            "name": data.get("name") or target,
+            "target": target,
+            "disease": data.get("disease", ""),
+            "modality": data.get("modality", "small_molecule"),
+        }
+    return blatant_why_adapter.run_target_research(
+        project=project,
+        modality=data.get("modality") or project.get("modality", "small_molecule"),
+        organism_id=int(data.get("organism_id", 9606)),
+        pdb_rows=int(data.get("pdb_rows", 6)),
+        sabdab_limit=int(data.get("sabdab_limit", 6)),
+    )
+
+
+@app.post("/api/v2/integrations/blatant-why/screening")
+async def blatant_why_screening(data: dict):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "blatant-why adapter 未初始化")
+    project_id = data.get("project_id", "")
+    compounds = compound_tracker.list_compounds(project_id=project_id) if compound_tracker and project_id else data.get("compounds", [])
+    if not compounds:
+        raise HTTPException(400, "需要 project_id 或 compounds")
+    project = kanban.get_project(project_id) if kanban and project_id else {"project_id": project_id, "name": data.get("name", "")}
+    return blatant_why_adapter.run_small_molecule_screening(project=project, compounds=compounds)
+
+
+@app.post("/api/v2/integrations/blatant-why/biologics-pipeline")
+async def blatant_why_biologics_pipeline(data: dict):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "blatant-why adapter 未初始化")
+    project_id = data.get("project_id", "")
+    project = kanban.get_project(project_id) if kanban and project_id else None
+    if not project:
+        raise HTTPException(404, "项目不存在")
+    campaign = blatant_why_adapter.biologics_pipeline.build_campaign(
+        project=project,
+        modality=data.get("modality", project.get("modality", "nanobody")),
+        scaffolds=data.get("scaffolds"),
+        seeds=int(data.get("seeds", 8)),
+        designs_per_seed=int(data.get("designs_per_seed", 8)),
+        complexity=data.get("complexity", "standard"),
+    )
+    if not data.get("submit_job") and not data.get("tamarind_settings"):
+        return campaign
+    job_settings = data.get("tamarind_settings") or {
+        "jobType": data.get("job_type", f"{data.get('modality', project.get('modality', 'nanobody'))}_design"),
+        "settings": {
+            "target": project.get("target", ""),
+            "modality": data.get("modality", project.get("modality", "nanobody")),
+            "scaffolds": campaign.get("scaffolds", []),
+            "seeds": int(data.get("seeds", 8)),
+            "designsPerSeed": int(data.get("designs_per_seed", 8)),
+            "complexity": data.get("complexity", "standard"),
+            **(data.get("job_settings", {}) or {}),
+        },
+    }
+    job_submission = blatant_why_adapter.submit_tamarind_job(
+        project=project,
+        modality=data.get("modality", project.get("modality", "nanobody")),
+        settings=job_settings,
+        wait_for_completion=bool(data.get("wait_for_completion", False)),
+        poll_interval_seconds=int(data.get("poll_interval_seconds", 20)),
+        timeout_seconds=int(data.get("timeout_seconds", 900)),
+    )
+    return {
+        "campaign": campaign,
+        "tamarind_job": job_submission,
+    }
+
+
+# ──────────────────────────────────────────────
+# MediPharma Integration
+# ──────────────────────────────────────────────
+@app.get("/api/v2/integrations/medi-pharma")
+async def medi_pharma_overview():
+    if not medi_pharma_adapter:
+        raise HTTPException(503, "MediPharma adapter 未初始化")
+    return medi_pharma_adapter.describe()
+
+
+@app.get("/api/v2/integrations/medi-pharma/health")
+async def medi_pharma_health():
+    return _run_medi_pharma_bridge("health")
+
+
+@app.get("/api/v2/integrations/medi-pharma/ecosystem")
+async def medi_pharma_ecosystem():
+    return _run_medi_pharma_bridge("ecosystem")
+
+
+@app.post("/api/v2/integrations/medi-pharma/execute")
+async def medi_pharma_execute(data: dict):
+    action = data.get("action", "").strip()
+    if not action:
+        raise HTTPException(400, "action 为必填")
+    return _run_medi_pharma_bridge(action, data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/targets/discover")
+async def medi_pharma_discover_targets(data: dict):
+    return _run_medi_pharma_bridge("discover_targets", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/screening/run")
+async def medi_pharma_screening_run(data: dict):
+    return _run_medi_pharma_bridge("run_screening", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/generate")
+async def medi_pharma_generate(data: dict):
+    return _run_medi_pharma_bridge("generate", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/admet/predict")
+async def medi_pharma_admet_predict(data: dict):
+    return _run_medi_pharma_bridge("predict_admet", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/admet/batch")
+async def medi_pharma_admet_batch(data: dict):
+    return _run_medi_pharma_bridge("batch_predict_admet", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/optimize")
+async def medi_pharma_optimize(data: dict):
+    return _run_medi_pharma_bridge("optimize", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/pipeline/run")
+async def medi_pharma_pipeline_run(data: dict):
+    return _run_medi_pharma_bridge("run_pipeline", data)
+
+
+@app.post("/api/v2/integrations/medi-pharma/knowledge/report")
+async def medi_pharma_knowledge_report(data: dict):
+    return _run_medi_pharma_bridge("knowledge_report", data)
+
+
+@app.get("/api/v2/integrations/tamarind/status")
+async def tamarind_status():
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    return blatant_why_adapter.tamarind_client.probe_status()
+
+
+@app.get("/api/v2/integrations/tamarind/tools")
+async def tamarind_tools():
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    try:
+        return blatant_why_adapter.tamarind_client.list_available_tools()
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.get("/api/v2/integrations/tamarind/jobs")
+async def tamarind_list_jobs(job_name: str = "", status: str = "", limit: int = 50):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    try:
+        return blatant_why_adapter.tamarind_client.list_jobs(job_name=job_name, status=status, limit=limit)
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.get("/api/v2/integrations/tamarind/jobs/{job_name}")
+async def tamarind_get_job(job_name: str):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    try:
+        return blatant_why_adapter.tamarind_client.get_job(job_name)
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.post("/api/v2/integrations/tamarind/jobs")
+async def tamarind_submit_job(data: dict):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    job_name = data.get("job_name", "").strip()
+    job_type = data.get("job_type", "").strip()
+    settings = data.get("settings")
+    if not job_name or not job_type or not isinstance(settings, dict):
+        raise HTTPException(400, "job_name、job_type、settings 为必填")
+    try:
+        return blatant_why_adapter.tamarind_client.submit_job(
+            job_name=job_name,
+            job_type=job_type,
+            settings=settings,
+            metadata=data.get("metadata"),
+            inputs=data.get("inputs"),
+            wait_for_completion=bool(data.get("wait_for_completion", False)),
+            poll_interval_seconds=int(data.get("poll_interval_seconds", 20)),
+            timeout_seconds=int(data.get("timeout_seconds", 900)),
+            include_result=bool(data.get("include_result", True)),
+        )
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.post("/api/v2/integrations/tamarind/jobs/{job_name}/poll")
+async def tamarind_poll_job(job_name: str, data: dict = None):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    data = data or {}
+    try:
+        return blatant_why_adapter.tamarind_client.poll_job(
+            job_name,
+            interval_seconds=int(data.get("interval_seconds", 20)),
+            timeout_seconds=int(data.get("timeout_seconds", 900)),
+            include_result=bool(data.get("include_result", False)),
+        )
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.post("/api/v2/integrations/tamarind/jobs/{job_name}/result")
+async def tamarind_get_result(job_name: str, data: dict = None):
+    if not blatant_why_adapter:
+        raise HTTPException(503, "Tamarind client 未初始化")
+    data = data or {}
+    try:
+        return blatant_why_adapter.tamarind_client.get_result(job_name, path=data.get("path", ""))
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from exc
 
 
 # ──────────────────────────────────────────────
@@ -833,6 +1281,7 @@ async def create_project(data: dict):
         target=data.get("target", ""),
         disease=data.get("disease", ""),
         budget=data.get("budget", 0),
+        modality=data.get("modality", "small_molecule"),
     )
     default_agents = [agent["agent_id"] for agent in agent_registry.list_agents(category="domain")] if agent_registry else []
     enabled_skills = [skill["skill_id"] for skill in skill_registry.list_skills(category="drug_discovery")[:6]] if skill_registry else []
@@ -846,6 +1295,22 @@ async def create_project(data: dict):
         enabled_tools=enabled_tools,
         tags=data.get("tags", []),
     ) if workspace_store else None
+    implementation = (
+        drug_discovery_hub.bootstrap_project(
+            project.project_id,
+            blueprint_id=data.get("blueprint_id", ""),
+            activated_by=data.get("owner_id", "") or data.get("created_by", ""),
+            note=data.get("implementation_note", ""),
+        )
+        if drug_discovery_hub
+        else None
+    )
+    enabled_capabilities = ((implementation or {}).get("state") or {}).get("active_capabilities", [])
+    if workspace_store and enabled_capabilities:
+        workspace = workspace_store.update_workspace(
+            project.project_id,
+            enabled_capabilities=enabled_capabilities,
+        )
     if project_memory:
         brief_entry = project_memory.add_entry(
             project_id=project.project_id,
@@ -860,7 +1325,13 @@ async def create_project(data: dict):
         )
         if workspace_store and brief_entry:
             workspace_store.add_note(project.project_id, f"Project brief created: {brief_entry['entry_id']}")
-    return {"project_id": project.project_id, "name": project.name, "workspace": workspace}
+    return {
+        "project_id": project.project_id,
+        "name": project.name,
+        "modality": project.modality,
+        "workspace": workspace,
+        "implementation": implementation,
+    }
 
 
 @app.get("/api/v2/projects")
@@ -876,6 +1347,7 @@ async def get_project(project_id: str):
     return {
         "project": project,
         "workspace": workspace_store.get_workspace(project_id) if workspace_store else None,
+        "implementation": drug_discovery_hub.get_project_implementation(project_id) if drug_discovery_hub else {},
         "memory_stats": project_memory.stats(project_id) if project_memory else {},
         "decisions_count": decision_logger.count(project_id) if decision_logger else 0,
         "second_me_bindings": second_me_bindings.list_bindings(project_id=project_id) if second_me_bindings else [],
@@ -1149,6 +1621,8 @@ async def start_workflow_run(data: dict):
         }
     if workspace_store:
         execution_context["workspace"] = workspace_store.get_workspace(data["project_id"])
+    if drug_discovery_hub:
+        execution_context["implementation"] = drug_discovery_hub.get_project_implementation(data["project_id"])
     try:
         run = workflow_orchestrator.start_run(
             template_id=data["template_id"],
@@ -1355,6 +1829,72 @@ async def predict_admet(data: dict):
 
 
 # ──────────────────────────────────────────────
+# Media (Audio / Video) via MIMO
+# ──────────────────────────────────────────────
+@app.get("/api/v2/media/status")
+async def media_status():
+    return media_client.describe()
+
+
+@app.post("/api/v2/media/audio/tts")
+async def media_tts(data: dict):
+    text = (data.get("text") or "").strip()
+    if not text:
+        raise HTTPException(400, "text 为必填")
+    result = media_client.synthesize_audio(
+        text=text,
+        voice=data.get("voice", "default"),
+        response_format=data.get("format", "mp3"),
+        speed=float(data.get("speed", 1.0)),
+        model=data.get("model", ""),
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(400, result.get("error") or "audio generation failed")
+    audio_bytes = result.get("audio", b"")
+    if not audio_bytes:
+        raise HTTPException(500, "audio bytes missing")
+    stored = media_store.save(
+        audio_bytes,
+        suffix=f".{data.get('format', 'mp3')}",
+        subdir="audio",
+    )
+    return {
+        "status": "ok",
+        "media": stored,
+        "content_type": result.get("content_type", "audio/mpeg"),
+    }
+
+
+@app.post("/api/v2/media/video/generate")
+async def media_video_generate(data: dict):
+    prompt = (data.get("prompt") or "").strip()
+    if not prompt:
+        raise HTTPException(400, "prompt 为必填")
+    result = media_client.generate_video(
+        prompt=prompt,
+        model=data.get("model", ""),
+        size=data.get("size", "1280x720"),
+        duration=int(data.get("duration", 6)),
+        fps=int(data.get("fps", 24)),
+        seed=data.get("seed"),
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(400, result.get("error") or "video generation failed")
+    response = result.get("response", {})
+    data_list = response.get("data") if isinstance(response, dict) else None
+    if isinstance(data_list, list) and data_list:
+        first = data_list[0]
+        if isinstance(first, dict) and first.get("b64_json"):
+            import base64
+            video_bytes = base64.b64decode(first["b64_json"])
+            stored = media_store.save(video_bytes, suffix=".mp4", subdir="video")
+            return {"status": "ok", "media": stored, "source": "b64_json"}
+        if isinstance(first, dict) and first.get("url"):
+            return {"status": "ok", "url": first["url"], "source": "url"}
+    return {"status": "ok", "response": response, "source": "raw"}
+
+
+# ──────────────────────────────────────────────
 # WebSocket
 # ──────────────────────────────────────────────
 @app.websocket("/ws/{session_id}")
@@ -1534,6 +2074,13 @@ async def sync_project_to_second_me(project_id: str, data: dict):
     project = kanban.get_project(project_id) if kanban else None
     if not project:
         raise HTTPException(404, "项目不存在")
+    if drug_discovery_hub:
+        project = {
+            **project,
+            "implementation": drug_discovery_hub.get_project_implementation(project_id),
+        }
+    if blatant_why_adapter:
+        project["blatant_why"] = blatant_why_adapter.build_dmta_blueprint(project=project)
     workspace = workspace_store.get_workspace(project_id) if workspace_store else {}
     memory_entries = project_memory.list_entries(project_id, limit=data.get("memory_limit", 8)) if project_memory else []
     decisions = decision_logger.get_decision_history(project_id=project_id)[:data.get("decision_limit", 6)] if decision_logger else []
@@ -1724,6 +2271,14 @@ async def img_file(path: str):
 @app.get("/media/{path:path}")
 async def media_file(path: str):
     f = FRONTEND_DIR / "media" / path
+    if f.exists():
+        return FileResponse(f)
+    raise HTTPException(404)
+
+
+@app.get("/media/generated/{path:path}")
+async def generated_media_file(path: str):
+    f = media_store.base_dir / path
     if f.exists():
         return FileResponse(f)
     raise HTTPException(404)

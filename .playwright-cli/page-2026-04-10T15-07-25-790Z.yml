@@ -1,0 +1,402 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "🧬 DrugMind" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e5]:
+        - link "首页" [ref=e6] [cursor=pointer]:
+          - /url: "#"
+        - link "讨论" [ref=e7] [cursor=pointer]:
+          - /url: "#"
+        - link "工作台" [ref=e8] [cursor=pointer]:
+          - /url: "#"
+        - link "AI团队" [ref=e9] [cursor=pointer]:
+          - /url: "#"
+        - link "分子工具" [ref=e10] [cursor=pointer]:
+          - /url: "#"
+        - link "关于" [ref=e11] [cursor=pointer]:
+          - /url: "#"
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e15]: Local / Custom Host
+      - generic [ref=e16]:
+        - text: "API:"
+        - code [ref=e17]: http://127.0.0.1:8097
+      - generic [ref=e18]: 未检测
+    - generic [ref=e19]:
+      - button "调试配置" [ref=e20] [cursor=pointer]
+      - button "检测 API" [ref=e21] [cursor=pointer]
+  - main [ref=e22]:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - heading "AI驱动的 药物研发协作平台" [level=1] [ref=e25]:
+          - text: AI驱动的
+          - text: 药物研发协作平台
+        - paragraph [ref=e26]: 把项目工作台、AI 团队、业务流和 H2A 会话直接放在首页，让真人和 agent 在同一个表面上协作推进。
+        - generic [ref=e27]:
+          - button "🛰️ 进入工作台" [ref=e28] [cursor=pointer]
+          - button "💬 发起 H2A" [ref=e29] [cursor=pointer]
+          - button "🎬 观看 Demo" [ref=e30] [cursor=pointer]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]: "8"
+            - generic [ref=e34]: AI分身
+          - generic [ref=e35]:
+            - generic [ref=e36]: "0"
+            - generic [ref=e37]: 讨论
+          - generic [ref=e38]:
+            - generic [ref=e39]: "5"
+            - generic [ref=e40]: 专业角色
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: Business Flow
+          - heading "把药物研发业务流搭成一条可执行的轨道。" [level=2] [ref=e44]
+          - paragraph [ref=e45]: 从项目立项到 H2A 问答、workflow 分派、artifact 沉淀再到 reviewer gate，首页直接把整条流展示出来。
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]: "01"
+            - strong [ref=e49]: 项目立项
+            - paragraph [ref=e50]: 先定义靶点、疾病、owner 和默认 agent 阵列，把项目工作区拉起来。
+          - generic [ref=e51]:
+            - generic [ref=e52]: "02"
+            - strong [ref=e53]: H2A 协作
+            - paragraph [ref=e54]: 真实成员先找对的 agent 对话，让问题在进入流程前先被拆成判断和动作。
+          - generic [ref=e55]:
+            - generic [ref=e56]: "03"
+            - strong [ref=e57]: Workflow 执行
+            - paragraph [ref=e58]: orchestrator 把步骤分给 AI agent 或 human owner，直到遇到门控。
+          - generic [ref=e59]:
+            - generic [ref=e60]: "04"
+            - strong [ref=e61]: Artifact 沉淀
+            - paragraph [ref=e62]: memory、decision、discussion、Second Me sync 全部挂回同一条时间线。
+          - generic [ref=e63]:
+            - generic [ref=e64]: "05"
+            - strong [ref=e65]: 审批与推进
+            - paragraph [ref=e66]: reviewer 放行后，再进入下一轮实验、下一轮讨论或下一轮 sprint。
+      - generic [ref=e68]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - paragraph [ref=e71]: Workbench On Home
+            - heading "首页直接看当前项目工作台。" [level=2] [ref=e72]
+          - generic [ref=e73]:
+            - combobox [ref=e74]:
+              - option "Browser H2A 526449 · 靶点确认" [selected]
+              - option "SecondMe Architecture Program · 靶点确认"
+              - option "Phase2 API Smoke · 靶点确认"
+              - option "API Skeleton Smoke · 靶点确认"
+            - button "打开完整工作台" [ref=e75] [cursor=pointer]
+          - generic [ref=e77]:
+            - generic [ref=e78]:
+              - generic [ref=e79]:
+                - generic [ref=e80]: Browser H2A 526449
+                - generic [ref=e81]: KRAS · CRC · Target Assessment
+              - generic [ref=e82]: active
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - generic [ref=e85]: 人工成员
+                - strong [ref=e86]: "1"
+              - generic [ref=e87]:
+                - generic [ref=e88]: Workflow Runs
+                - strong [ref=e89]: "0"
+              - generic [ref=e90]:
+                - generic [ref=e91]: Timeline Items
+                - strong [ref=e92]: "7"
+              - generic [ref=e93]:
+                - generic [ref=e94]: H2A Threads
+                - strong [ref=e95]: "1"
+              - generic [ref=e96]:
+                - generic [ref=e97]: Capabilities
+                - strong [ref=e98]: "4"
+              - generic [ref=e99]:
+                - generic [ref=e100]: Executions
+                - strong [ref=e101]: "0"
+          - generic [ref=e103]: 当前项目还没有 workflow run
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - paragraph [ref=e106]: AI Team
+            - heading "首页直接看到 AI 团队与平台 agent。" [level=2] [ref=e107]
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e110]: 🧪
+              - generic [ref=e111]: 药物化学家
+              - generic [ref=e112]: medicinal_chemist
+              - generic [ref=e113]:
+                - generic [ref=e114]: SMILES
+                - generic [ref=e115]: 命名反应
+                - generic [ref=e116]: 合成路线设计
+            - generic [ref=e117]:
+              - generic [ref=e118]: 🔬
+              - generic [ref=e119]: 生物学家
+              - generic [ref=e120]: biologist
+              - generic [ref=e121]:
+                - generic [ref=e122]: 靶点验证
+                - generic [ref=e123]: 细胞实验设计
+                - generic [ref=e124]: 动物模型
+            - generic [ref=e125]:
+              - generic [ref=e126]: 💊
+              - generic [ref=e127]: 药理学家
+              - generic [ref=e128]: pharmacologist
+              - generic [ref=e129]:
+                - generic [ref=e130]: PK/PD建模
+                - generic [ref=e131]: 剂量-反应关系
+                - generic [ref=e132]: 毒理学评估
+            - generic [ref=e133]:
+              - generic [ref=e134]: 📊
+              - generic [ref=e135]: 数据科学家
+              - generic [ref=e136]: data_scientist
+              - generic [ref=e137]:
+                - generic [ref=e138]: 机器学习
+                - generic [ref=e139]: 分子表示学习
+                - generic [ref=e140]: 虚拟筛选
+            - generic [ref=e141]:
+              - generic [ref=e142]: 📋
+              - generic [ref=e143]: 项目负责人
+              - generic [ref=e144]: project_lead
+              - generic [ref=e145]:
+                - generic [ref=e146]: 项目管理
+                - generic [ref=e147]: 资源分配
+                - generic [ref=e148]: Go/No-Go决策
+          - generic [ref=e149]:
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - strong [ref=e152]: 🤖 DMPK Strategist
+                - paragraph [ref=e153]: Owns developability, DMPK, and candidate nomination tradeoffs across a compound series.
+              - generic [ref=e154]:
+                - generic [ref=e155]: domain
+                - generic [ref=e156]: strategist
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - strong [ref=e159]: 🤖 Discovery Strategist
+                - paragraph [ref=e160]: Turns a project brief into an executable drug discovery implementation plan.
+              - generic [ref=e161]:
+                - generic [ref=e162]: domain
+                - generic [ref=e163]: strategist
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - strong [ref=e166]: 🤖 数据科学家
+                - paragraph [ref=e167]: 数据科学家 agent for drug discovery collaboration
+              - generic [ref=e168]:
+                - generic [ref=e169]: domain
+                - generic [ref=e170]: expert
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - strong [ref=e173]: 🤖 生物学家
+                - paragraph [ref=e174]: 生物学家 agent for drug discovery collaboration
+              - generic [ref=e175]:
+                - generic [ref=e176]: domain
+                - generic [ref=e177]: expert
+            - generic [ref=e178]:
+              - generic [ref=e179]:
+                - strong [ref=e180]: 🤖 药物化学家
+                - paragraph [ref=e181]: 药物化学家 agent for drug discovery collaboration
+              - generic [ref=e182]:
+                - generic [ref=e183]: domain
+                - generic [ref=e184]: expert
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - strong [ref=e187]: 🤖 药理学家
+                - paragraph [ref=e188]: 药理学家 agent for drug discovery collaboration
+              - generic [ref=e189]:
+                - generic [ref=e190]: domain
+                - generic [ref=e191]: expert
+            - generic [ref=e192]:
+              - generic [ref=e193]:
+                - strong [ref=e194]: 🤖 项目负责人
+                - paragraph [ref=e195]: 项目负责人 agent for drug discovery collaboration
+              - generic [ref=e196]:
+                - generic [ref=e197]: domain
+                - generic [ref=e198]: expert
+            - generic [ref=e199]:
+              - generic [ref=e200]:
+                - strong [ref=e201]: 🔗 Integration Agent
+                - paragraph [ref=e202]: Owns MCP, Second Me, and external system integration tasks.
+              - generic [ref=e203]:
+                - generic [ref=e204]: platform
+                - generic [ref=e205]: copilot
+            - generic [ref=e206]:
+              - generic [ref=e207]:
+                - strong [ref=e208]: ✅ Scientific Reviewer
+                - paragraph [ref=e209]: Reviews outputs for scientific consistency and evidence gaps.
+              - generic [ref=e210]:
+                - generic [ref=e211]: platform
+                - generic [ref=e212]: reviewer
+            - generic [ref=e213]:
+              - generic [ref=e214]:
+                - strong [ref=e215]: 🛰️ Workflow Orchestrator
+                - paragraph [ref=e216]: Coordinates multi-agent workflows and assigns tasks.
+              - generic [ref=e217]:
+                - generic [ref=e218]: platform
+                - generic [ref=e219]: orchestrator
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - paragraph [ref=e222]: H2A
+          - heading "让 Human 和 Agent 在首页直接对话。" [level=2] [ref=e223]
+          - paragraph [ref=e224]: 不是把人丢给一个总入口大模型，而是让真实工作人员登录后，以自己的身份点名一个或多个 agent，形成可追踪的项目线程。
+        - generic [ref=e225]:
+          - complementary [ref=e226]:
+            - generic [ref=e227]:
+              - heading "真实用户身份" [level=2] [ref=e228]
+              - generic [ref=e230]: 当前未登录，H2A 会话会退化为临时成员身份，无法继承项目权限。
+              - generic [ref=e231]:
+                - textbox "用户名" [ref=e232]
+                - textbox "密码" [ref=e233]
+                - generic [ref=e234]:
+                  - button "登录" [ref=e235] [cursor=pointer]
+                  - button "注册新用户" [ref=e236] [cursor=pointer]
+                  - button "退出" [ref=e237] [cursor=pointer]
+            - generic [ref=e238]:
+              - heading "会话配置" [level=2] [ref=e239]
+              - generic [ref=e240]:
+                - combobox [ref=e241]:
+                  - option "Browser H2A 526449 · 靶点确认" [selected]
+                  - option "SecondMe Architecture Program · 靶点确认"
+                  - option "Phase2 API Smoke · 靶点确认"
+                  - option "API Skeleton Smoke · 靶点确认"
+                - combobox [ref=e242]:
+                  - option "Browser 526467 · Project Scientist" [selected]
+                - generic [ref=e243]:
+                  - button "🤖 DMPK Strategist" [ref=e244] [cursor=pointer]:
+                    - generic [ref=e245]: 🤖
+                    - generic [ref=e246]: DMPK Strategist
+                  - button "🤖 Discovery Strategist" [ref=e247] [cursor=pointer]:
+                    - generic [ref=e248]: 🤖
+                    - generic [ref=e249]: Discovery Strategist
+                  - button "🤖 数据科学家" [ref=e250] [cursor=pointer]:
+                    - generic [ref=e251]: 🤖
+                    - generic [ref=e252]: 数据科学家
+                  - button "🤖 生物学家" [ref=e253] [cursor=pointer]:
+                    - generic [ref=e254]: 🤖
+                    - generic [ref=e255]: 生物学家
+                  - button "🤖 药物化学家" [ref=e256] [cursor=pointer]:
+                    - generic [ref=e257]: 🤖
+                    - generic [ref=e258]: 药物化学家
+                  - button "🤖 药理学家" [ref=e259] [cursor=pointer]:
+                    - generic [ref=e260]: 🤖
+                    - generic [ref=e261]: 药理学家
+                  - button "🤖 项目负责人" [ref=e262] [cursor=pointer]:
+                    - generic [ref=e263]: 🤖
+                    - generic [ref=e264]: 项目负责人
+                  - button "🔗 Integration Agent" [ref=e265] [cursor=pointer]:
+                    - generic [ref=e266]: 🔗
+                    - generic [ref=e267]: Integration Agent
+                  - button "✅ Scientific Reviewer" [ref=e268] [cursor=pointer]:
+                    - generic [ref=e269]: ✅
+                    - generic [ref=e270]: Scientific Reviewer
+                  - button "🛰️ Workflow Orchestrator" [ref=e271] [cursor=pointer]:
+                    - generic [ref=e272]: 🛰️
+                    - generic [ref=e273]: Workflow Orchestrator
+                - generic [ref=e274]: 当前群聊已选择 2 个 agent：DMPK Strategist / Discovery Strategist
+                - button "创建多 Agent 群聊线程" [ref=e275] [cursor=pointer]
+            - generic [ref=e276]:
+              - heading "对话线程" [level=2] [ref=e277]
+              - article [ref=e279] [cursor=pointer]:
+                - strong [ref=e280]: Browser 526467 ↔ 2 Agents
+                - paragraph [ref=e281]: "基于我的专业判断（生物学家/药理学家视角），数据科学家的建议在**数据整合与计算建模**方面是全面且合理的起点。然而，从**靶点验证和活性评估的生物学严谨性**出发，我认为当前阶段（target_id）的核心风险在于**过早陷入计算模拟而缺乏关键的实验锚点**。KRAS是一个已有大量研究但仍有重大挑战的靶点，单纯的计算预测若无生物学验证，极易产生误导。 因此，我建议下一周的优先事项应**更侧重于建立生物学基础和实验验证框架**，具体如下： ### **第一优先：深入的文献挖掘与遗传学证据分析（奠定生物学合理性）** * **任务**：系统性地收集并分析KRAS在CRC中的**遗传学证据"
+                - generic [ref=e282]:
+                  - generic [ref=e283]: Browser 526467
+                  - generic [ref=e284]: group
+                  - generic [ref=e285]: 2 agents
+                  - generic [ref=e286]: 数据科学家
+                  - generic [ref=e287]: 生物学家
+                  - generic [ref=e288]: 3 messages
+          - generic [ref=e289]:
+            - generic [ref=e290]:
+              - generic [ref=e291]:
+                - heading "H2A Conversation" [level=2] [ref=e292]
+                - paragraph [ref=e293]: Human 先发问，多个 Agent 会基于同一项目上下文并行响应，再把每一轮对话沉淀回时间线。
+              - button "刷新线程" [ref=e294] [cursor=pointer]
+            - generic [ref=e295]:
+              - article [ref=e296]:
+                - strong [ref=e297]: Browser 526467 ↔ 2 Agents
+                - paragraph [ref=e298]: Human 以 Browser 526467 身份接入，当前线程模式为 group，会话由 2 个 agent 并行响应。
+                - generic [ref=e299]:
+                  - generic [ref=e300]: Browser 526467
+                  - generic [ref=e301]: group
+                  - generic [ref=e302]: 数据科学家
+                  - generic [ref=e303]: 生物学家
+              - article [ref=e304]:
+                - generic [ref=e305]:
+                  - strong [ref=e306]: Browser 526467
+                  - generic [ref=e307]: 04/07 09:47
+                - generic [ref=e308]: 请两位一起判断这个新项目下一周应该优先做什么。
+              - article [ref=e309]:
+                - generic [ref=e310]:
+                  - strong [ref=e311]: 数据科学家
+                  - generic [ref=e312]: 04/07 09:48
+                - generic [ref=e313]: "从数据驱动的角度来看，当前项目处于靶点识别（target_id）阶段，针对KRAS突变型结直肠癌（CRC）。基于现有信息和药物发现的一般流程，我建议下一周优先执行以下任务： 1. **数据收集与整合** - 立即系统收集KRAS在CRC中的突变频率、亚型分布（如G12C、G12D、G13D等）及现有抑制剂数据（如sotorasib、adagrasib的活性数据）。 - 整合公开数据库（如TCGA、COSMIC）的突变谱与临床预后关联数据，通过生存分析（Kaplan-Meier、Cox回归）量化不同突变的预后价值。 - **目标**：建立结构化数据集，为后续建模提供基础。 2. **靶点可药性评估** - 使用计算工具（如FPocket、SiteMap）分析KRAS突变蛋白的3D结构（PDB ID: 如5VBA），预测可结合口袋的理化性质（疏水性、氢键受体/供体分布）。 - 通过已知抑制剂的分子动力学模拟（如GROMACS）评估结合稳定性，计算结合自由能（MM/PBSA）。 - **目标**：量化突变位点的可药性，优先选择口袋特征明确的突变体（如G12C已有成功案例，但需关注耐药突变）。 3. **AI/ML初步建模** - 构建QSAR模型：基于已知KRAS抑制剂的化学结构（SMILES）与活性数据（IC50），使用图神经网络（GNN）或描述符（ECFP4、MACCS）训练分类/回归模型（AUC>0.85为基准）。 - 生成式模型探索：若数据充足，使用REINVENT或MolGAN生成针对突变KRAS的新颖骨架，通过Tanimoto相似性（阈值<0.4）确保新颖性。 - **目标**：快速筛选虚拟化合物库（如Enamine REAL），预测活性并评估置信区间（如通过模型不确定性量化）。 4. **风险评估与优先级排序**"
+              - article [ref=e314]:
+                - generic [ref=e315]:
+                  - strong [ref=e316]: 生物学家
+                  - generic [ref=e317]: 04/07 09:48
+                - generic [ref=e318]: "基于我的专业判断（生物学家/药理学家视角），数据科学家的建议在**数据整合与计算建模**方面是全面且合理的起点。然而，从**靶点验证和活性评估的生物学严谨性**出发，我认为当前阶段（target_id）的核心风险在于**过早陷入计算模拟而缺乏关键的实验锚点**。KRAS是一个已有大量研究但仍有重大挑战的靶点，单纯的计算预测若无生物学验证，极易产生误导。 因此，我建议下一周的优先事项应**更侧重于建立生物学基础和实验验证框架**，具体如下： ### **第一优先：深入的文献挖掘与遗传学证据分析（奠定生物学合理性）** * **任务**：系统性地收集并分析KRAS在CRC中的**遗传学证据"
+            - generic [ref=e319]:
+              - textbox "例如：请以药物化学家的角度，判断这个项目当前最该推进什么实验？" [ref=e320]
+              - generic [ref=e321]:
+                - button "发送给 Agent" [ref=e322] [cursor=pointer]
+                - button "查看完整 AI 团队" [ref=e323] [cursor=pointer]
+      - generic [ref=e325]:
+        - generic [ref=e326]:
+          - paragraph [ref=e327]: Cinematic Demo
+          - heading "把深夜无人应答的药研项目，拍成一支会自己推进的短片。" [level=2] [ref=e328]
+          - paragraph [ref=e329]: 现在首页放的是一支真正导出的宣传短片，不再是假装在播放。 它从失败结果开始拍起，把“没人一起判断”的那一刻，拍到五个数字分身接住项目、工具合流、结论落地。
+          - generic [ref=e330]:
+            - generic [ref=e331]:
+              - generic [ref=e332]: "01"
+              - strong [ref=e333]: 镜头从压力开始
+              - paragraph [ref=e334]: 不是讲功能，而是先拍那个最真实的深夜：实验失败、风险升高、团队无人回复。
+            - generic [ref=e335]:
+              - generic [ref=e336]: "02"
+              - strong [ref=e337]: 角色被同时召回
+              - paragraph [ref=e338]: 药化、生物、药理、数据、项目管理五个分身，在同一问题上同步给出判断。
+            - generic [ref=e339]:
+              - generic [ref=e340]: "03"
+              - strong [ref=e341]: 工具直接进剧情
+              - paragraph [ref=e342]: ADMET、场景模板、化合物策略和项目板不是旁白，它们直接进入镜头中心。
+            - generic [ref=e343]:
+              - generic [ref=e344]: "04"
+              - strong [ref=e345]: 结尾必须带推进
+              - paragraph [ref=e346]: 最后落下来的不是一句答案，而是下一轮实验、下一次周会和下一步 sprint。
+          - generic [ref=e347]:
+            - button "暂停短片" [ref=e348] [cursor=pointer]
+            - button "重新播放" [ref=e349] [cursor=pointer]
+            - button "打开分镜页" [ref=e350] [cursor=pointer]
+          - generic [ref=e352]: 24 秒 / 5 幕 / 导出为 MP4 + WebM
+        - generic [ref=e353]:
+          - generic [ref=e354]:
+            - generic [ref=e355]:
+              - generic [ref=e356]: DrugMind Promo Film
+              - generic [ref=e357]: 导出成片，回嵌首页，作为产品 Demo 播放
+            - generic [ref=e358]: 视频播放中
+          - generic [ref=e359]:
+            - generic:
+              - generic: DrugMind / Demo Reel
+              - generic:
+                - strong: 从失败结果，到下一轮实验。
+                - paragraph: 一支真正导出的首页宣传短片，讲完整个药研协作闭环。
+          - generic [ref=e361]:
+            - generic [ref=e362]:
+              - generic [ref=e363]: "01"
+              - paragraph [ref=e364]: 深夜失败结果
+            - generic [ref=e365]:
+              - generic [ref=e366]: "02"
+              - paragraph [ref=e367]: 问题进入平台
+            - generic [ref=e368]:
+              - generic [ref=e369]: "03"
+              - paragraph [ref=e370]: 五角度同步讨论
+            - generic [ref=e371]:
+              - generic [ref=e372]: "04"
+              - paragraph [ref=e373]: 工具与判断合流
+            - generic [ref=e374]:
+              - generic [ref=e375]: "05"
+              - paragraph [ref=e376]: 项目推进落地
+      - generic [ref=e377]:
+        - heading "🔬 最新讨论" [level=2] [ref=e378]
+        - generic [ref=e380]:
+          - generic [ref=e381]: 💬
+          - text: 暂无讨论，成为第一个发起讨论的人
+    - text: ☐ ☐ ☐ ☐ ☐ ☐
+  - contentinfo [ref=e382]:
+    - paragraph [ref=e383]:
+      - text: © 2026 DrugMind · AI驱动的药物研发协作平台 ·
+      - link "GitHub" [ref=e384] [cursor=pointer]:
+        - /url: https://github.com/MoKangMedical/drugmind

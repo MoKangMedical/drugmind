@@ -59,7 +59,7 @@ pip install -r requirements.txt
 
 # 设置环境变量
 export MIMO_BASE_URL="https://api.xiaomimimo.com/v1"
-export MIMO_API_KEY="sk-ccwzuzw9e1t42xjok84nfx7wrv4geuzc590ojipwfqga5uxl"
+export MIMO_API_KEY="your-mimo-api-key"
 
 # 启动
 python3 main.py serve --port 8096

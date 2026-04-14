@@ -4,7 +4,10 @@ ADMET预测桥接
 """
 
 import logging
+import os
 from typing import Optional
+
+from integrations import MediPharmaClient
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +16,13 @@ class ADMETBridge:
     """ADMET预测桥接层"""
 
     def __init__(self, medipharma_api_url: str = ""):
-        self.api_url = medipharma_api_url
+        configured_url = (
+            medipharma_api_url
+            or os.getenv("MEDI_PHARMA_BASE_URL", "").strip()
+            or os.getenv("MEDIPHARMA_BASE_URL", "").strip()
+        )
+        self.api_url = configured_url.rstrip("/")
+        self.client = MediPharmaClient(base_url=self.api_url)
 
     def predict(self, smiles: str) -> dict:
         """ADMET预测"""
@@ -24,13 +33,7 @@ class ADMETBridge:
     def _call_api(self, smiles: str) -> dict:
         """调用MediPharma API"""
         try:
-            import httpx
-            resp = httpx.post(
-                f"{self.api_url}/api/v1/admet/predict",
-                json={"smiles": smiles},
-                timeout=30
-            )
-            return resp.json()
+            return self.client.predict_admet({"smiles": smiles})
         except Exception as e:
             logger.error(f"MediPharma API调用失败: {e}")
             return {"error": str(e)}

@@ -19,6 +19,7 @@ class Project:
     name: str
     target: str = ""
     disease: str = ""
+    modality: str = "small_molecule"  # small_molecule / biologics / protein / antibody / nanobody
     status: str = "active"  # active / paused / completed
     stage: str = "target_id"  # target_id / screening / hit_to_lead / lead_opt / candidate
     compounds: list[dict] = field(default_factory=list)
@@ -59,7 +60,8 @@ class KanbanBoard:
         name: str,
         target: str = "",
         disease: str = "",
-        budget: float = 0
+        budget: float = 0,
+        modality: str = "small_molecule",
     ) -> Project:
         """创建项目"""
         project = Project(
@@ -67,6 +69,7 @@ class KanbanBoard:
             name=name,
             target=target,
             disease=disease,
+            modality=modality,
             budget_total=budget,
         )
         self.projects[project_id] = project

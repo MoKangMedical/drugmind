@@ -4,7 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DrugMind — AI驱动的药物研发协作平台</title>
+    <meta name="description" content="DrugMind — 药物研发人员的数字分身协作平台。7×24 AI专家协作，加速药物发现。">
+    <meta property="og:title" content="DrugMind | 药物研发数字分身平台">
+    <meta property="og:description" content="让每一位药物研发人员拥有自己的AI数字分身，7×24与其他研发人员的分身讨论药物项目。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://drugmind.cloud">
+    <meta property="og:image" content="https://drugmind.cloud/media/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='44'%3E%F0%9F%A7%AC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar" id="navbar">
@@ -377,6 +388,21 @@
           <div id="workbenchProjectSummary" class="workbench-summary empty-state">请选择一个项目</div>
         </div>
 
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>Implementation Blueprint</h2>
+              <p>把项目阶段、默认 capability、退出标准和 BY 映射放到同一块控制面板。</p>
+            </div>
+            <div class="workbench-inline-actions">
+              <button class="btn btn-sm btn-outline" type="button" onclick="refreshDrugDiscoveryCatalogs()">刷新目录</button>
+            </div>
+          </div>
+          <div id="workbenchImplementationPanel" class="workbench-panel-body">
+            <div class="empty-state">请选择一个项目</div>
+          </div>
+        </div>
+
         <div class="tool-card workbench-card" id="workbenchCreateProjectCard" style="display:none">
           <div class="workbench-card-header">
             <div>
@@ -411,6 +437,18 @@
         <div class="tool-card workbench-card">
           <div class="workbench-card-header">
             <div>
+              <h2>Second Me Sync</h2>
+              <p>查看绑定、挑选实例并把 implementation、workflow 和 memory 同步出去。</p>
+            </div>
+          </div>
+          <div id="workbenchSecondMePanel" class="workbench-panel-body">
+            <div class="empty-state">暂无 Second Me 绑定</div>
+          </div>
+        </div>
+
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
               <h2>Artifact Timeline</h2>
               <p>把 decision、discussion、memory、Second Me sync 拉成一条项目时间线。</p>
             </div>
@@ -422,6 +460,44 @@
       </aside>
 
       <section class="workbench-main">
+        <div class="workbench-split-grid">
+          <div class="tool-card workbench-card">
+            <div class="workbench-card-header">
+              <div>
+                <h2>Capability Launcher</h2>
+                <p>直接执行 DrugMind capability，并把结果推回 artifact 和 Second Me。</p>
+              </div>
+            </div>
+            <div id="workbenchCapabilityPanel" class="workbench-panel-body">
+              <div class="empty-state">请选择一个项目</div>
+            </div>
+          </div>
+
+          <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>BY / Structural Biology Bridge</h2>
+              <p>把 BY 的结构研究、Tamarind submit/status/poll 和 biologics pipeline 放进同一个可执行面板。</p>
+            </div>
+          </div>
+            <div id="workbenchByBridgePanel" class="workbench-panel-body">
+              <div class="empty-state">请选择一个项目</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-card workbench-card">
+          <div class="workbench-card-header">
+            <div>
+              <h2>MediPharma Bridge</h2>
+              <p>把靶点发现、虚拟筛选、分子生成、ADMET、先导优化、全流水线和知识引擎接进 DrugMind 工作台。</p>
+            </div>
+          </div>
+          <div id="workbenchMediPharmaPanel" class="workbench-panel-body">
+            <div class="empty-state">请选择一个项目</div>
+          </div>
+        </div>
+
         <div class="tool-card workbench-card">
           <div class="workbench-card-header">
             <div>

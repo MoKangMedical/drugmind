@@ -1,0 +1,80 @@
+{
+  "api_skeleton_smoke": {
+    "project_id": "api_skeleton_smoke",
+    "name": "API Skeleton Smoke",
+    "target": "EGFR",
+    "disease": "",
+    "status": "active",
+    "stage": "target_id",
+    "compounds": [],
+    "milestones": [],
+    "decisions": [],
+    "budget_total": 0,
+    "budget_spent": 0,
+    "created_at": "2026-04-06T20:24:54.503989",
+    "updated_at": ""
+  },
+  "phase2_api_smoke": {
+    "project_id": "phase2_api_smoke",
+    "name": "Phase2 API Smoke",
+    "target": "KRAS",
+    "disease": "",
+    "status": "active",
+    "stage": "target_id",
+    "compounds": [
+      {
+        "compound_id": "CMP-001",
+        "name": "CMP-001",
+        "linked_at": "2026-04-06T20:30:36.155963"
+      }
+    ],
+    "milestones": [],
+    "decisions": [
+      {
+        "decision": "CONDITIONAL",
+        "rationale": "Proceed after more ADMET data.",
+        "timestamp": "2026-04-06T20:30:36.169080"
+      }
+    ],
+    "budget_total": 0,
+    "budget_spent": 0,
+    "created_at": "2026-04-06T20:30:36.145771",
+    "updated_at": "2026-04-06T20:30:36.155972"
+  },
+  "proj_secondme_arch": {
+    "project_id": "proj_secondme_arch",
+    "name": "SecondMe Architecture Program",
+    "target": "MCL1",
+    "disease": "Oncology",
+    "status": "active",
+    "stage": "target_id",
+    "compounds": [],
+    "milestones": [],
+    "decisions": [
+      {
+        "decision": "GO",
+        "rationale": "Reviewer outcome: GO\n- Step: Review Delivery\n- Topic: Smoke test workflow from local browser verification\n- Upstream outputs reviewed: 1\n- No material scientific blockers were detected in the current workflow context.\n- Approval recommendation: approve and proceed to the next execution stage.",
+        "timestamp": "2026-04-07T09:14:07.299020"
+      }
+    ],
+    "budget_total": 500000,
+    "budget_spent": 0,
+    "created_at": "2026-04-07T02:00:11.135734",
+    "updated_at": ""
+  },
+  "browser_h2a_1775526449": {
+    "project_id": "browser_h2a_1775526449",
+    "name": "Browser H2A 526449",
+    "target": "KRAS",
+    "disease": "CRC",
+    "status": "active",
+    "stage": "target_id",
+    "compounds": [],
+    "milestones": [],
+    "decisions": [],
+    "budget_total": 0,
+    "budget_spent": 0,
+    "created_at": "2026-04-07T09:47:45.815392",
+    "updated_at": ""
+  }
+}

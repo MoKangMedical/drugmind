@@ -32,6 +32,11 @@ class ProjectWorkspace:
     linked_discussions: list[str] = field(default_factory=list)
     linked_decisions: list[str] = field(default_factory=list)
     linked_compounds: list[str] = field(default_factory=list)
+    linked_second_me_instances: list[str] = field(default_factory=list)
+    implementation_blueprint_id: str = ""
+    implementation_phase_id: str = ""
+    enabled_capabilities: list[str] = field(default_factory=list)
+    linked_capability_executions: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
     created_at: str = ""
     updated_at: str = ""
@@ -62,6 +67,7 @@ class ProjectWorkspaceStore:
         default_agents: list[str] | None = None,
         enabled_skills: list[str] | None = None,
         enabled_tools: list[str] | None = None,
+        enabled_capabilities: list[str] | None = None,
         tags: list[str] | None = None,
     ) -> dict:
         existing = self.workspaces.get(project_id)
@@ -93,6 +99,11 @@ class ProjectWorkspaceStore:
                     if tool_id not in existing.enabled_tools:
                         existing.enabled_tools.append(tool_id)
                         changed = True
+            if enabled_capabilities:
+                for capability_id in enabled_capabilities:
+                    if capability_id not in existing.enabled_capabilities:
+                        existing.enabled_capabilities.append(capability_id)
+                        changed = True
             if changed:
                 existing.updated_at = datetime.now().isoformat()
                 self._save()
@@ -106,6 +117,7 @@ class ProjectWorkspaceStore:
             default_agents=default_agents or [],
             enabled_skills=enabled_skills or [],
             enabled_tools=enabled_tools or [],
+            enabled_capabilities=enabled_capabilities or [],
         )
         self.workspaces[project_id] = workspace
         self._save()
@@ -137,6 +149,9 @@ class ProjectWorkspaceStore:
             "linked_discussions",
             "linked_decisions",
             "linked_compounds",
+            "linked_second_me_instances",
+            "enabled_capabilities",
+            "linked_capability_executions",
             "notes",
         }
         for key, value in updates.items():
@@ -177,6 +192,12 @@ class ProjectWorkspaceStore:
 
     def link_compound(self, project_id: str, compound_id: str) -> dict:
         return self._link(project_id, "linked_compounds", compound_id)
+
+    def link_second_me_instance(self, project_id: str, instance_id: str) -> dict:
+        return self._link(project_id, "linked_second_me_instances", instance_id)
+
+    def link_capability_execution(self, project_id: str, execution_id: str) -> dict:
+        return self._link(project_id, "linked_capability_executions", execution_id)
 
     def count(self) -> int:
         return len(self.workspaces)

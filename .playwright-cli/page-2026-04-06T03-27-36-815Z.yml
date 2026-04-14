@@ -1,0 +1,190 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img "SecondMe Logo" [ref=e8]
+        - generic [ref=e9]:
+          - generic [ref=e10]: Second Me
+          - generic [ref=e11]: DEVELOPER
+      - menu [ref=e12]:
+        - menuitem "home 控制台" [ref=e13] [cursor=pointer]:
+          - img "home" [ref=e14]:
+            - img [ref=e15]
+          - generic [ref=e17]: 控制台
+        - menuitem "appstore 我的应用" [expanded] [ref=e18] [cursor=pointer]:
+          - img "appstore" [ref=e19]:
+            - img [ref=e20]
+          - generic [ref=e22]: 我的应用
+        - menu [ref=e23]:
+          - menuitem "应用列表" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]: 应用列表
+        - menuitem "shop 应用商店" [ref=e26] [cursor=pointer]:
+          - img "shop" [ref=e27]:
+            - img [ref=e28]
+          - generic [ref=e30]: 应用商店
+        - menuitem "api 集成管理" [expanded] [ref=e31] [cursor=pointer]:
+          - img "api" [ref=e32]:
+            - img [ref=e33]
+          - generic [ref=e35]: 集成管理
+        - menu [ref=e167]:
+          - menuitem "集成列表" [ref=e168] [cursor=pointer]:
+            - generic [ref=e169]: 集成列表
+        - menuitem "book 文档中心" [ref=e36] [cursor=pointer]:
+          - img "book" [ref=e37]:
+            - img [ref=e38]
+          - generic [ref=e40]: 文档中心
+        - menuitem "rocket Developer Skill" [ref=e41] [cursor=pointer]:
+          - img "rocket" [ref=e42]:
+            - img [ref=e43]
+          - generic [ref=e45]: Developer Skill
+      - button "menu-fold" [ref=e47] [cursor=pointer]:
+        - img "menu-fold" [ref=e49]:
+          - img [ref=e50]
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - generic [ref=e54]:
+        - navigation [ref=e56]:
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - generic [ref=e60] [cursor=pointer]: 首页
+            - listitem [ref=e61]: /
+            - listitem [ref=e62]: 我的应用
+            - listitem [ref=e170]: /
+            - listitem [ref=e171]: 应用列表
+        - generic [ref=e63]:
+          - button "global 中" [ref=e64] [cursor=pointer]:
+            - img "global" [ref=e66]:
+              - img [ref=e67]
+            - generic [ref=e69]: 中
+          - button "moon" [ref=e70] [cursor=pointer]:
+            - img "moon" [ref=e72]:
+              - img [ref=e73]
+          - button "bell" [ref=e75] [cursor=pointer]:
+            - img "bell" [ref=e77]:
+              - img [ref=e78]
+          - button "question-circle" [ref=e80] [cursor=pointer]:
+            - img "question-circle" [ref=e82]:
+              - img [ref=e83]
+          - img [ref=e87] [cursor=pointer]
+    - main [ref=e88]:
+      - generic [ref=e728]:
+        - generic [ref=e729]:
+          - heading "我的应用" [level=3] [ref=e730]
+          - button "plus 新建应用" [ref=e732] [cursor=pointer]:
+            - img "plus" [ref=e734]:
+              - img [ref=e735]
+            - generic [ref=e738]: 新建应用
+        - generic [ref=e743]:
+          - table [ref=e747]:
+            - rowgroup [ref=e756]:
+              - row "Select all 应用名称 应用描述 状态 创建时间 更新时间 操作" [ref=e757]:
+                - columnheader "Select all" [ref=e758]:
+                  - checkbox "Select all" [ref=e762] [cursor=pointer]
+                - columnheader "应用名称" [ref=e763]:
+                  - generic [ref=e764]:
+                    - generic [ref=e765]: 应用名称
+                    - textbox "搜索应用名称" [ref=e768]
+                - columnheader "应用描述" [ref=e770]
+                - columnheader "状态" [ref=e771]
+                - columnheader "创建时间" [ref=e772] [cursor=pointer]:
+                  - generic [ref=e773]:
+                    - generic [ref=e774]: 创建时间
+                    - generic [ref=e776]:
+                      - img [ref=e777]:
+                        - img [ref=e778]
+                      - img [ref=e780]:
+                        - img [ref=e781]
+                - columnheader "更新时间" [ref=e783] [cursor=pointer]:
+                  - generic [ref=e784]:
+                    - generic [ref=e785]: 更新时间
+                    - generic [ref=e787]:
+                      - img [ref=e788]:
+                        - img [ref=e789]
+                      - img [ref=e791]:
+                        - img [ref=e792]
+                - columnheader "操作" [ref=e794]
+            - rowgroup [ref=e795]:
+              - checkbox [ref=e799] [cursor=pointer]
+              - generic [ref=e800]:
+                - generic [ref=e801]: 应用名称
+                - textbox [ref=e804]:
+                  - /placeholder: 搜索应用名称
+              - generic [ref=e806]:
+                - generic [ref=e807]: 创建时间
+                - generic [ref=e809]:
+                  - img [ref=e810]:
+                    - img [ref=e811]
+                  - img [ref=e813]:
+                    - img [ref=e814]
+              - generic [ref=e816]:
+                - generic [ref=e817]: 更新时间
+                - generic [ref=e819]:
+                  - img [ref=e820]:
+                    - img [ref=e821]
+                  - img [ref=e823]:
+                    - img [ref=e824]
+              - row "MediChat-RD 罕见病助手 AI-driven rare disease screening, diseas... 审核中 未发布 2026/4/5 2026/4/5 edit delete" [ref=e826] [cursor=pointer]:
+                - cell [ref=e827]:
+                  - checkbox [ref=e830]
+                - cell "MediChat-RD 罕见病助手" [ref=e831]:
+                  - strong [ref=e833]: MediChat-RD 罕见病助手
+                - cell "AI-driven rare disease screening, diseas..." [ref=e834]:
+                  - generic [ref=e835]: AI-driven rare disease screening, diseas...
+                - cell "审核中 未发布" [ref=e836]:
+                  - generic [ref=e837]:
+                    - generic [ref=e839]: 审核中
+                    - generic [ref=e841]: 未发布
+                - cell "2026/4/5" [ref=e842]
+                - cell "2026/4/5" [ref=e843]
+                - cell "edit delete" [ref=e844]:
+                  - generic [ref=e845]:
+                    - button "edit" [ref=e847]:
+                      - img "edit" [ref=e849]:
+                        - img [ref=e850]
+                    - button "delete" [ref=e853]:
+                      - img "delete" [ref=e855]:
+                        - img [ref=e856]
+              - row "MedRoundTable-临床科研圆桌会 全球首个基于A2A架构的医学科研协作平台，14位专业AI Agent实现从临床问... 已通过 已发布 2026/2/10 2026/3/25 edit delete" [ref=e858] [cursor=pointer]:
+                - cell [ref=e859]:
+                  - checkbox [ref=e862]
+                - cell "MedRoundTable-临床科研圆桌会" [ref=e863]:
+                  - strong [ref=e865]: MedRoundTable-临床科研圆桌会
+                - cell "全球首个基于A2A架构的医学科研协作平台，14位专业AI Agent实现从临床问..." [ref=e866]:
+                  - generic [ref=e867]: 全球首个基于A2A架构的医学科研协作平台，14位专业AI Agent实现从临床问...
+                - cell "已通过 已发布" [ref=e868]:
+                  - generic [ref=e869]:
+                    - generic [ref=e871]: 已通过
+                    - generic [ref=e873]: 已发布
+                - cell "2026/2/10" [ref=e874]
+                - cell "2026/3/25" [ref=e875]
+                - cell "edit delete" [ref=e876]:
+                  - generic [ref=e877]:
+                    - button "edit" [ref=e879]:
+                      - img "edit" [ref=e881]:
+                        - img [ref=e882]
+                    - button "delete" [ref=e885]:
+                      - img "delete" [ref=e887]:
+                        - img [ref=e888]
+          - list [ref=e890]:
+            - listitem [ref=e891]: 共 2 项
+            - listitem "上一页" [ref=e892]:
+              - button "left" [disabled] [ref=e893]:
+                - img "left" [ref=e894]:
+                  - img [ref=e895]
+            - listitem "1" [ref=e897] [cursor=pointer]:
+              - generic [ref=e898]: "1"
+            - listitem "下一页" [ref=e899]:
+              - button "right" [disabled] [ref=e900]:
+                - img "right" [ref=e901]:
+                  - img [ref=e902]
+            - listitem [ref=e904]:
+              - generic [ref=e905]:
+                - generic "20 条/页" [ref=e906]:
+                  - text: 20 条/页
+                  - combobox "页码" [ref=e907]
+                - img "down" [ref=e909]:
+                  - img [ref=e910]
+    - contentinfo [ref=e132]:
+      - img "SecondMe" [ref=e133]
+      - generic [ref=e134]: Copyright © 2026 SecondMe 开发者平台. All Rights Reserved.
+      - button "问题求助" [ref=e135] [cursor=pointer]

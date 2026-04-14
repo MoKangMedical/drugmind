@@ -1,0 +1,93 @@
+- generic [ref=e4]:
+  - generic [ref=e5] [cursor=pointer]:
+    - img "SecondMe" [ref=e6]
+    - generic [ref=e7]: Second Me
+  - link "book 查看开发者文档" [ref=e8] [cursor=pointer]:
+    - /url: https://develop-docs.second.me/
+    - img "book" [ref=e9]:
+      - img [ref=e10]
+    - generic [ref=e12]: 查看开发者文档
+  - generic [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: <
+          - generic [ref=e22]: SM
+          - generic [ref=e23]: />
+        - heading "SecondMe Developer Skill" [level=1] [ref=e24]:
+          - text: SecondMe
+          - text: Developer Skill
+        - paragraph [ref=e25]: 从想法到上线，只要一个 Skill。
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e32]: 安装 Developer Skill
+          - button "Copy" [ref=e33] [cursor=pointer]
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: "1"
+            - generic [ref=e37]: "2"
+            - generic [ref=e38]: "3"
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - generic [ref=e41]: ">"
+              - generic [ref=e42]: https://develop.second.me/skill.md
+            - generic [ref=e43]:
+              - generic [ref=e44]: ">"
+              - generic [ref=e45]: 安装这个 Skill，并引导我完成
+            - generic [ref=e46]:
+              - generic [ref=e47]: ">"
+              - generic [ref=e48]: 与SecondMe 联调与信息提交。
+        - generic [ref=e49]:
+          - generic [ref=e50]: ✓
+          - generic [ref=e51]: Skill 提示词已就绪，可直接开始安装与提交流程
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]: ">"
+          - generic [ref=e55]:
+            - generic [ref=e56]: Skill 安装
+            - generic [ref=e57]: 从托管 Prompt 直接开始
+        - generic [ref=e58]:
+          - generic [ref=e59]: "#"
+          - generic [ref=e60]:
+            - generic [ref=e61]: 凭证配置
+            - generic [ref=e62]: 绑定应用信息与密钥
+        - generic [ref=e63]:
+          - generic [ref=e64]: ~
+          - generic [ref=e65]:
+            - generic [ref=e66]: 联合调试
+            - generic [ref=e67]: 串起集成排查流程
+        - generic [ref=e68]:
+          - generic [ref=e69]: $
+          - generic [ref=e70]:
+            - generic [ref=e71]: 信息提交
+            - generic [ref=e72]: 完成平台侧提交流程
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - paragraph [ref=e77]: 登录
+        - generic [ref=e78]:
+          - button "Google 使用 Google 登录" [ref=e79] [cursor=pointer]:
+            - img "Google" [ref=e80]
+            - generic [ref=e81]: 使用 Google 登录
+          - button "使用 Apple 登录" [ref=e82] [cursor=pointer]:
+            - img [ref=e83]
+            - generic [ref=e85]: 使用 Apple 登录
+          - button "使用邮箱登录" [ref=e86] [cursor=pointer]:
+            - img [ref=e87]
+            - generic [ref=e90]: 使用邮箱登录
+        - generic [ref=e92]: 或者
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - generic [ref=e96] [cursor=pointer]:
+              - generic "+86" [ref=e97]:
+                - text: "+86"
+                - combobox [ref=e98]
+              - img "down" [ref=e100]:
+                - img [ref=e101]
+            - textbox "输入手机号" [ref=e103]
+          - generic [ref=e104]:
+            - textbox "输入验证码" [ref=e105]
+            - button "获取验证码" [disabled] [ref=e106]:
+              - generic: 获取验证码
+          - button "登 录" [ref=e107] [cursor=pointer]:
+            - generic [ref=e108]: 登 录
+      - generic [ref=e109]: Copyright © 2026 SecondMe 开发者平台. All Rights Reserved.

@@ -1530,6 +1530,11 @@ code {
   gap: 22px;
   align-items: start;
 }
+.workbench-split-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
 .workbench-sidebar,
 .workbench-main {
   display: grid;
@@ -1590,8 +1595,104 @@ code {
   display: grid;
   gap: 12px;
 }
+.workbench-form-grid.compact {
+  gap: 10px;
+}
 .workbench-form-grid .full {
   width: 100%;
+}
+.workbench-panel-body,
+.workbench-panel-stack {
+  position: relative;
+  z-index: 1;
+}
+.workbench-panel-stack {
+  display: grid;
+  gap: 14px;
+}
+.capability-highlight,
+.execution-card,
+.phase-chip {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(8, 15, 34, 0.56);
+}
+.workbench-capability-head,
+.execution-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.workbench-capability-head p,
+.execution-card p,
+.phase-chip p {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.workbench-progress-rail {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.workbench-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5eead4, #6366f1);
+}
+.phase-strip,
+.execution-feed {
+  display: grid;
+  gap: 12px;
+}
+.phase-chip {
+  position: relative;
+  overflow: hidden;
+}
+.phase-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(140deg, rgba(255,255,255,0.06), transparent 46%);
+}
+.phase-chip.active {
+  border-color: rgba(94, 234, 212, 0.24);
+  background: rgba(94, 234, 212, 0.06);
+}
+.phase-chip span {
+  display: inline-flex;
+  margin-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.phase-chip strong {
+  display: block;
+  font-size: 15px;
+}
+.workbench-checklist {
+  display: grid;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.execution-card p {
+  margin-bottom: 0;
+}
+.artifact-link {
+  text-decoration: none;
+}
+.artifact-link:hover {
+  border-color: rgba(94, 234, 212, 0.24);
+  color: #c4fff3;
 }
 .checkbox-row {
   display: flex;
@@ -1977,6 +2078,9 @@ code {
     align-items: stretch;
   }
   .workbench-shell {
+    grid-template-columns: 1fr;
+  }
+  .workbench-split-grid {
     grid-template-columns: 1fr;
   }
   .workbench-metric-grid {

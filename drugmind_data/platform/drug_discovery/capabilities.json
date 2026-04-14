@@ -1,0 +1,646 @@
+{
+  "capability.structural_research": {
+    "capability_id": "capability.structural_research",
+    "name": "Structural Research",
+    "category": "biology",
+    "description": "Use PDB, UniProt, SAbDab, and knowledge traces to frame target feasibility.",
+    "stage_ids": [
+      "target_id",
+      "screening"
+    ],
+    "required_inputs": [
+      "target",
+      "modality"
+    ],
+    "outputs": [
+      "target_structure_plan",
+      "prior_art_summary"
+    ],
+    "recommended_agents": [
+      "agent.biologist",
+      "agent.discovery_strategist"
+    ],
+    "related_skills": [
+      "skill.structural_research",
+      "skill.target_evaluation"
+    ],
+    "tool_ids": [
+      "tool.by_mcp_bridge",
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484706",
+    "updated_at": "2026-04-10T22:08:28.484706"
+  },
+  "capability.target_landscape": {
+    "capability_id": "capability.target_landscape",
+    "name": "Target Landscape",
+    "category": "biology",
+    "description": "Frame target rationale, evidence strength, and project-start questions.",
+    "stage_ids": [
+      "target_id"
+    ],
+    "required_inputs": [
+      "target",
+      "disease"
+    ],
+    "outputs": [
+      "target_dossier",
+      "open_questions"
+    ],
+    "recommended_agents": [
+      "agent.biologist",
+      "agent.project_lead"
+    ],
+    "related_skills": [
+      "skill.target_evaluation",
+      "skill.evidence_review"
+    ],
+    "tool_ids": [
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484709",
+    "updated_at": "2026-04-10T22:08:28.484709"
+  },
+  "capability.assay_strategy": {
+    "capability_id": "capability.assay_strategy",
+    "name": "Assay Strategy",
+    "category": "biology",
+    "description": "Design a layered assay cascade and data contract for discovery decisions.",
+    "stage_ids": [
+      "target_id",
+      "screening"
+    ],
+    "required_inputs": [
+      "target",
+      "assay_context"
+    ],
+    "outputs": [
+      "assay_stack",
+      "quality_gates"
+    ],
+    "recommended_agents": [
+      "agent.biologist",
+      "agent.data_scientist"
+    ],
+    "related_skills": [
+      "skill.assay_strategy",
+      "skill.evidence_review"
+    ],
+    "tool_ids": [
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484711",
+    "updated_at": "2026-04-10T22:08:28.484711"
+  },
+  "capability.hit_triage": {
+    "capability_id": "capability.hit_triage",
+    "name": "Hit Triage",
+    "category": "chemistry",
+    "description": "Rank current hits using activity and developability heuristics.",
+    "stage_ids": [
+      "screening",
+      "hit_to_lead"
+    ],
+    "required_inputs": [
+      "compound_series"
+    ],
+    "outputs": [
+      "top_hits",
+      "rescue_bucket"
+    ],
+    "recommended_agents": [
+      "agent.medicinal_chemist",
+      "agent.project_lead"
+    ],
+    "related_skills": [
+      "skill.hit_triage",
+      "skill.project_triage"
+    ],
+    "tool_ids": [
+      "tool.drugmind_admet",
+      "tool.drugmind_compound"
+    ],
+    "created_at": "2026-04-10T22:08:28.484712",
+    "updated_at": "2026-04-10T22:08:28.484712"
+  },
+  "capability.series_design": {
+    "capability_id": "capability.series_design",
+    "name": "Series Design",
+    "category": "chemistry",
+    "description": "Turn compound evidence into the next chemistry cycle.",
+    "stage_ids": [
+      "hit_to_lead",
+      "lead_opt"
+    ],
+    "required_inputs": [
+      "compound_series",
+      "constraints"
+    ],
+    "outputs": [
+      "chemistry_moves",
+      "priority_compounds"
+    ],
+    "recommended_agents": [
+      "agent.medicinal_chemist",
+      "agent.pharmacologist"
+    ],
+    "related_skills": [
+      "skill.series_design",
+      "skill.lead_optimization"
+    ],
+    "tool_ids": [
+      "tool.drugmind_compound",
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484714",
+    "updated_at": "2026-04-10T22:08:28.484714"
+  },
+  "capability.admet_risk": {
+    "capability_id": "capability.admet_risk",
+    "name": "ADMET Risk",
+    "category": "dmpk",
+    "description": "Surface developability liabilities early and turn them into action items.",
+    "stage_ids": [
+      "hit_to_lead",
+      "lead_opt",
+      "candidate"
+    ],
+    "required_inputs": [
+      "compound_series"
+    ],
+    "outputs": [
+      "high_risk_compounds",
+      "mitigation_actions"
+    ],
+    "recommended_agents": [
+      "agent.pharmacologist"
+    ],
+    "related_skills": [
+      "skill.admet_assessment"
+    ],
+    "tool_ids": [
+      "tool.drugmind_admet",
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484716",
+    "updated_at": "2026-04-10T22:08:28.484716"
+  },
+  "capability.dmta_screening_ranking": {
+    "capability_id": "capability.dmta_screening_ranking",
+    "name": "DMTA Screening & Ranking",
+    "category": "screening",
+    "description": "Run BY-inspired attrition, shortlist, and Pareto ranking for small-molecule programs.",
+    "stage_ids": [
+      "screening",
+      "hit_to_lead",
+      "lead_opt"
+    ],
+    "required_inputs": [
+      "compound_series",
+      "activity_table"
+    ],
+    "outputs": [
+      "shortlist",
+      "pareto_front",
+      "campaign_gate"
+    ],
+    "recommended_agents": [
+      "agent.dmpk_strategist",
+      "agent.data_scientist"
+    ],
+    "related_skills": [
+      "skill.dmta_screening",
+      "skill.admet_assessment"
+    ],
+    "tool_ids": [
+      "tool.by_screening_bridge",
+      "tool.drugmind_admet"
+    ],
+    "created_at": "2026-04-10T22:08:28.484717",
+    "updated_at": "2026-04-10T22:08:28.484717"
+  },
+  "capability.biomarker_strategy": {
+    "capability_id": "capability.biomarker_strategy",
+    "name": "Biomarker Strategy",
+    "category": "translational",
+    "description": "Plan engagement, pathway, and stratification biomarkers.",
+    "stage_ids": [
+      "target_id",
+      "preclinical",
+      "candidate"
+    ],
+    "required_inputs": [
+      "target",
+      "disease"
+    ],
+    "outputs": [
+      "biomarker_layers",
+      "decision_points"
+    ],
+    "recommended_agents": [
+      "agent.biologist",
+      "agent.data_scientist"
+    ],
+    "related_skills": [
+      "skill.biomarker_strategy",
+      "skill.evidence_review"
+    ],
+    "tool_ids": [
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484719",
+    "updated_at": "2026-04-10T22:08:28.484719"
+  },
+  "capability.translational_plan": {
+    "capability_id": "capability.translational_plan",
+    "name": "Translational Plan",
+    "category": "translational",
+    "description": "Build the evidence chain from lead series to preclinical package.",
+    "stage_ids": [
+      "candidate",
+      "preclinical",
+      "clinical"
+    ],
+    "required_inputs": [
+      "compound_series",
+      "biomarker_strategy"
+    ],
+    "outputs": [
+      "milestones",
+      "priority_compounds"
+    ],
+    "recommended_agents": [
+      "agent.project_lead",
+      "agent.biologist"
+    ],
+    "related_skills": [
+      "skill.translational_strategy",
+      "skill.go_nogo_review"
+    ],
+    "tool_ids": [
+      "tool.project_memory",
+      "tool.project_kanban"
+    ],
+    "created_at": "2026-04-10T22:08:28.484720",
+    "updated_at": "2026-04-10T22:08:28.484720"
+  },
+  "capability.candidate_nomination": {
+    "capability_id": "capability.candidate_nomination",
+    "name": "Candidate Nomination",
+    "category": "portfolio",
+    "description": "Prepare a gate-ready nomination package and backup plan.",
+    "stage_ids": [
+      "lead_opt",
+      "candidate",
+      "preclinical"
+    ],
+    "required_inputs": [
+      "compound_series",
+      "decision_rules"
+    ],
+    "outputs": [
+      "lead_candidate",
+      "backup_candidates",
+      "gate"
+    ],
+    "recommended_agents": [
+      "agent.project_lead",
+      "agent.pharmacologist"
+    ],
+    "related_skills": [
+      "skill.candidate_nomination",
+      "skill.go_nogo_review"
+    ],
+    "tool_ids": [
+      "tool.project_memory",
+      "tool.project_kanban"
+    ],
+    "created_at": "2026-04-10T22:08:28.484722",
+    "updated_at": "2026-04-10T22:08:28.484722"
+  },
+  "capability.biologics_design_campaign": {
+    "capability_id": "capability.biologics_design_campaign",
+    "name": "Biologics Design Campaign",
+    "category": "biologics",
+    "description": "Generate a BY-style biologics campaign with compute planning and screening gates.",
+    "stage_ids": [
+      "target_id",
+      "screening",
+      "candidate"
+    ],
+    "required_inputs": [
+      "target",
+      "modality",
+      "scaffolds"
+    ],
+    "outputs": [
+      "campaign_plan",
+      "design_estimate"
+    ],
+    "recommended_agents": [
+      "agent.discovery_strategist",
+      "agent.project_lead"
+    ],
+    "related_skills": [
+      "skill.biologics_campaign",
+      "skill.structural_research"
+    ],
+    "tool_ids": [
+      "tool.by_biologics_pipeline",
+      "tool.by_mcp_bridge"
+    ],
+    "created_at": "2026-04-10T22:08:28.484723",
+    "updated_at": "2026-04-10T22:08:28.484723"
+  },
+  "capability.second_me_program_sync": {
+    "capability_id": "capability.second_me_program_sync",
+    "name": "Second Me Program Sync",
+    "category": "integration",
+    "description": "Project implementation snapshot prepared for linked Second Me personas.",
+    "stage_ids": [
+      "target_id",
+      "screening",
+      "hit_to_lead",
+      "lead_opt",
+      "candidate",
+      "preclinical",
+      "clinical"
+    ],
+    "required_inputs": [
+      "implementation_state"
+    ],
+    "outputs": [
+      "persona_sync"
+    ],
+    "recommended_agents": [
+      "agent.integration"
+    ],
+    "related_skills": [
+      "skill.integration_delivery",
+      "skill.workflow_planning"
+    ],
+    "tool_ids": [
+      "tool.second_me_project_sync",
+      "tool.project_memory"
+    ],
+    "created_at": "2026-04-10T22:08:28.484725",
+    "updated_at": "2026-04-10T22:08:28.484725"
+  },
+  "capability.campaign_memory": {
+    "capability_id": "capability.campaign_memory",
+    "name": "Campaign Memory",
+    "category": "integration",
+    "description": "Condense current project execution into reusable campaign memory and persona-ready context.",
+    "stage_ids": [
+      "screening",
+      "hit_to_lead",
+      "lead_opt",
+      "candidate",
+      "preclinical",
+      "clinical"
+    ],
+    "required_inputs": [
+      "execution_history"
+    ],
+    "outputs": [
+      "campaign_memory_summary"
+    ],
+    "recommended_agents": [
+      "agent.integration",
+      "agent.project_lead"
+    ],
+    "related_skills": [
+      "skill.campaign_memory",
+      "skill.workflow_planning"
+    ],
+    "tool_ids": [
+      "tool.project_memory",
+      "tool.second_me_project_sync"
+    ],
+    "created_at": "2026-04-10T22:08:28.484726",
+    "updated_at": "2026-04-10T22:08:28.484726"
+  },
+  "capability.medi_pharma_target_discovery": {
+    "capability_id": "capability.medi_pharma_target_discovery",
+    "name": "MediPharma Target Discovery",
+    "category": "biology",
+    "description": "Use MediPharma to discover and rank candidate targets from disease context.",
+    "stage_ids": [
+      "target_id"
+    ],
+    "required_inputs": [
+      "disease"
+    ],
+    "outputs": [
+      "top_targets",
+      "target_summary"
+    ],
+    "recommended_agents": [
+      "agent.biologist",
+      "agent.discovery_strategist"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_target_discovery",
+      "skill.target_evaluation"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_target_discovery",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943659",
+    "updated_at": "2026-04-10T23:25:42.943659"
+  },
+  "capability.medi_pharma_virtual_screening": {
+    "capability_id": "capability.medi_pharma_virtual_screening",
+    "name": "MediPharma Virtual Screening",
+    "category": "screening",
+    "description": "Run MediPharma virtual screening against a configured ChEMBL target.",
+    "stage_ids": [
+      "screening",
+      "hit_to_lead"
+    ],
+    "required_inputs": [
+      "target_chembl_id"
+    ],
+    "outputs": [
+      "top_candidates",
+      "screening_summary"
+    ],
+    "recommended_agents": [
+      "agent.data_scientist",
+      "agent.discovery_strategist"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_virtual_screening",
+      "skill.dmta_screening"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_virtual_screening",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943661",
+    "updated_at": "2026-04-10T23:25:42.943661"
+  },
+  "capability.medi_pharma_molecule_generation": {
+    "capability_id": "capability.medi_pharma_molecule_generation",
+    "name": "MediPharma Molecule Generation",
+    "category": "chemistry",
+    "description": "Generate candidate molecules around a target or scaffold using MediPharma.",
+    "stage_ids": [
+      "screening",
+      "hit_to_lead",
+      "lead_opt"
+    ],
+    "required_inputs": [
+      "target_name"
+    ],
+    "outputs": [
+      "top_candidates",
+      "generation_summary"
+    ],
+    "recommended_agents": [
+      "agent.medicinal_chemist",
+      "agent.discovery_strategist"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_molecule_generation",
+      "skill.series_design"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_generation",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943662",
+    "updated_at": "2026-04-10T23:25:42.943662"
+  },
+  "capability.medi_pharma_admet_batch": {
+    "capability_id": "capability.medi_pharma_admet_batch",
+    "name": "MediPharma Batch ADMET",
+    "category": "dmpk",
+    "description": "Run MediPharma ADMET batch prediction across the current compound panel.",
+    "stage_ids": [
+      "screening",
+      "hit_to_lead",
+      "lead_opt",
+      "candidate"
+    ],
+    "required_inputs": [
+      "smiles_list"
+    ],
+    "outputs": [
+      "admet_batch",
+      "pass_filter_summary"
+    ],
+    "recommended_agents": [
+      "agent.dmpk_strategist",
+      "agent.pharmacologist"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_admet_batch",
+      "skill.admet_assessment"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_admet",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943663",
+    "updated_at": "2026-04-10T23:25:42.943663"
+  },
+  "capability.medi_pharma_lead_optimization": {
+    "capability_id": "capability.medi_pharma_lead_optimization",
+    "name": "MediPharma Lead Optimization",
+    "category": "chemistry",
+    "description": "Use MediPharma multi-objective optimization on a seed molecule from the project.",
+    "stage_ids": [
+      "hit_to_lead",
+      "lead_opt"
+    ],
+    "required_inputs": [
+      "smiles"
+    ],
+    "outputs": [
+      "top_candidates",
+      "optimization_trajectory"
+    ],
+    "recommended_agents": [
+      "agent.medicinal_chemist",
+      "agent.dmpk_strategist"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_lead_optimization",
+      "skill.lead_optimization"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_lead_optimization",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943664",
+    "updated_at": "2026-04-10T23:25:42.943664"
+  },
+  "capability.medi_pharma_pipeline_run": {
+    "capability_id": "capability.medi_pharma_pipeline_run",
+    "name": "MediPharma Pipeline Run",
+    "category": "portfolio",
+    "description": "Run the MediPharma end-to-end target-to-candidate pipeline from inside DrugMind.",
+    "stage_ids": [
+      "target_id",
+      "screening",
+      "hit_to_lead",
+      "lead_opt"
+    ],
+    "required_inputs": [
+      "disease"
+    ],
+    "outputs": [
+      "stages_completed",
+      "final_candidates"
+    ],
+    "recommended_agents": [
+      "agent.discovery_strategist",
+      "agent.project_lead"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_pipeline",
+      "skill.project_triage"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_pipeline",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943665",
+    "updated_at": "2026-04-10T23:25:42.943665"
+  },
+  "capability.medi_pharma_knowledge_report": {
+    "capability_id": "capability.medi_pharma_knowledge_report",
+    "name": "MediPharma Knowledge Report",
+    "category": "biology",
+    "description": "Generate a target-disease knowledge report with literature, patents, and clinical context.",
+    "stage_ids": [
+      "target_id",
+      "candidate",
+      "preclinical"
+    ],
+    "required_inputs": [
+      "target",
+      "disease"
+    ],
+    "outputs": [
+      "knowledge_report",
+      "key_insights"
+    ],
+    "recommended_agents": [
+      "agent.biologist",
+      "agent.project_lead"
+    ],
+    "related_skills": [
+      "skill.medi_pharma_knowledge_engine",
+      "skill.target_evaluation"
+    ],
+    "tool_ids": [
+      "tool.medi_pharma_knowledge_report",
+      "tool.medi_pharma_bridge"
+    ],
+    "created_at": "2026-04-10T23:25:42.943666",
+    "updated_at": "2026-04-10T23:25:42.943666"
+  }
+}

@@ -1,0 +1,415 @@
+{
+  "mem_f0e5e35b9b": {
+    "entry_id": "mem_f0e5e35b9b",
+    "project_id": "platform_skeleton_smoke",
+    "memory_type": "note",
+    "title": "Smoke note",
+    "content": "Platform skeleton verification entry.",
+    "tags": [
+      "smoke"
+    ],
+    "source": "",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:24:16.888796"
+  },
+  "mem_ad06132fcc": {
+    "entry_id": "mem_ad06132fcc",
+    "project_id": "api_skeleton_smoke",
+    "memory_type": "project_brief",
+    "title": "API Skeleton Smoke bootstrap",
+    "content": "Project created for target=EGFR; disease=N/A; budget=0",
+    "tags": [
+      "bootstrap",
+      "project"
+    ],
+    "source": "api.create_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:24:54.504229"
+  },
+  "mem_3d603fcf45": {
+    "entry_id": "mem_3d603fcf45",
+    "project_id": "api_skeleton_smoke",
+    "memory_type": "note",
+    "title": "Kickoff",
+    "content": "Initial memory entry",
+    "tags": [],
+    "source": "",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:24:54.505470"
+  },
+  "mem_cbfbcbdd38": {
+    "entry_id": "mem_cbfbcbdd38",
+    "project_id": "api_skeleton_smoke",
+    "memory_type": "workflow",
+    "title": "Workflow started: Target Evaluation Workflow",
+    "content": "Workflow topic: Evaluate EGFR",
+    "tags": [
+      "workflow",
+      "workflow.target_evaluation"
+    ],
+    "source": "api.start_workflow_run",
+    "author_id": "",
+    "related_agents": [
+      "agent.biologist",
+      "agent.project_lead",
+      "agent.reviewer"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:24:54.506763"
+  },
+  "mem_cd451bd10b": {
+    "entry_id": "mem_cd451bd10b",
+    "project_id": "phase2_api_smoke",
+    "memory_type": "project_brief",
+    "title": "Phase2 API Smoke bootstrap",
+    "content": "Project created for target=KRAS; disease=N/A; budget=0",
+    "tags": [
+      "bootstrap",
+      "project"
+    ],
+    "source": "api.create_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:30:36.147435"
+  },
+  "mem_23b84bf7b5": {
+    "entry_id": "mem_23b84bf7b5",
+    "project_id": "phase2_api_smoke",
+    "memory_type": "compound",
+    "title": "Compound added: CMP-001",
+    "content": "SMILES: CCO",
+    "tags": [
+      "compound",
+      "hit"
+    ],
+    "source": "api.add_compound",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [
+      "CMP-001"
+    ],
+    "created_at": "2026-04-06T20:30:36.156963"
+  },
+  "mem_7fb0a81556": {
+    "entry_id": "mem_7fb0a81556",
+    "project_id": "phase2_api_smoke",
+    "memory_type": "workflow",
+    "title": "Workflow started: Lead Optimization Workflow",
+    "content": "Workflow topic: Optimize KRAS lead",
+    "tags": [
+      "workflow",
+      "workflow.lead_optimization"
+    ],
+    "source": "api.start_workflow_run",
+    "author_id": "",
+    "related_agents": [
+      "agent.medicinal_chemist",
+      "agent.pharmacologist",
+      "agent.project_lead"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:30:36.160823"
+  },
+  "mem_a70f3b1335": {
+    "entry_id": "mem_a70f3b1335",
+    "project_id": "phase2_api_smoke",
+    "memory_type": "decision",
+    "title": "Decision: CONDITIONAL - Advance CMP-001",
+    "content": "Proceed after more ADMET data.",
+    "tags": [
+      "decision",
+      "CONDITIONAL"
+    ],
+    "source": "api.add_project_decision",
+    "author_id": "",
+    "related_agents": [
+      "agent.project_lead",
+      "agent.pharmacologist"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-06T20:30:36.170954"
+  },
+  "mem_dc3350a75e": {
+    "entry_id": "mem_dc3350a75e",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "project_brief",
+    "title": "SecondMe Architecture Program bootstrap",
+    "content": "Project created for target=MCL1; disease=Oncology; budget=500000",
+    "tags": [
+      "bootstrap",
+      "project"
+    ],
+    "source": "api.create_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-07T02:00:11.136369"
+  },
+  "mem_1805f9fb16": {
+    "entry_id": "mem_1805f9fb16",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "second_me_binding",
+    "title": "Second Me binding created: 林药研",
+    "content": "instance_id=medicinal_chemist_林药研; role=medicinal_chemist; user_id=; twin_id=medicinal_chemist_张化学家",
+    "tags": [
+      "second_me",
+      "binding"
+    ],
+    "source": "api.create_second_me_twin",
+    "author_id": "",
+    "related_agents": [
+      "medicinal_chemist_张化学家"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T02:00:11.145920"
+  },
+  "mem_134333e2f8": {
+    "entry_id": "mem_134333e2f8",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "second_me_sync",
+    "title": "Second Me sync: 林药研",
+    "content": "## DrugMind Project Sync Snapshot\n- synced_at: 2026-04-07T02:00:11.147472\n- project_id: proj_secondme_arch\n- project_name: SecondMe Architecture Program\n- stage: target_id\n- target: MCL1\n- disease: Oncology\n- workspace_status: active\n- linked_discussions: 0\n- linked_workflows: 0\n- linked_decisions: 0\n- note: sync after",
+    "tags": [
+      "second_me",
+      "sync",
+      "medicinal_chemist_林药研"
+    ],
+    "source": "api.sync_project_to_second_me",
+    "author_id": "",
+    "related_agents": [
+      "medicinal_chemist_张化学家"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T02:00:11.147742"
+  },
+  "mem_d6f1d4479e": {
+    "entry_id": "mem_d6f1d4479e",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "workflow",
+    "title": "Workflow started: Integration Delivery Workflow",
+    "content": "Workflow topic: Smoke test workflow from local browser verification",
+    "tags": [
+      "workflow",
+      "workflow.integration_delivery"
+    ],
+    "source": "api.start_workflow_run",
+    "author_id": "",
+    "related_agents": [
+      "agent.integration",
+      "agent.reviewer"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:14:07.297385"
+  },
+  "mem_2f866e952d": {
+    "entry_id": "mem_2f866e952d",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "workflow_execution",
+    "title": "Integration Delivery Workflow: Plan Integration",
+    "content": "Integration execution for Smoke test workflow from local browser verification\n- Step: Plan Integration\n- Workspace linked workflows: 0\n- Required outputs: integration_plan\n- No Second Me sync was executed in this step.\n- Recommendation: preserve the current integration contract and capture any missing auth or data-shape requirements before release.",
+    "tags": [
+      "workflow_execution",
+      "workflow.integration_delivery",
+      "plan_integration"
+    ],
+    "source": "workflow.execute_step",
+    "author_id": "",
+    "related_agents": [
+      "agent.integration"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:14:07.297947"
+  },
+  "mem_0671bb860c": {
+    "entry_id": "mem_0671bb860c",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "workflow_execution",
+    "title": "Integration Delivery Workflow: Review Delivery",
+    "content": "Reviewer outcome: GO\n- Step: Review Delivery\n- Topic: Smoke test workflow from local browser verification\n- Upstream outputs reviewed: 1\n- No material scientific blockers were detected in the current workflow context.\n- Approval recommendation: approve and proceed to the next execution stage.",
+    "tags": [
+      "workflow_execution",
+      "workflow.integration_delivery",
+      "review_delivery"
+    ],
+    "source": "workflow.execute_step",
+    "author_id": "",
+    "related_agents": [
+      "agent.reviewer"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:14:07.298648"
+  },
+  "mem_9bec0d7235": {
+    "entry_id": "mem_9bec0d7235",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "h2a_group_exchange",
+    "title": "H2A · Smoke 373764 ↔ 数据科学家, 生物学家",
+    "content": "Human: 请你们一起判断这个项目下一步应该推进什么。\n\n数据科学家: 从数据驱动的角度，针对MCL1靶点的肿瘤项目（当前处于target_id阶段），下一步应优先推进**计算驱动的先导化合物发现与优化**。以下是具体建议：\n\n---\n\n### **1. 数据整合与靶点可成药性分析**\n- **现有数据挖掘**：整合公开数据集（如TCGA、GDSC）中MCL1的表达、突变与肿瘤生存率的关联性，量化其作为靶点的临床潜力（例如，通过Cox回归分析风险比）。\n- **结构数据利用**：基于PDB中MCL1蛋白结构（如5LOF、6O6X），使用分子动力学模拟评估结合口袋的稳定性，为虚拟筛选提供结构基础。\n\n---\n\n### **2. 生成式模型驱动的分子设计**\n- **生成对抗网络（GAN）或变分自编码器（VAE）**：训练生成模型，以已知MCL1抑制剂（如S63845、AZD5991）为种子，生成新型骨架分子。评估指标包括：\n  - **Tanimoto相似性**（确保新颖性）\n  - **预测结合亲和力**（通过分子对接或GNN打分函数）\n  - **合成可行性**（SA Score）\n- **多任务学习**：联合预测活性、选择性（vs. BCL-2/BCL-XL）和ADMET性质，减少后期优化失败率。\n\n---\n\n### **3. 高通量虚拟筛选与优先级排序**\n- **筛选策略**：\n  - 对ZINC、Enamine等库进行分子对接（AutoDock Vina或Glide）。\n  - 使用**图神经网络（GNN）** 对筛选结果进行二次排序，模型需在已知活性数据上验证（AUC > 0.85）。\n- **置信度评估**：通过**不确定性量化**（如MC Dropout）识别高置信度候选分子，优先推进实验验证。\n\n---\n\n### **4. 数据驱动的假设生成**\n- **模式发现**：分析现有MCL1抑制剂的构效关系（SAR），识别关键药效团（如与Arg263的盐桥、疏水口袋填充）。\n- **耐药性预测**：整合突变数据（\n\n生物学家: 基于我的专业判断，我必须首先强调：**在缺乏任何实验数据的情况下，当前项目的核心任务是进行靶点验证和初步活性评估，而非直接推进计算驱动的先导化合物发现。**\n\n数据科学家的建议在技术层面是合理的，但它跳过了药物发现流程中最关键、风险最高的环节——**生物学验证**。以下是基于科学严谨性的分析：\n\n### **核心问题与风险**\n1.  **靶点依赖性未证实**：虽然MCL1在多种肿瘤中过表达（如AML、MM、NSCLC），且遗传学（如CRISPR筛选）证据支持其必要性，但这**不等于**药理学抑制能产生治疗窗口。我们必须通过实验回答：在目标肿瘤细胞系中，抑制MCL1是否足以诱导凋亡？其EC50值是否具有临床意义？\n2.  **选择性是关键挑战**：MCL1与BCL-2、BCL-XL同属抗凋亡蛋白家族，结构相似。一个没有良好选择性（例如，对MCL1的pIC50 > 8，但对BCL-XL的pIC50 < 6）的抑制剂，很可能因血小板毒性（BCL-XL依赖）而失败。**计算预测的选择性必须经过生化或细胞实验验证。**\n3.  **细胞模型到动物模型的转化鸿沟**：即使一个分子在细胞上表现出优异的活性（如IC50 < 10 nM），其在体内的药代动力学（PK）和药效动力学（PD）关系，以及肿瘤微环境的影响，都是未知数。没有早期体内数据，所有计算优化都可能导向一个“纸上完美”但体内无效的分子。\n\n### **下一步应推进的关键实验（优先级排序）**\n**阶段目标：从 `target_id` 进入 `hit_validation` 与 `POC (proof-of-concept)`。**\n\n1.  **建立靶点依赖性与生物标志物关联（体外POC）**：\n    *   **实验**：在3-5个MCL1高表达的肿瘤细胞系（如MV4-11, H929）和1-2个低表达对照细胞系中，使用已知工具化合物（如S63845）进行**细胞活力测定**。必须获得完整的剂量-反应曲线，计算EC50。\n    *   **关键数据**：确认MCL1抑制与细胞死亡的关联。理想情况下，应通过Western Blot检测凋亡标志物（如caspase-3切割，PARP切割）来确认作用机制是on-target的。\n    *   **生物学问题**：是否存在固有耐药或适应性耐药的细胞系？其分子背景是什么（如BCL-XL高表达）？\n\n2.  **评估先导化合物的选择性谱**：\n    *   **实验**：对现有的、活性最好的1-2",
+    "tags": [
+      "h2a",
+      "agent.data_scientist",
+      "agent.biologist"
+    ],
+    "source": "api.h2a_exchange",
+    "author_id": "user_00f2d23f",
+    "related_agents": [
+      "agent.data_scientist",
+      "agent.biologist"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:46:54.794737"
+  },
+  "mem_f1834b1087": {
+    "entry_id": "mem_f1834b1087",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "h2a_group_exchange",
+    "title": "H2A · Py Smoke 526424 ↔ 数据科学家, 生物学家",
+    "content": "Human: 请两位一起判断这个项目接下来一周最该推进什么。\n\n数据科学家: 从数据驱动的角度来看，MCL1靶点项目当前处于早期阶段（target_id），接下来一周最优先的任务应该是 **构建高质量的数据基础并启动初步的建模探索**。具体建议如下：\n\n---\n\n### 1. **数据整合与质量评估（优先级最高）**\n   - **行动**：系统收集MCL1相关的公开数据（如ChEMBL、PubChem中的活性化合物、PDB中的结构数据），并整合内部可能存在的初步实验数据。\n   - **理由**：没有可靠的数据，任何模型都是空中楼阁。需要评估现有数据的覆盖度（如化合物多样性、活性分布、选择性数据是否充足）。\n   - **关键指标**：计算化学空间的覆盖率（如通过Tanimoto相似性分析）、活性数据的噪声水平（如重复实验的R²）。\n\n### 2. **启动基线模型构建（并行推进）**\n   - **行动**：使用已整合的数据训练一个简单的QSAR模型（如随机森林或图神经网络GNN），预测化合物对MCL1的抑制活性。\n   - **理由**：即使数据有限，基线模型能快速揭示数据中的模式（如关键子结构特征），并为后续生成式模型提供验证基准。\n   - **关键指标**：关注模型的交叉验证AUC（分类）或R²（回归），同时分析特征重要性（如GNN中的注意力权重）。\n\n### 3. **生成式模型的可行性评估（创新探索）**\n   - **行动**：评估是否可采用生成式模型（如VAE或Transformer）设计新型MCL1抑制剂，但需先确认是否有足够的已知活性化合物作为种子。\n   - **理由**：若数据量充足（例如>1000个活性化合物），生成式模型能快速扩展化学空间；若数据稀缺，则优先采用基于片段的设计方法。\n   - **风险控制**：通过生成化合物的预测置信度（如模型不确定性估计）和类药性过滤（如QED评分）降低风险。\n\n### 4. **多任务学习框架的初步设计（前瞻性布局）**\n   - **行动**：规划同时预测MCL1活性、选择性（如vs. BCL-2家族其他蛋白）和ADMET性质的多任务模型架构。\n   - **理由**：MCL1抑制剂常面临选择性挑战，多任务学习能利用相关任务的辅助数据提升模型泛化能力。\n   - **数据需求**：需确认是否有相关靶点（如BCL-2、BCL-xL）的活性数据可供迁移学习。\n\n---\n\n### 风险与局限性说明：\n- **数据瓶颈**：若公开数据稀疏或噪声过高，模型预测可能不可靠（需通过实验验证闭环）。\n- **模型选择**：GNN对小数据集可能过拟合，可先尝试基于描述符的模型（如ECFP4+随机森林）。\n- **时间约束**：一周内应优先完成数据整合和基线模型，生成式模型可作为后续迭代方向\n\n生物学家: 基于我的专业判断，我基本同意数据科学家提出的**数据整合与基线模型构建**作为本周的核心工作。然而，从生物学和药理学严谨性的角度出发，我必须对任务的优先级和具体内容提出关键的修正与补充。当前阶段最紧迫的并非“建模探索”，而是**建立靶点验证的生物学基准与数据质量评估标准**。\n\n以下是经过我修正的、接下来一周最应推进的行动方案：\n\n### **核心任务：建立生物学基准与高质量数据筛选框架（优先级最高）**\n\n**理由**：在`target_id`阶段，最大的风险是基于有缺陷或生物学意义不明确的数据启动昂贵的计算与化学工作。MCL1是一个经过充分研究的靶点，但其抑制剂开发因**选择性挑战**和**潜在的血小板毒性**而著称。我们必须首先定义“什么是有希望的活性”，然后才能去寻找或设计它。\n\n**具体行动**：\n\n1.  **定义核心生物学问题与验证实验**：\n    *   **行动**：明确回答：我们验证MCL1抑制活性的**黄金标准细胞实验**是什么？是使用依赖MCL1生存的特定癌细胞系（如某些AML细胞系）的细胞活力实验吗？我们是否计划并行测试对血小板或其它BCL-2家族蛋白（BCL-2, BCL-xL）的选择性？\n    *   **理由**：公开数据库（如ChEMBL）中的活性数据来源混杂，包含大量生化水平的IC50，但其与细胞活性的相关性",
+    "tags": [
+      "h2a",
+      "agent.data_scientist",
+      "agent.biologist"
+    ],
+    "source": "api.h2a_exchange",
+    "author_id": "user_61f4345d",
+    "related_agents": [
+      "agent.data_scientist",
+      "agent.biologist"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:47:45.812535"
+  },
+  "mem_6cd7a59601": {
+    "entry_id": "mem_6cd7a59601",
+    "project_id": "browser_h2a_1775526449",
+    "memory_type": "project_brief",
+    "title": "Browser H2A 526449 bootstrap",
+    "content": "Project created for target=KRAS; disease=CRC; budget=0",
+    "tags": [
+      "bootstrap",
+      "project"
+    ],
+    "source": "api.create_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:47:45.817045"
+  },
+  "mem_274e5a765e": {
+    "entry_id": "mem_274e5a765e",
+    "project_id": "browser_h2a_1775526449",
+    "memory_type": "h2a_group_exchange",
+    "title": "H2A · Browser 526467 ↔ 数据科学家, 生物学家",
+    "content": "Human: 请两位一起判断这个新项目下一周应该优先做什么。\n\n数据科学家: 从数据驱动的角度来看，当前项目处于靶点识别（target_id）阶段，针对KRAS突变型结直肠癌（CRC）。基于现有信息和药物发现的一般流程，我建议下一周优先执行以下任务：\n\n1. **数据收集与整合**  \n   - 立即系统收集KRAS在CRC中的突变频率、亚型分布（如G12C、G12D、G13D等）及现有抑制剂数据（如sotorasib、adagrasib的活性数据）。  \n   - 整合公开数据库（如TCGA、COSMIC）的突变谱与临床预后关联数据，通过生存分析（Kaplan-Meier、Cox回归）量化不同突变的预后价值。  \n   - **目标**：建立结构化数据集，为后续建模提供基础。\n\n2. **靶点可药性评估**  \n   - 使用计算工具（如FPocket、SiteMap）分析KRAS突变蛋白的3D结构（PDB ID: 如5VBA），预测可结合口袋的理化性质（疏水性、氢键受体/供体分布）。  \n   - 通过已知抑制剂的分子动力学模拟（如GROMACS）评估结合稳定性，计算结合自由能（MM/PBSA）。  \n   - **目标**：量化突变位点的可药性，优先选择口袋特征明确的突变体（如G12C已有成功案例，但需关注耐药突变）。\n\n3. **AI/ML初步建模**  \n   - 构建QSAR模型：基于已知KRAS抑制剂的化学结构（SMILES）与活性数据（IC50），使用图神经网络（GNN）或描述符（ECFP4、MACCS）训练分类/回归模型（AUC>0.85为基准）。  \n   - 生成式模型探索：若数据充足，使用REINVENT或MolGAN生成针对突变KRAS的新颖骨架，通过Tanimoto相似性（阈值<0.4）确保新颖性。  \n   - **目标**：快速筛选虚拟化合物库（如Enamine REAL），预测活性并评估置信区间（如通过模型不确定性量化）。\n\n4. **风险评估与优先级排序**\n\n生物学家: 基于我的专业判断（生物学家/药理学家视角），数据科学家的建议在**数据整合与计算建模**方面是全面且合理的起点。然而，从**靶点验证和活性评估的生物学严谨性**出发，我认为当前阶段（target_id）的核心风险在于**过早陷入计算模拟而缺乏关键的实验锚点**。KRAS是一个已有大量研究但仍有重大挑战的靶点，单纯的计算预测若无生物学验证，极易产生误导。\n\n因此，我建议下一周的优先事项应**更侧重于建立生物学基础和实验验证框架**，具体如下：\n\n### **第一优先：深入的文献挖掘与遗传学证据分析（奠定生物学合理性）**\n*   **任务**：系统性地收集并分析KRAS在CRC中的**遗传学证据",
+    "tags": [
+      "h2a",
+      "agent.data_scientist",
+      "agent.biologist"
+    ],
+    "source": "api.h2a_exchange",
+    "author_id": "user_8ad440ab",
+    "related_agents": [
+      "agent.data_scientist",
+      "agent.biologist"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-07T09:48:26.925197"
+  },
+  "mem_9f01afbe2f": {
+    "entry_id": "mem_9f01afbe2f",
+    "project_id": "browser_h2a_1775526449",
+    "memory_type": "implementation_bootstrap",
+    "title": "Implementation bootstrap · Target Assessment",
+    "content": "Blueprint=AI-First Small Molecule Discovery; phase=Target Assessment; objective=Lock target rationale, assay entry point, and translational anchor.; capabilities=capability.structural_research, capability.target_landscape, capability.assay_strategy, capability.biomarker_strategy; activated_by=",
+    "tags": [
+      "implementation",
+      "bootstrap",
+      "phase.target_assessment"
+    ],
+    "source": "drug_discovery.bootstrap_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-10T22:23:08.502521"
+  },
+  "mem_cb0adf6fbd": {
+    "entry_id": "mem_cb0adf6fbd",
+    "project_id": "phase2_api_smoke",
+    "memory_type": "implementation_bootstrap",
+    "title": "Implementation bootstrap · Target Assessment",
+    "content": "Blueprint=AI-First Small Molecule Discovery; phase=Target Assessment; objective=Lock target rationale, assay entry point, and translational anchor.; capabilities=capability.structural_research, capability.target_landscape, capability.assay_strategy, capability.biomarker_strategy; activated_by=",
+    "tags": [
+      "implementation",
+      "bootstrap",
+      "phase.target_assessment"
+    ],
+    "source": "drug_discovery.bootstrap_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-10T22:23:30.495734"
+  },
+  "mem_9dc9309c75": {
+    "entry_id": "mem_9dc9309c75",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "implementation_bootstrap",
+    "title": "Implementation bootstrap · Target Assessment",
+    "content": "Blueprint=AI-First Small Molecule Discovery; phase=Target Assessment; objective=Lock target rationale, assay entry point, and translational anchor.; capabilities=capability.structural_research, capability.target_landscape, capability.assay_strategy, capability.biomarker_strategy; activated_by=",
+    "tags": [
+      "implementation",
+      "bootstrap",
+      "phase.target_assessment"
+    ],
+    "source": "drug_discovery.bootstrap_project",
+    "author_id": "",
+    "related_agents": [],
+    "related_compounds": [],
+    "created_at": "2026-04-10T22:23:30.498749"
+  },
+  "mem_95fd4fc40d": {
+    "entry_id": "mem_95fd4fc40d",
+    "project_id": "phase2_api_smoke",
+    "memory_type": "capability_execution",
+    "title": "Target Landscape · cap_aa4dccff00",
+    "content": "{\n  \"target\": \"KRAS\",\n  \"disease\": \"未定义适应症\",\n  \"priority_hypotheses\": [\n    \"验证 KRAS 在 未定义适应症 中是否具有明确的人体遗传学或患者分层证据。\",\n    \"确认 KRAS 的调控方向、成药方式和安全窗口是否可解释。\",\n    \"把靶点生物学、竞争态势和项目资源约束放到同一张 go/no-go 表里。\"\n  ],\n  \"recommended_experiments\": [\n    \"建立 target engagement / pathway modulation readout\",\n    \"补齐 disease-relevant cellular model 和阳性对照\",\n    \"定义最小成药性门槛：选择性、暴露、安全窗口、转化标志物\"\n  ],\n  \"open_questions\": [\n    \"人体或患者层面的因果证据是否足够强？\",\n    \"调控该靶点后最容易观测到的药效 readout 是什么？\",\n    \"是否存在明确的安全性/组织选择性风险？\"\n  ],\n  \"agent_views\": [\n    {\n      \"agent_id\": \"agent.biologist\",\n      \"name\": \"生物学家\",\n      \"message\": \"### **KRAS靶点项目启动价值评估（未定义适应症场景）**\\n\\n**致项目团队：**\\n\\n在“未定义适应症”的早期阶段启动针对KRAS的项目，是一项高风险与高潜在回报并存的战略决策。作为项目评估的生物学与药理学负责人，我将从机制、证据、风险及关键实验路径进行系统性分析。核心原则是：**所有判断必须基于数据，没有数据就必须生成数据。**\\n\\n---\\n\\n#### **1. 机制与生物学合理性**\\n\\n*   **靶点机制：** KRAS（Kirsten Rat Sarcoma Viral Oncogene Homolog）是一个小GTP酶，作为分子开关，在RAS-MAPK和PI3K-AKT等关键信号通路中调控细胞增殖、存活和代谢。其致癌性主要源于热点突变（如G12C, G12D, G12V, G13D等），导致GTP水解酶活性受损，使蛋白持续处于GTP结合的激活状态，从而驱动肿瘤发生发展。\\n*   **疾病关联性：** **极高。** KRAS是人类癌症中最常见的突变癌基因之一，存在于约25%的肿瘤中，尤其在胰腺癌（~90%）、结直肠癌（~45%）和非小细胞肺癌（NSCLC， ~30%）中高频发生。其作为驱动基因的因果关系明确，是经典的“undruggable”靶点。\\n*   **遗传学证据：** **强有力。** 数十年的癌症遗传学研究确立了KRAS突变作为癌症驱动事件的因果地位。小鼠模型中条件性表达突变KRAS可诱发多种组织特异性肿瘤，提供了直接的体内功能验证。\\n\\n**结论：** 从靶点生物学角度，KRAS具备顶级的疾病关联性和遗传学证据，其机制研究深入，是肿瘤学领域公认的、极具价值的靶点。**“未定义适应症”的挑战不在于靶点本身是否成立，而在于如何精准选择最具转化潜力的突变亚型和患者群体。**\\n\\n---\\n\\n#### **2. 现有证据与活性评估**\\n\\n*   **可成药性突破：** 近年来，针对KRAS G12C突变共价抑制剂的成功（如Sotorasib, Adagrasib）彻底改变了该靶点的成药前景。它们通过与突变蛋白的半胱氨酸残基结合，将KRAS锁定在非活性GDP状态。临床数据显示，在KRAS G12C突变的NSCLC和结直肠癌中，客观缓解率（ORR）约为30-40%，证实了靶向KRAS的临床可行性。\\n*   **选择性考量：** 这是当前评估的核心。\\n    *   **突变选择性：** 现有药物（如G12C抑制剂）对野生型KRAS及其他RAS\",\n      \"confidence\": 0.85\n    },\n    {\n      \"agent_id\": \"agent.project_lead\",\n      \"name\": \"项目负责人\",\n      \"message\": \"**项目评估：KRAS靶点在未定义适应症下的启动价值**\\n\\n**综合判断：** 基于现有信息，KRAS是一个**高价值但高竞争**的靶点。项目启动具有科学合理性，但成功关键在于**精准的差异化定位**。建议 **“有条件Go”** ，立即启动定义适应症和差异化分子特性的探索性工作。\\n\\n---\\n\\n### **1. 机制与价值**\\n*   **核心机制：** KRAS是关键的细胞内信号传导枢纽（MAPK/PI3K通路），其功能获得性突变（如G12C, G12D, G12V）导致持续活化，驱动肿瘤增殖、存活和代谢重编程。\\n*   **靶点价值：**\\n    *   **强人类遗传学证据：** 在多种高发癌症（胰腺癌、结直肠癌、非小细胞肺癌）中高频突变，是明确的驱动基因。\\n    *   **技术可成药性突破：** 已克服“不可成药”历史，G12C共价抑制剂（Sotorasib, Adagrasib）已获批，验证了靶点和多种药物模式（共价、非共价、分子胶、PROTAC）。\\n    *   **未满足需求巨大：** 现有药物仅针对单一突变（G12C），且面临原发/继发耐药。其他高频突变（G12D, G12V等）及耐药后机制仍是重大临床缺口。\\n\\n### **2. 关键证据与现状**\\n*   **已验证证据：**\\n    *   **临床POC：** G12C抑制剂在NSCLC中显示明确疗效。\\n    *   **生物标志物：** KRAS突变状态是成熟的伴随诊断生物标志物。\\n    *   **多模式探索：** 行业管线已覆盖多种突变类型和药物模式（变构抑制剂、SOS1抑制剂、降解剂等）。\\n*   **待探索机会（我们的潜在切入点）：**\\n    *   **突变亚型特异性：** 针对G12D、G12V等尚无上市药物的突变开发高选择性抑制剂。\\n    *   **克服耐药：** 针对已获批G12C抑制剂的获得性耐药机制（如Y96D、R68S等二次突变，或旁路激活）设计新一代分子。\\n    *   **联合治疗基石：** 探索与免疫治疗、化疗或其他靶向药（如SHP2、RTK抑制剂）的协同方案，扩大受益人群。\\n\\n### **3. 主要风险**\\n*   **技术/竞争风险（高）：**\\n    *   **红海竞争：** 全球数十家药企布局，进度领先者已进入临床后期。**快速跟进（fast-follow）策略成功概率低。**\",\n      \"confidence\": 0.85\n    }\n  ]\n}",
+    "tags": [
+      "capability",
+      "capability.target_landscape",
+      "biology"
+    ],
+    "source": "drug_discovery.execute_capability",
+    "author_id": "frontend-smoke",
+    "related_agents": [
+      "agent.biologist",
+      "agent.project_lead"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-10T22:24:17.273169"
+  },
+  "mem_738dc12fd8": {
+    "entry_id": "mem_738dc12fd8",
+    "project_id": "proj_secondme_arch",
+    "memory_type": "second_me_sync",
+    "title": "Second Me sync: 林药研",
+    "content": "## DrugMind Project Sync Snapshot\n- synced_at: 2026-04-10T22:24:35.914517\n- project_id: proj_secondme_arch\n- project_name: SecondMe Architecture Program\n- stage: target_id\n- target: MCL1\n- disease: Oncology\n- workspace_status: active\n- linked_discussions: 0\n- linked_workflows: 1\n- linked_decisions: 1\n### Key memory\n- [",
+    "tags": [
+      "second_me",
+      "sync",
+      "medicinal_chemist_林药研"
+    ],
+    "source": "api.sync_project_to_second_me",
+    "author_id": "",
+    "related_agents": [
+      "medicinal_chemist_张化学家"
+    ],
+    "related_compounds": [],
+    "created_at": "2026-04-10T22:24:35.915627"
+  }
+}

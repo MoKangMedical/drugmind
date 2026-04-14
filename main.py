@@ -24,6 +24,8 @@ def get_engines(use_llm=True):
     from agents.registry import AgentRegistry
     from digital_twin.engine import DigitalTwinEngine
     from collaboration.discussion import DiscussionEngine
+    from drug_discovery import DrugDiscoveryImplementationHub
+    from integrations import BlatantWhyAdapter, MediPharmaAdapter
     from project.kanban import KanbanBoard
     from project.workspace import ProjectWorkspaceStore
     from drug_modeling.compound_tracker import CompoundTracker
@@ -56,6 +58,24 @@ def get_engines(use_llm=True):
     skill_registry = SkillRegistry(f"{STORAGE_DIR}/platform/skills")
     tool_registry = ToolRegistry(f"{STORAGE_DIR}/platform/tools")
     project_memory = ProjectMemoryStore(f"{STORAGE_DIR}/platform/memory")
+    blatant_why_adapter = BlatantWhyAdapter()
+    medi_pharma_adapter = MediPharmaAdapter()
+    drug_discovery_hub = DrugDiscoveryImplementationHub(
+        f"{STORAGE_DIR}/platform/drug_discovery",
+        twin_engine=twin,
+        agent_registry=agent_registry,
+        skill_registry=skill_registry,
+        tool_registry=tool_registry,
+        kanban=kanban,
+        workspace_store=workspace_store,
+        project_memory=project_memory,
+        compound_tracker=tracker,
+        decision_logger=decisions,
+        second_me=sm,
+        second_me_bindings=second_me_bindings,
+        blatant_why_adapter=blatant_why_adapter,
+        medi_pharma_adapter=medi_pharma_adapter,
+    )
     workflow_orchestrator = WorkflowOrchestrator(
         f"{STORAGE_DIR}/platform/workflows",
         agent_registry=agent_registry,
@@ -70,6 +90,8 @@ def get_engines(use_llm=True):
         compound_tracker=tracker,
         second_me=sm,
         second_me_bindings=second_me_bindings,
+        drug_discovery_hub=drug_discovery_hub,
+        blatant_why_adapter=blatant_why_adapter,
     )
 
     return (
@@ -87,6 +109,9 @@ def get_engines(use_llm=True):
         skill_registry,
         tool_registry,
         project_memory,
+        drug_discovery_hub,
+        blatant_why_adapter,
+        medi_pharma_adapter,
         workflow_orchestrator,
         h2a_threads,
     )
@@ -111,6 +136,9 @@ def cmd_serve(args):
         skill_registry,
         tool_registry,
         project_memory,
+        drug_discovery_hub,
+        blatant_why_adapter,
+        medi_pharma_adapter,
         workflow_orchestrator,
         h2a_threads,
     ) = get_engines(use_llm=True)
@@ -129,6 +157,9 @@ def cmd_serve(args):
         skill_registry,
         tool_registry,
         project_memory,
+        drug_discovery_hub,
+        blatant_why_adapter,
+        medi_pharma_adapter,
         workflow_orchestrator,
         h2a_threads,
     )
@@ -170,6 +201,9 @@ def cmd_test(args):
         skill_registry,
         tool_registry,
         project_memory,
+        drug_discovery_hub,
+        blatant_why_adapter,
+        medi_pharma_adapter,
         workflow_orchestrator,
         h2a_threads,
     ) = get_engines(use_llm=False)
@@ -179,7 +213,8 @@ def cmd_test(args):
         f"agents={agent_registry.count()} "
         f"skills={skill_registry.count()} "
         f"tools={tool_registry.count()} "
-        f"workflow_templates={len(workflow_orchestrator.templates)}"
+        f"workflow_templates={len(workflow_orchestrator.templates)} "
+        f"capabilities={drug_discovery_hub.count_capabilities()}"
     )
     print(
         "  项目上下文: ✅ "
@@ -188,7 +223,19 @@ def cmd_test(args):
         f"projects={kanban.count()} "
         f"compounds={tracker.count()} "
         f"second_me_bindings={second_me_bindings.count()} "
-        f"h2a_threads={h2a_threads.count()}"
+        f"h2a_threads={h2a_threads.count()} "
+        f"capability_executions={drug_discovery_hub.count_executions()}"
+    )
+    print(
+        "  BY整合: ✅ "
+        f"mcp_servers={len(blatant_why_adapter.mcp_bridge.list_servers())} "
+        f"compute_provider={blatant_why_adapter.tamarind_client.describe()['provider']}"
+    )
+    medi_pharma_status = medi_pharma_adapter.probe_status()
+    print(
+        "  MediPharma: ✅ "
+        f"status={medi_pharma_status.get('status')} "
+        f"base_url={medi_pharma_status.get('base_url', '') or 'not_configured'}"
     )
 
     try:

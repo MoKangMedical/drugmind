@@ -1,0 +1,105 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img "SecondMe Logo" [ref=e8]
+        - generic [ref=e9]:
+          - generic [ref=e10]: Second Me
+          - generic [ref=e11]: DEVELOPER
+      - menu [ref=e12]:
+        - menuitem "home 控制台" [ref=e13] [cursor=pointer]:
+          - img "home" [ref=e14]:
+            - img [ref=e15]
+          - generic [ref=e17]: 控制台
+        - menuitem "appstore 我的应用" [expanded] [ref=e18] [cursor=pointer]:
+          - img "appstore" [ref=e19]:
+            - img [ref=e20]
+          - generic [ref=e22]: 我的应用
+        - menu [ref=e23]:
+          - menuitem "应用列表" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]: 应用列表
+        - menuitem "shop 应用商店" [ref=e26] [cursor=pointer]:
+          - img "shop" [ref=e27]:
+            - img [ref=e28]
+          - generic [ref=e30]: 应用商店
+        - menuitem "api 集成管理" [ref=e31] [cursor=pointer]:
+          - img "api" [ref=e32]:
+            - img [ref=e33]
+          - generic [ref=e35]: 集成管理
+        - menuitem "book 文档中心" [ref=e36] [cursor=pointer]:
+          - img "book" [ref=e37]:
+            - img [ref=e38]
+          - generic [ref=e40]: 文档中心
+        - menuitem "rocket Developer Skill" [ref=e41] [cursor=pointer]:
+          - img "rocket" [ref=e42]:
+            - img [ref=e43]
+          - generic [ref=e45]: Developer Skill
+      - button "menu-fold" [ref=e47] [cursor=pointer]:
+        - img "menu-fold" [ref=e49]:
+          - img [ref=e50]
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - generic [ref=e54]:
+        - navigation [ref=e56]:
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - generic [ref=e60] [cursor=pointer]: 首页
+            - listitem [ref=e61]: /
+            - listitem [ref=e62]: 仪表盘
+        - generic [ref=e63]:
+          - button "global 中" [ref=e64] [cursor=pointer]:
+            - img "global" [ref=e66]:
+              - img [ref=e67]
+            - generic [ref=e69]: 中
+          - button "moon" [ref=e70] [cursor=pointer]:
+            - img "moon" [ref=e72]:
+              - img [ref=e73]
+          - button "bell" [ref=e75] [cursor=pointer]:
+            - img "bell" [ref=e77]:
+              - img [ref=e78]
+          - button "question-circle" [ref=e80] [cursor=pointer]:
+            - img "question-circle" [ref=e82]:
+              - img [ref=e83]
+          - img [ref=e87] [cursor=pointer]
+    - main [ref=e88]:
+      - generic [ref=e89]:
+        - generic [ref=e90]:
+          - heading "仪表盘, tony1982110" [level=1] [ref=e91]
+          - paragraph [ref=e92]: 快捷操作
+        - generic [ref=e93]:
+          - generic [ref=e94] [cursor=pointer]:
+            - img "edit" [ref=e96]:
+              - img [ref=e97]
+            - generic [ref=e99]:
+              - generic [ref=e100]: 新建应用
+              - generic [ref=e101]: 创建新应用
+            - generic [ref=e102]: →
+          - generic [ref=e103] [cursor=pointer]:
+            - img "unordered-list" [ref=e105]:
+              - img [ref=e106]
+            - generic [ref=e108]:
+              - generic [ref=e109]: 我的应用
+              - generic [ref=e110]: 查看和管理我的应用
+            - generic [ref=e111]: →
+          - generic [ref=e112] [cursor=pointer]:
+            - img "edit" [ref=e114]:
+              - img [ref=e115]
+            - generic [ref=e117]:
+              - generic [ref=e118]: 问题求助
+              - generic [ref=e119]: 提交支持单并持续跟踪处理状态
+            - generic [ref=e120]: →
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - heading "API 更新" [level=2] [ref=e123]
+            - link "查看全部 →" [ref=e124] [cursor=pointer]:
+              - /url: https://develop-docs.second.me/zh/docs/changelog
+          - generic [ref=e126]:
+            - heading [level=3] [ref=e127]
+            - list [ref=e128]:
+              - listitem [ref=e129]
+              - listitem [ref=e130]
+              - listitem [ref=e131]
+    - contentinfo [ref=e132]:
+      - img "SecondMe" [ref=e133]
+      - generic [ref=e134]: Copyright © 2026 SecondMe 开发者平台. All Rights Reserved.
+      - button "问题求助" [ref=e135] [cursor=pointer]

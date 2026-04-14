@@ -1,0 +1,2 @@
+[     991ms] [INFO] 🌐 i18next is maintained with support from Locize — consider powering your project with managed localization (AI, CDN, integrations): https://locize.com 💙 @ https://develop.second.me/assets/index-CgXdEGrd.js:21
+[    2119ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://us.i.posthog.com/flags/?v=2&ip=0&_=1775446007993&ver=1.359.1&compression=base64:0

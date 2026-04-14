@@ -1,0 +1,14 @@
+[    2293ms] [LOG] i18n init @ https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/app/layout-4fb625ad9204e8c0.js:0
+[    2294ms] [LOG] Script loaded @ :1
+[    2340ms] Uncaught Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at rX (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:36659)
+    at rZ (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:37692)
+    at <anonymous> (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:131592)
+    at sg (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:136754)
+    at sp (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:128092)
+    at <anonymous> (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:122921)
+    at sn (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:123022)
+    at sQ (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/4bd1b696-97b52c6a0a81b816.js:0:149410)
+    at M (https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/93794-657150d6d050bde7.js:0:41099)
+[    2375ms] [LOG] [ReportQueue] SDK ready, flushing queue... @ https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/56778-40d3fc6ee6ffad25.js:0
+[    2375ms] [LOG] [ReportQueue] Flushing 0 items @ https://mindverseglobal.mindverse.com/front-packaged/mindcommerse/prod_k8s/packaged-files/_next/static/chunks/56778-40d3fc6ee6ffad25.js:0
