@@ -112,3 +112,17 @@ DrugMind与 [Second Me](https://github.com/mindverse/Second-Me) 深度集成：
 ## 📄 许可证
 
 Apache 2.0
+
+---
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=MoKangMedical/drugmind&type=Date)](https://star-history.com/#MoKangMedical/drugmind&Date)
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+MIT License
