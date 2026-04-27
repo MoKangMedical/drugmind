@@ -1,5 +1,6 @@
 """
-DrugMind LLM集成 - 小米MIMO API
+DrugMind LLM集成 - MIMO API
+支持OpenAI兼容接口的LLM调用
 """
 
 import os

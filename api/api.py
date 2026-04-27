@@ -475,6 +475,51 @@ async def list_topics():
 
 
 
+# ──────────────────────────────────────────────
+# 定价 & 试用 (整合自 collab/app.py)
+# ──────────────────────────────────────────────
+PLANS = {
+    "starter": {"name": "Starter", "price": 299, "seats": 5, "features": [
+        "Target knowledge graph", "Literature auto-aggregation",
+        "Basic collaboration space", "ADMET quick assessment"
+    ]},
+    "team": {"name": "Team", "price": 499, "seats": -1, "features": [
+        "Everything in Starter", "Digital twin simulation",
+        "Pipeline progress tracking", "AI decision recommendations",
+        "External data integration"
+    ], "popular": True},
+    "enterprise": {"name": "Enterprise", "price": 799, "seats": -1, "features": [
+        "Everything in Team", "Private deployment", "SSO integration",
+        "Dedicated customer success", "Custom development", "SLA guarantee"
+    ]},
+}
+
+
+@app.get("/api/v2/plans")
+async def get_plans():
+    return {"plans": PLANS}
+
+
+@app.post("/api/v2/trial")
+async def apply_trial(data: dict):
+    """Apply for free trial"""
+    name = data.get("name", "")
+    size = data.get("size", 10)
+    if not name:
+        raise HTTPException(400, "Team name required")
+    plan_key = "starter" if size <= 5 else ("team" if size <= 50 else "enterprise")
+    plan = PLANS[plan_key]
+    monthly = size * plan["price"]
+    return {
+        "name": name,
+        "plan": plan["name"],
+        "seats": size,
+        "monthly_fee": monthly,
+        "annual_fee": monthly * 12,
+        "trial_days": 14,
+    }
+
+
 # MCP Server路由
 app.include_router(mcp_router)
 

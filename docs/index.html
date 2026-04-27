@@ -3,63 +3,354 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DrugMind — Drug R&D Digital Twin Collaboration Platform | MoKangMedical</title>
-<meta name="description" content="Second Me for pharma teams. Build AI digital twins from drug R&D data. Target validation, compound optimization, clinical trial design, RWD analysis — one platform.">
-<meta name="keywords" content="drug discovery,digital twin,pharma collaboration,clinical trial,RWD,compound optimization,target validation,pharmaceutical AI">
-<meta property="og:title" content="DrugMind — Drug R&D Digital Twin Collaboration Platform">
-<meta property="og:description" content="药企团队的Second Me。药物研发数字孪生，靶点验证→化合物优化→临床试验→RWD全链路。">
+<title>DrugMind — AI Drug R&D Digital Twin Platform | MoKangMedical</title>
+<meta name="description" content="AI-powered drug R&D digital twin collaboration platform. 5 expert AI agents for target discovery, molecular design, ADMET prediction, clinical trial simulation, and RWD analysis.">
+<meta name="keywords" content="drug discovery,digital twin,pharma AI,clinical trial,RWD,ADMET,target validation,drug R&D collaboration">
+<meta property="og:title" content="DrugMind — AI Drug R&D Digital Twin Platform">
+<meta property="og:description" content="5 expert AI digital twins collaborate 24/7 to accelerate your drug discovery pipeline.">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://mokangmedical.github.io/drugmind/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%2300d4aa'/><path d='M16 8v16M10 12l6-4 6 4M10 20l6 4 6-4' stroke='%23060b18' stroke-width='2' fill='none'/></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DrugMind","description":"Second Me for pharma teams. Build AI digital twins from drug R&D data. Target validation, compound optimization, clinical trial design, RWD analysis — one platform.","url":"https://mokangmedical.github.io/drugmind/","author":{"@type":"Person","name":"MoKangMedical","url":"https://github.com/MoKangMedical"},"codeRepository":"https://github.com/MoKangMedical/drugmind","license":"https://opensource.org/licenses/MIT","keywords":"drug discovery,digital twin,pharma collaboration,clinical trial,RWD,compound optimization,target validation,pharmaceutical AI","operatingSystem":"Cross-platform","applicationCategory":"DeveloperApplication","isAccessibleForFree":true}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DrugMind","description":"AI-powered drug R&D digital twin collaboration platform","url":"https://mokangmedical.github.io/drugmind/","author":{"@type":"Person","name":"MoKangMedical"},"codeRepository":"https://github.com/MoKangMedical/drugmind","license":"https://opensource.org/licenses/MIT","applicationCategory":"DeveloperApplication","isAccessibleForFree":true}
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--c:#1a1a2e;--a:#1a73e8;--bg:#fff;--card:#f8f9fa;--border:#e0e0e0}
-body{font-family:system-ui,-apple-system,sans-serif;max-width:860px;margin:0 auto;padding:2rem;color:var(--c);line-height:1.8;background:var(--bg)}
-h1{font-size:2.2rem;margin-bottom:.3rem}.sub{color:#666;font-size:1.1rem;margin-top:0}
-.bilingual{display:grid;grid-template-columns:1fr 1fr;gap:1rem;background:var(--card);padding:1.5rem;border-radius:8px;margin:1.5rem 0}
-a{color:var(--a);text-decoration:none}a:hover{text-decoration:underline}
-.badge{display:inline-block;background:#e8f0fe;color:var(--a);padding:.25rem .7rem;border-radius:12px;font-size:.85rem;margin:.2rem}
-.badges{margin:1rem 0}
-.features{background:var(--card);padding:1.5rem;border-radius:8px}
-.faq .qa{border-bottom:1px solid var(--border);padding:1rem 0}.faq .qa:last-child{border:none}
-.cross{display:flex;flex-wrap:wrap;gap:.5rem}.cross-link{background:var(--card);padding:.4rem .8rem;border-radius:6px;font-size:.9rem}
-footer{margin-top:3rem;text-align:center;color:#999;font-size:.85rem}
-@media(max-width:640px){.bilingual{grid-template-columns:1fr}h1{font-size:1.6rem}}
+:root{--bg:#060b18;--bg2:#0c1225;--card:#111a33;--border:#1e3055;--text:#e8edf5;--text2:#7b8db0;--muted:#4a5d80;--accent:#00d4aa;--accent2:#00ffcc;--blue:#3b82f6;--purple:#8b5cf6}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none;transition:color .2s}a:hover{color:var(--accent2)}
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,11,24,.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(30,48,85,.5)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-size:20px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px;letter-spacing:-.5px}
+.logo:hover{color:var(--text)}
+.nav-links{display:flex;gap:8px}
+.nav-links a{color:var(--text2);padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:all .2s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.04);text-decoration:none}
+
+/* Hero */
+.hero{text-align:center;padding:160px 20px 100px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:1000px;height:1000px;background:radial-gradient(circle,rgba(0,212,170,.06) 0%,transparent 60%);pointer-events:none}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(40px,6vw,72px);font-weight:900;line-height:1.1;margin-bottom:24px;letter-spacing:-2px}
+.hero h1 span{background:linear-gradient(135deg,#00d4aa,#0088ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:20px;color:var(--text2);max-width:680px;margin:0 auto 48px;line-height:1.7}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,#00d4aa,#0088ff);color:#060b18;box-shadow:0 4px 20px rgba(0,212,170,.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,170,.4);color:#060b18}
+.btn-outline{background:transparent;border:1.5px solid var(--accent);color:var(--accent)}
+.btn-outline:hover{background:rgba(0,212,170,.08);color:var(--accent)}
+.hero-stats{display:flex;justify-content:center;gap:56px;padding-top:40px;border-top:1px solid var(--border)}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:800;color:var(--accent);letter-spacing:-1px;display:block}
+.stat-label{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+
+/* Sections */
+section{padding:80px 0}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;text-align:center;margin-bottom:16px;letter-spacing:-1px}
+.section-sub{font-size:17px;color:var(--text2);text-align:center;max-width:600px;margin:0 auto 48px}
+h3{font-size:20px;font-weight:700;margin-bottom:12px}
+
+/* Grid */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+
+/* Cards */
+.card{background:linear-gradient(145deg,var(--card),var(--bg2));border:1px solid var(--border);border-radius:16px;padding:32px;transition:all .3s}
+.card:hover{border-color:rgba(0,212,170,.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 30px rgba(0,212,170,.1)}
+.card-icon{width:48px;height:48px;color:var(--accent);margin-bottom:20px}
+.card p{color:var(--text2);font-size:14px;line-height:1.7}
+
+/* Pipeline */
+.pipeline{display:flex;gap:12px;overflow-x:auto;padding:8px 0}
+.pipe-stage{min-width:180px;background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;flex-shrink:0;transition:all .2s}
+.pipe-stage:hover{border-color:var(--accent)}
+.pipe-icon{width:32px;height:32px;margin:0 auto 12px;color:var(--accent)}
+.pipe-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.pipe-desc{font-size:12px;color:var(--muted)}
+
+/* Team */
+.team-card{text-align:center}
+.team-card .card-icon{margin:0 auto 16px}
+.team-role{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:12px}
+.team-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.team-tag{background:rgba(0,212,170,.08);color:var(--accent);font-size:11px;padding:4px 10px;border-radius:20px}
+
+/* Pricing */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.price-card{background:linear-gradient(145deg,var(--card),var(--bg2));border:1px solid var(--border);border-radius:16px;padding:36px;position:relative;transition:all .3s}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.popular{border-color:var(--accent);box-shadow:0 0 40px rgba(0,212,170,.15)}
+.price-badge{position:absolute;top:-12px;right:24px;background:linear-gradient(135deg,#00d4aa,#0088ff);color:#060b18;font-size:12px;font-weight:700;padding:4px 16px;border-radius:20px}
+.price-name{font-size:18px;font-weight:700;margin-bottom:8px}
+.price-val{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;color:var(--accent);letter-spacing:-2px}
+.price-unit{font-size:14px;color:var(--muted);margin-bottom:24px}
+.price-list{list-style:none;margin-bottom:28px}
+.price-list li{padding:8px 0;font-size:14px;color:var(--text2);display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(30,48,85,.3)}
+.price-list li:last-child{border:none}
+.price-list li::before{content:'';display:inline-block;width:16px;height:16px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2300d4aa' stroke-width='2.5'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* ROI */
+.roi{background:linear-gradient(145deg,var(--card),var(--bg2));border:1px solid var(--border);border-radius:16px;padding:40px}
+.roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.roi-item{padding:20px;background:rgba(0,0,0,.15);border-radius:12px}
+.roi-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.roi-value{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700}
+.roi-total{text-align:center;padding:28px;background:rgba(0,212,170,.06);border-radius:12px;border:1px solid rgba(0,212,170,.15)}
+.roi-total .big{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;color:var(--accent);letter-spacing:-2px}
+.roi-total .sub{font-size:15px;color:var(--text2);margin-top:4px}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid var(--border);padding:24px 0}
+.faq-q{font-weight:600;margin-bottom:8px}
+.faq-a{color:var(--text2);font-size:15px;line-height:1.7}
+
+/* Footer */
+footer{text-align:center;padding:40px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+footer a{margin:0 8px}
+
+/* CTA */
+.cta{text-align:center;padding:80px 20px;background:linear-gradient(180deg,transparent,rgba(0,212,170,.03))}
+.cta h2{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-1px}
+
+/* Responsive */
+@media(max-width:900px){.grid-3,.pricing{grid-template-columns:1fr}.grid-5{grid-template-columns:repeat(2,1fr)}.hero-stats{gap:24px;flex-wrap:wrap}.roi-grid{grid-template-columns:1fr}.pipeline{flex-direction:column}.hero h1{font-size:36px}}
+@media(max-width:600px){.grid-5{grid-template-columns:1fr}.nav-links{display:none}.container{padding:0 16px}}
 </style>
 </head>
 <body>
-<h1>DrugMind</h1>
-<p class="sub">Drug R&D Digital Twin Collaboration Platform</p>
-<div class="badges">
-<a href="https://github.com/MoKangMedical/drugmind" class="badge">⭐ GitHub</a>
-<a href="https://github.com/MoKangMedical/drugmind/issues" class="badge">🐛 Issues</a>
-<a href="https://github.com/MoKangMedical/drugmind/blob/main/CONTRIBUTING.md" class="badge">🤝 Contributing</a>
-<a href="https://pypi.org/project/openclaw-medical-harness/" class="badge">📦 PyPI</a>
+
+<nav>
+<div class="nav-inner">
+  <a href="#" class="logo">
+    <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#00d4aa"/><path d="M16 8v16M10 12l6-4 6 4M10 20l6 4 6-4" stroke="#060b18" stroke-width="2.5" fill="none"/></svg>
+    DrugMind
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#team">AI Team</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://github.com/MoKangMedical/drugmind">GitHub</a>
+  </div>
 </div>
-<div class="bilingual">
-<div><strong>中文</strong><p>药企团队的Second Me。药物研发数字孪生，靶点验证→化合物优化→临床试验→RWD全链路。</p></div>
-<div><strong>English</strong><p>Second Me for pharma teams. Build AI digital twins from drug R&D data. Target validation, compound optimization, clinical trial design, RWD analysis — one platform.</p></div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>AI-Powered<br><span>Drug R&D Platform</span></h1>
+  <p>5 expert AI digital twins collaborate 24/7 to accelerate your drug discovery pipeline — from target validation to real-world evidence</p>
+  <div class="hero-btns">
+    <a href="https://github.com/MoKangMedical/drugmind" class="btn btn-primary">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      View on GitHub
+    </a>
+    <a href="#features" class="btn btn-outline">Explore Features</a>
+  </div>
+  <div class="hero-stats">
+    <div><span class="stat-num">5</span><span class="stat-label">AI Agents</span></div>
+    <div><span class="stat-num">24/7</span><span class="stat-label">Always On</span></div>
+    <div><span class="stat-num">E2E</span><span class="stat-label">Full Pipeline</span></div>
+    <div><span class="stat-num">Open</span><span class="stat-label">Source MIT</span></div>
+  </div>
 </div>
-<h2>核心功能 Use Cases</h2>
-<div class="features"><p>靶点验证 · 化合物优化 · 临床试验设计 · RWD分析 · 团队协作 · 知识管理</p></div>
-<h2>快速开始 Quick Start</h2>
-<div class="features"><pre>git clone https://github.com/MoKangMedical/drugmind.git
-cd drugmind
-# See README.md for detailed setup</pre></div>
-<h2>常见问题 FAQ</h2>
-<div class="faq"><div class="qa"><p><strong>Q: 数字孪生是什么意思？</strong></p><p>A: 基于团队历史数据和公开药物数据库，构建AI代理模拟药物研发全过程。</p></div>
-<div class="qa"><p><strong>Q: 支持哪些数据源？</strong></p><p>A: ChEMBL、OpenTargets、UniProt、PubMed、ClinicalTrials.gov等。</p></div>
-<div class="qa"><p><strong>Q: 团队如何协作？</strong></p><p>A: 多角色/多项目/权限管理，支持CRO/CMP等外部协作方。</p></div></div>
-<h2>MoKangMedical 生态</h2>
-<div class="cross"><a href="https://mokangmedical.github.io/chronicdiseasemanagement/" class="cross-link">慢康智枢</a>
-<a href="https://mokangmedical.github.io/cloud-memorial/" class="cross-link">云思园</a>
-<a href="https://mokangmedical.github.io/digital-sage/" class="cross-link">数字智者</a>
-<a href="https://mokangmedical.github.io/medichat-rd/" class="cross-link">MediChat-RD</a>
-<a href="https://mokangmedical.github.io/medi-pharma/" class="cross-link">MediPharma</a>
-<a href="https://mokangmedical.github.io/tianyan/" class="cross-link">天眼</a></div>
+
+<!-- FEATURES -->
+<section id="features">
+<div class="container">
+  <h2 class="section-title">Core Capabilities</h2>
+  <p class="section-sub">From molecular design to clinical trials, AI covers every stage of drug R&D</p>
+  <div class="grid-3">
+    <div class="card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <h3>Target Discovery</h3>
+      <p>Knowledge graph-based target identification, integrating genomics, proteomics, and literature mining. Druggability scoring and priority ranking with GWAS and Mendelian randomization.</p>
+    </div>
+    <div class="card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M12 10v4"/><path d="M10 14l-2.5 2.5"/><path d="M14 14l2.5 2.5"/></svg>
+      <h3>Molecular Design</h3>
+      <p>AI-driven molecule generation (VAE, GAN, diffusion), structure-based virtual screening, lead optimization with multi-objective ADMET constraints, and drug-likeness assessment.</p>
+    </div>
+    <div class="card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M7.5 21h9"/><path d="M5.5 21L10 9"/><path d="M18.5 21L14 9"/></svg>
+      <h3>ADMET Prediction</h3>
+      <p>Absorption, Distribution, Metabolism, Excretion, Toxicity — comprehensive pharmacokinetic profiling with RDKit-powered analysis and Lipinski compliance checking.</p>
+    </div>
+    <div class="card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 7h0"/><path d="M13 7h0"/><path d="M9 11h0"/><path d="M13 11h0"/><path d="M9 15h0"/><path d="M13 15h0"/></svg>
+      <h3>Clinical Trial Simulation</h3>
+      <p>Virtual patient generation, endpoint prediction, statistical power analysis, adaptive trial design optimization — simulate before you invest.</p>
+    </div>
+    <div class="card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg>
+      <h3>Real-World Data</h3>
+      <p>EMR integration, insurance claims analysis, real-world evidence generation, pharmacovigilance monitoring — from trial to market.</p>
+    </div>
+    <div class="card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <h3>Team Collaboration</h3>
+      <p>Multi-agent structured discussions, consensus formation, decision logging with full audit trail — your virtual R&D team never sleeps.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline" style="background:rgba(0,0,0,.15)">
+<div class="container">
+  <h2 class="section-title">Full Drug Discovery Pipeline</h2>
+  <p class="section-sub">End-to-end coverage from target to real-world evidence</p>
+  <div class="pipeline">
+    <div class="pipe-stage"><svg class="pipe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg><div class="pipe-name">Target Discovery</div><div class="pipe-desc">Knowledge graph + genomics</div></div>
+    <div class="pipe-stage"><svg class="pipe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M12 10v4"/></svg><div class="pipe-name">Hit-to-Lead</div><div class="pipe-desc">Virtual screening + AI generation</div></div>
+    <div class="pipe-stage"><svg class="pipe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M7.5 21h9"/></svg><div class="pipe-name">Lead Optimization</div><div class="pipe-desc">ADMET + SAR analysis</div></div>
+    <div class="pipe-stage"><svg class="pipe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg><div class="pipe-name">Clinical Trials</div><div class="pipe-desc">Virtual patient simulation</div></div>
+    <div class="pipe-stage"><svg class="pipe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg><div class="pipe-name">RWD / RWE</div><div class="pipe-desc">Post-market surveillance</div></div>
+  </div>
+</div>
+</section>
+
+<!-- AI TEAM -->
+<section id="team">
+<div class="container">
+  <h2 class="section-title">5 Expert AI Agents</h2>
+  <p class="section-sub">Each digital twin brings a unique professional perspective to your drug R&D decisions</p>
+  <div class="grid-5">
+    <div class="card team-card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M7.5 21h9"/><path d="M5.5 21L10 9"/><path d="M18.5 21L14 9"/></svg>
+      <div class="team-role">Medicinal Chemist</div>
+      <h3 style="font-size:16px">Synthesis & SAR</h3>
+      <p style="font-size:13px">Synthetic feasibility, SA Score, retrosynthesis, cost control</p>
+    </div>
+    <div class="card team-card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/></svg>
+      <div class="team-role">Biologist</div>
+      <h3 style="font-size:16px">Target & Assay</h3>
+      <p style="font-size:13px">Target validation, cell assays, animal models, biomarkers</p>
+    </div>
+    <div class="card team-card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="team-role">Pharmacologist</div>
+      <h3 style="font-size:16px">Safety & PK/PD</h3>
+      <p style="font-size:13px">hERG risk, ADMET, therapeutic index, clinical translation</p>
+    </div>
+    <div class="card team-card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg>
+      <div class="team-role">Data Scientist</div>
+      <h3 style="font-size:16px">ML & Modeling</h3>
+      <p style="font-size:13px">QSAR, GNN, virtual screening, statistical analysis</p>
+    </div>
+    <div class="card team-card">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <div class="team-role">Project Lead</div>
+      <h3 style="font-size:16px">Strategy & Go/No-Go</h3>
+      <p style="font-size:13px">Portfolio management, risk-benefit, budget, timeline</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:rgba(0,0,0,.15)">
+<div class="container">
+  <h2 class="section-title">Pricing</h2>
+  <p class="section-sub">Scale your drug R&D team with AI — seat-based subscription</p>
+  <div class="pricing">
+    <div class="price-card">
+      <div class="price-name">Starter</div>
+      <div class="price-val">$299</div>
+      <div class="price-unit">per seat / month</div>
+      <ul class="price-list">
+        <li>Target knowledge graph</li>
+        <li>Literature auto-aggregation</li>
+        <li>Basic collaboration space</li>
+        <li>ADMET quick assessment</li>
+        <li>Up to 5 seats</li>
+      </ul>
+      <a href="https://github.com/MoKangMedical/drugmind" class="btn btn-outline" style="width:100%;justify-content:center">Get Started</a>
+    </div>
+    <div class="price-card popular">
+      <div class="price-badge">Recommended</div>
+      <div class="price-name">Team</div>
+      <div class="price-val">$499</div>
+      <div class="price-unit">per seat / month</div>
+      <ul class="price-list">
+        <li>Everything in Starter</li>
+        <li>Digital twin simulation</li>
+        <li>Pipeline progress tracking</li>
+        <li>AI decision recommendations</li>
+        <li>External data integration</li>
+        <li>Unlimited seats</li>
+      </ul>
+      <a href="https://github.com/MoKangMedical/drugmind" class="btn btn-primary" style="width:100%;justify-content:center">Start Free Trial</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name">Enterprise</div>
+      <div class="price-val">$799</div>
+      <div class="price-unit">per seat / month</div>
+      <ul class="price-list">
+        <li>Everything in Team</li>
+        <li>Private deployment</li>
+        <li>SSO integration</li>
+        <li>Dedicated customer success</li>
+        <li>Custom development</li>
+        <li>SLA guarantee</li>
+      </ul>
+      <a href="https://github.com/MoKangMedical/drugmind" class="btn btn-outline" style="width:100%;justify-content:center">Contact Sales</a>
+    </div>
+  </div>
+
+  <!-- ROI -->
+  <div class="roi" style="margin-top:48px">
+    <h3 style="text-align:center;margin-bottom:28px;font-size:20px">ROI Calculator — 20-person R&D team</h3>
+    <div class="roi-grid">
+      <div class="roi-item"><div class="roi-label">Annual Team Fee</div><div class="roi-value">$119,760</div></div>
+      <div class="roi-item"><div class="roi-label">Literature Time Saved</div><div class="roi-value">$384,000</div></div>
+      <div class="roi-item"><div class="roi-label">Decision Error Reduction</div><div class="roi-value">$500,000</div></div>
+      <div class="roi-item"><div class="roi-label">Pipeline Acceleration</div><div class="roi-value">$3,000,000</div></div>
+    </div>
+    <div class="roi-total">
+      <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Estimated Annual Net Benefit</div>
+      <div class="big">$3,764,240</div>
+      <div class="sub">31x Return on Investment</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section>
+<div class="container" style="max-width:800px">
+  <h2 class="section-title">FAQ</h2>
+  <div class="faq-item"><div class="faq-q">What is DrugMind?</div><div class="faq-a">DrugMind is an AI-powered drug R&D digital twin collaboration platform. It deploys 5 specialized AI agents (Medicinal Chemist, Biologist, Pharmacologist, Data Scientist, Project Lead) to analyze drug discovery questions from every professional angle, 24/7.</div></div>
+  <div class="faq-item"><div class="faq-q">How does the digital twin work?</div><div class="faq-a">Each AI agent is trained on domain-specific knowledge and follows role-specific reasoning patterns. They engage in structured discussions, debate trade-offs, and reach consensus — simulating a real R&D team's decision-making process.</div></div>
+  <div class="faq-item"><div class="faq-q">What data sources are supported?</div><div class="faq-a">ChEMBL, OpenTargets, UniProt, PubMed, ClinicalTrials.gov, PubChem, and more. The platform also supports private data integration for Enterprise plans.</div></div>
+  <div class="faq-item"><div class="faq-q">How is DrugMind different from MediPharma?</div><div class="faq-a">MediPharma is a tool-chain (execution + computation). DrugMind is a collaboration platform (decision + coordination). MediPharma's APIs can be embedded in DrugMind — they are complementary, not competing.</div></div>
+</div>
+</section>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Ready to accelerate drug discovery?</h2>
+  <p style="color:var(--text2);margin-bottom:32px">Open source. MIT licensed. Start building your AI R&D team today.</p>
+  <a href="https://github.com/MoKangMedical/drugmind" class="btn btn-primary" style="font-size:18px;padding:16px 40px">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    Get Started
+  </a>
+</div>
+
 <footer>
-<p><a href="https://github.com/MoKangMedical/drugmind">GitHub</a> · <a href="https://mokangmedical.github.io/openclaw-medical-harness/">Medical Harness</a> · MIT License</p>
+  <p>2026 DrugMind | AI Drug R&D Digital Twin Platform | MoKangMedical</p>
+  <p style="margin-top:8px">
+    <a href="https://github.com/MoKangMedical/drugmind">GitHub</a>
+    <a href="https://mokangmedical.github.io/drugmind/">Docs</a>
+    <a href="https://github.com/MoKangMedical">MoKangMedical</a>
+  </p>
 </footer>
-</body></html>
+
+</body>
+</html>
