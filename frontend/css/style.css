@@ -490,6 +490,48 @@ a:hover { color: var(--accent-bright); text-decoration: none; }
 .verdict-warn { background: var(--orange-dim); color: var(--orange); }
 .verdict-fail { background: var(--red-dim); color: var(--red); }
 
+/* ─── 按钮变体 ─── */
+.btn-accent {
+  background: var(--accent); color: var(--bg-deep); font-weight: 700;
+}
+.btn-accent:hover { background: var(--accent-bright); }
+
+/* ─── 模态框 ─── */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px; width: 100%; max-width: 440px;
+  max-height: 90vh; overflow-y: auto; position: relative;
+  animation: modalIn 0.25s ease;
+}
+.modal-lg { max-width: 640px; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: none; color: var(--text-muted);
+  font-size: 24px; cursor: pointer; line-height: 1;
+}
+.modal-close:hover { color: var(--text-primary); }
+.modal-tabs { display: flex; gap: 4px; margin-bottom: 24px; }
+.modal-tab {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm); font-size: 14px;
+  font-weight: 600; cursor: pointer; border: 1px solid var(--border);
+  background: transparent; color: var(--text-secondary); transition: all var(--transition);
+  font-family: var(--font);
+}
+.modal-tab.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+
+/* ─── 表单错误 ─── */
+.form-error {
+  margin-top: 12px; padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--red-dim); color: var(--red); font-size: 13px;
+}
+
 /* ─── 响应式 ─── */
 @media (max-width: 768px) {
   .mobile-toggle { display: block; }

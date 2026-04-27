@@ -101,6 +101,7 @@
       <a href="#" class="nav-link" data-page="tools" onclick="showPage('tools')">Tools</a>
       <a href="#" class="nav-link" data-page="pricing" onclick="showPage('pricing')">Pricing</a>
       <a href="#" class="nav-link" data-page="about" onclick="showPage('about')">About</a>
+      <a href="#" class="nav-link" id="navAuth" onclick="showAuthModal()">Sign In</a>
     </div>
   </div>
 </nav>
@@ -175,6 +176,10 @@
       <button class="btn btn-primary" onclick="searchDiscussions()">
         <svg width="16" height="16"><use href="#icon-search"/></svg>
         Search
+      </button>
+      <button class="btn btn-accent" onclick="showCreateDiscussion()">
+        <svg width="16" height="16"><use href="#icon-message"/></svg>
+        New Discussion
       </button>
     </div>
     <div class="tags-bar" id="tagsBar"></div>
@@ -375,6 +380,99 @@
 
 <!-- 3Dmol.js for molecule visualization -->
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal" style="display:none">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('authModal')">&times;</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchAuthTab('login', this)">Sign In</button>
+      <button class="modal-tab" onclick="switchAuthTab('register', this)">Register</button>
+    </div>
+    <!-- Login -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" id="loginUser" class="input" placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="loginPass" class="input" placeholder="Enter password">
+      </div>
+      <button class="btn btn-primary full" onclick="doLogin()">Sign In</button>
+      <div id="loginError" class="form-error" style="display:none"></div>
+    </div>
+    <!-- Register -->
+    <div id="registerForm" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" id="regUser" class="input" placeholder="Choose username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="regEmail" class="input" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="regPass" class="input" placeholder="Choose password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Display Name</label>
+        <input type="text" id="regName" class="input" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Organization</label>
+        <input type="text" id="regOrg" class="input" placeholder="Company / University">
+      </div>
+      <button class="btn btn-primary full" onclick="doRegister()">Create Account</button>
+      <div id="regError" class="form-error" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Discussion Modal -->
+<div class="modal-overlay" id="createDiscModal" style="display:none">
+  <div class="modal modal-lg">
+    <button class="modal-close" onclick="closeModal('createDiscModal')">&times;</button>
+    <h2 style="margin-bottom:20px;display:flex;align-items:center;gap:10px">
+      <svg width="20" height="20"><use href="#icon-message"/></svg>
+      Start New Discussion
+    </h2>
+    <div class="form-group">
+      <label class="form-label">Topic</label>
+      <input type="text" id="discTopic" class="input" placeholder="e.g.: Should Compound #47 proceed to lead optimization?">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Background (optional)</label>
+      <textarea id="discContext" class="textarea" placeholder="Provide context for the discussion..." rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tags (comma separated)</label>
+      <input type="text" id="discTags" class="input" placeholder="e.g.: ADMET, lead optimization, hERG">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Select AI Participants</label>
+      <div class="role-selector" id="discRoles"></div>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-primary" onclick="submitDiscussion()">
+        <svg width="16" height="16"><use href="#icon-play"/></svg>
+        Create & Run Discussion
+      </button>
+      <button class="btn btn-ghost" onclick="closeModal('createDiscModal')">Cancel</button>
+    </div>
+    <div id="discResult" style="display:none;margin-top:20px"></div>
+  </div>
+</div>
+
+<!-- Discussion Detail Modal -->
+<div class="modal-overlay" id="discDetailModal" style="display:none">
+  <div class="modal modal-lg">
+    <button class="modal-close" onclick="closeModal('discDetailModal')">&times;</button>
+    <div id="discDetailContent"></div>
+  </div>
+</div>
+
 <script src="js/app.js"></script>
 </body>
 </html>

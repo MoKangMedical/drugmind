@@ -400,3 +400,294 @@ function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ─── Auth Modal ───
+let currentUser = null;
+
+function showAuthModal() {
+  if (currentUser) {
+    // Logout
+    currentUser = null;
+    localStorage.removeItem('drugmind_user');
+    document.getElementById('navAuth').textContent = 'Sign In';
+    return;
+  }
+  document.getElementById('authModal').style.display = 'flex';
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function switchAuthTab(tab, btn) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+async function doLogin() {
+  const username = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value.trim();
+  if (!username || !password) { showFormError('loginError', 'Please fill all fields'); return; }
+
+  try {
+    const r = await fetch(API + '/api/v2/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ username, password })
+    }).then(r => r.json());
+
+    if (r.error) { showFormError('loginError', r.error); return; }
+    currentUser = r;
+    localStorage.setItem('drugmind_user', JSON.stringify(r));
+    document.getElementById('navAuth').textContent = username;
+    closeModal('authModal');
+  } catch(e) {
+    showFormError('loginError', 'Connection failed');
+  }
+}
+
+async function doRegister() {
+  const data = {
+    username: document.getElementById('regUser').value.trim(),
+    email: document.getElementById('regEmail').value.trim(),
+    password: document.getElementById('regPass').value.trim(),
+    display_name: document.getElementById('regName').value.trim(),
+    organization: document.getElementById('regOrg').value.trim(),
+  };
+  if (!data.username || !data.email || !data.password) {
+    showFormError('regError', 'Please fill required fields'); return;
+  }
+
+  try {
+    const r = await fetch(API + '/api/v2/register', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    }).then(r => r.json());
+
+    if (r.error) { showFormError('regError', r.error); return; }
+    currentUser = r;
+    localStorage.setItem('drugmind_user', JSON.stringify(r));
+    document.getElementById('navAuth').textContent = data.username;
+    closeModal('authModal');
+  } catch(e) {
+    showFormError('regError', 'Connection failed');
+  }
+}
+
+function showFormError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 5000);
+}
+
+// Restore session
+(function() {
+  const saved = localStorage.getItem('drugmind_user');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      document.getElementById('navAuth').textContent = currentUser.username || currentUser.display_name || 'Account';
+    } catch(e) {}
+  }
+})();
+
+// ─── Create Discussion ───
+function showCreateDiscussion() {
+  // Populate role selector
+  const el = document.getElementById('discRoles');
+  if (el && allRoles.length > 0) {
+    el.innerHTML = allRoles.map(r => `
+      <div class="role-chip selected" data-role="${r.role_id}" onclick="toggleRoleChip(this)">
+        <span class="role-chip-icon">${roleIcon(r.role_id, 18)}</span>
+        <span>${escapeHtml(r.display_name)}</span>
+      </div>
+    `).join('');
+  }
+  document.getElementById('discResult').style.display = 'none';
+  document.getElementById('createDiscModal').style.display = 'flex';
+}
+
+async function submitDiscussion() {
+  const topic = document.getElementById('discTopic').value.trim();
+  const context = document.getElementById('discContext').value.trim();
+  const tagsStr = document.getElementById('discTags').value.trim();
+
+  if (!topic) { alert('Please enter a topic'); return; }
+
+  const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+  const selectedRoleIds = [];
+  document.querySelectorAll('#discRoles .role-chip.selected').forEach(c => {
+    selectedRoleIds.push(c.dataset.role);
+  });
+
+  const resultEl = document.getElementById('discResult');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = '<div class="skeleton" style="height:60px"></div><p style="text-align:center;color:var(--text-muted)">AI agents are discussing...</p>';
+
+  try {
+    // Create discussion
+    const createR = await fetch(API + '/api/v2/hub', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        topic, creator_id: currentUser?.user_id || 'anonymous',
+        creator_name: currentUser?.display_name || 'Anonymous',
+        tags, participants: selectedRoleIds,
+      })
+    }).then(r => r.json());
+
+    if (createR.error) {
+      resultEl.innerHTML = `<div class="form-error">${createR.error}</div>`;
+      return;
+    }
+
+    // Run AI discussion
+    const sessionId = createR.session_id;
+    const runR = await fetch(API + `/api/v2/hub/${sessionId}/reply`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        twin_id: '', name: 'System', role: 'system',
+        emoji: '', content: `Discussion started: ${topic}. Context: ${context}`,
+      })
+    }).then(r => r.json());
+
+    // Also trigger a quick-ask to get AI responses
+    const askR = await fetch(API + '/api/v2/quick-ask', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        question: topic,
+        context: context,
+        roles: selectedRoleIds.length > 0 ? selectedRoleIds : undefined,
+      })
+    }).then(r => r.json());
+
+    let html = `<h3 style="margin-bottom:16px">${escapeHtml(topic)}</h3>`;
+    if (tags.length) html += `<div class="tags" style="margin-bottom:16px">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
+
+    (askR.responses || []).forEach(r => {
+      html += `<div class="response-card">
+        <div class="response-header">
+          <span class="response-icon">${roleIcon(r.role, 24)}</span>
+          <span class="response-name">${escapeHtml(r.name)}</span>
+          <span class="response-role">${escapeHtml(r.role)}</span>
+        </div>
+        <div class="response-content">${escapeHtml(r.message)}</div>
+      </div>`;
+    });
+
+    html += `<p style="margin-top:16px;color:var(--text-muted);font-size:13px">Discussion saved. View in Discussion Hub.</p>`;
+    resultEl.innerHTML = html;
+
+    // Refresh discussions list
+    await loadDiscussions();
+
+  } catch(e) {
+    resultEl.innerHTML = '<div class="form-error">Failed to create discussion</div>';
+  }
+}
+
+// ─── WebSocket Real-time Discussion ───
+let ws = null;
+let wsSessionId = null;
+
+function connectWebSocket(sessionId) {
+  if (ws) ws.close();
+  wsSessionId = sessionId;
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${protocol}//${window.location.host}/ws/${sessionId}`);
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    appendWsMessage(data);
+  };
+
+  ws.onclose = () => {
+    console.log('WebSocket closed');
+  };
+
+  ws.onerror = (e) => {
+    console.warn('WebSocket error:', e);
+  };
+}
+
+function sendWsMessage(message, twinId) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ twin_id: twinId, message }));
+  }
+}
+
+function appendWsMessage(data) {
+  const container = document.getElementById('discDetailContent');
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'response-card';
+  div.innerHTML = `
+    <div class="response-header">
+      <span class="response-icon">${roleIcon(data.role, 24)}</span>
+      <span class="response-name">${escapeHtml(data.name)}</span>
+      <span class="response-role">${escapeHtml(data.role)}</span>
+    </div>
+    <div class="response-content">${escapeHtml(data.message)}</div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+// ─── Discussion Detail with WebSocket ───
+async function openDiscussionDetail(sessionId) {
+  const modal = document.getElementById('discDetailModal');
+  const content = document.getElementById('discDetailContent');
+  modal.style.display = 'flex';
+  content.innerHTML = '<div class="skeleton" style="height:120px"></div>';
+
+  try {
+    const d = await fetch(API + `/api/v2/hub/${sessionId}`).then(r => r.json());
+    let html = `<h2 style="margin-bottom:16px">${escapeHtml(d.topic)}</h2>`;
+
+    if (d.context) html += `<p style="color:var(--text-secondary);margin-bottom:16px">${escapeHtml(d.context)}</p>`;
+
+    html += '<div id="wsMessages">';
+    (d.messages || []).forEach(m => {
+      const iconId = ROLE_ICONS[m.role] || 'icon-cpu';
+      html += `<div class="response-card">
+        <div class="response-header">
+          <span class="response-icon"><svg width="20" height="20"><use href="#${iconId}"/></svg></span>
+          <span class="response-name">${escapeHtml(m.name)}</span>
+          <span class="response-role">${escapeHtml(m.role)}</span>
+        </div>
+        <div class="response-content">${escapeHtml(m.content)}</div>
+      </div>`;
+    });
+    html += '</div>';
+
+    // WebSocket input
+    html += `<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+      <div style="display:flex;gap:8px">
+        <input type="text" id="wsInput" class="input" placeholder="Continue the discussion..." onkeydown="if(event.key==='Enter')sendWsInput()">
+        <button class="btn btn-primary" onclick="sendWsInput()">Send</button>
+      </div>
+    </div>`;
+
+    content.innerHTML = html;
+
+    // Connect WebSocket
+    connectWebSocket(sessionId);
+
+  } catch(e) {
+    content.innerHTML = '<div class="empty-state">Failed to load</div>';
+  }
+}
+
+function sendWsInput() {
+  const input = document.getElementById('wsInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  // Add user message to UI
+  appendWsMessage({ name: 'You', role: 'user', message: msg });
+
+  // Send via WebSocket (use first selected twin)
+  const twinId = allRoles.length > 0 ? `${allRoles[0].role_id}_${allRoles[0].display_name}` : '';
+  sendWsMessage(msg, twinId);
+}

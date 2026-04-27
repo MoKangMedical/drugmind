@@ -1,27 +1,25 @@
 version: '3.8'
 
 services:
-  drugmind-api:
+  drugmind:
     build: .
+    container_name: drugmind-app
     ports:
       - "8096:8096"
-    volumes:
-      - ./drugmind_data:/app/drugmind_data
     environment:
-      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.xiaomi.com/v1}
-      - LLM_API_KEY=${LLM_API_KEY:-placeholder}
-      - LLM_MODEL=${LLM_MODEL:-mimo-v2-pro}
-    command: python main.py serve --port 8096
+      - MIMO_API_KEY=${MIMO_API_KEY}
+      - MIMO_BASE_URL=${MIMO_BASE_URL:-https://api.xiaomimimo.com/v1}
+      - MIMO_MODEL=${MIMO_MODEL:-mimo-v2-pro}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
+    volumes:
+      - drugmind_data:/app/drugmind_data
     restart: unless-stopped
-
-  # 可选: Second Me集成
-  # second-me:
-  #   image: mindverse/second-me:latest
-  #   ports:
-  #     - "8082:8082"
-  #   volumes:
-  #     - second_me_data:/app/data
-  #   restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8096/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   drugmind_data:

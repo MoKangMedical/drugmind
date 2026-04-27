@@ -24,7 +24,7 @@ def chat(
     messages: list[dict],
     model: str = "",
     temperature: float = 0.4,
-    max_tokens: int = 1024,
+    max_tokens: int = 2048,
 ) -> str:
     """
     调用MIMO聊天

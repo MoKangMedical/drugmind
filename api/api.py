@@ -363,13 +363,142 @@ async def get_pipeline():
 
 
 # ──────────────────────────────────────────────
-# ADMET
+# 分子服务 (ADMET + 3D + 信息)
 # ──────────────────────────────────────────────
 @app.post("/api/v2/admet")
 async def predict_admet(data: dict):
-    from drug_modeling.admet_bridge import ADMETBridge
-    bridge = ADMETBridge()
-    return bridge.predict(data["smiles"])
+    """增强ADMET预测"""
+    from drug_modeling.molecular_service import get_mol_service
+    return get_mol_service().predict_admet(data["smiles"])
+
+
+@app.post("/api/v2/molecule/sdf")
+async def get_molecule_sdf(data: dict):
+    """SMILES -> 3D SDF"""
+    from drug_modeling.molecular_service import get_mol_service
+    result = get_mol_service().smiles_to_sdf(data["smiles"])
+    return result
+
+
+@app.post("/api/v2/molecule/info")
+async def get_molecule_info(data: dict):
+    """获取分子信息 (名称、分子式等)"""
+    from drug_modeling.molecular_service import get_mol_service
+    return get_mol_service().get_mol_info(data["smiles"])
+
+
+# ──────────────────────────────────────────────
+# 靶点发现 (OpenTargets + ChEMBL)
+# ──────────────────────────────────────────────
+@app.get("/api/v2/targets/search")
+async def search_targets(q: str = "", limit: int = 10):
+    """搜索疾病相关靶点"""
+    if not q:
+        raise HTTPException(400, "Query parameter 'q' required")
+    from drug_modeling.target_service import get_target_service
+    return get_target_service().search_targets(q, limit)
+
+
+@app.get("/api/v2/targets/{target_id}")
+async def get_target_detail(target_id: str):
+    """获取靶点详细信息"""
+    from drug_modeling.target_service import get_target_service
+    return get_target_service().get_target_detail(target_id)
+
+
+@app.get("/api/v2/targets/{target_id}/compounds")
+async def get_target_compounds(target_id: str, limit: int = 10):
+    """获取靶点相关化合物"""
+    from drug_modeling.target_service import get_target_service
+    return get_target_service().search_compounds(target_id, limit)
+
+
+# ──────────────────────────────────────────────
+# SaaS: Stripe + Tenant + Marketplace + SSO
+# ──────────────────────────────────────────────
+@app.post("/api/v2/tenants")
+async def create_tenant(data: dict):
+    """创建租户"""
+    from api.saas import get_tenant_manager
+    tenant = get_tenant_manager().create(
+        name=data["name"], plan=data.get("plan", "starter"),
+        owner_id=data.get("owner_id", "anonymous"),
+    )
+    return {"tenant_id": tenant.tenant_id, "name": tenant.name, "plan": tenant.plan}
+
+
+@app.get("/api/v2/tenants")
+async def list_tenants():
+    """列出所有租户"""
+    from api.saas import get_tenant_manager
+    return {"tenants": get_tenant_manager().list_all()}
+
+
+@app.post("/api/v2/stripe/checkout")
+async def stripe_checkout(data: dict):
+    """创建Stripe支付会话"""
+    from api.saas import get_stripe_service
+    return get_stripe_service().create_checkout_session(
+        tenant_id=data["tenant_id"], plan=data["plan"],
+        success_url=data.get("success_url", "/"), cancel_url=data.get("cancel_url", "/"),
+    )
+
+
+@app.post("/api/v2/stripe/webhook")
+async def stripe_webhook(request: Request):
+    """Stripe webhook处理"""
+    body = await request.body()
+    sig = request.headers.get("stripe-signature", "")
+    from api.saas import get_stripe_service
+    return get_stripe_service().handle_webhook(body, sig)
+
+
+@app.get("/api/v2/marketplace")
+async def marketplace_search(q: str = "", role: str = "", limit: int = 20):
+    """搜索分身市场"""
+    from api.saas import get_marketplace
+    return {"twins": get_marketplace().search(q, role, limit)}
+
+
+@app.get("/api/v2/marketplace/trending")
+async def marketplace_trending():
+    """热门分身"""
+    from api.saas import get_marketplace
+    return {"twins": get_marketplace().trending()}
+
+
+@app.post("/api/v2/marketplace/publish")
+async def marketplace_publish(data: dict):
+    """发布分身到市场"""
+    from api.saas import get_marketplace
+    twin = get_marketplace().publish(
+        name=data["name"], role=data["role"],
+        description=data.get("description", ""),
+        author=data.get("author", "Anonymous"),
+        author_id=data.get("author_id", ""),
+        expertise=data.get("expertise", []),
+    )
+    return {"twin_id": twin.twin_id, "name": twin.name}
+
+
+@app.post("/api/v2/marketplace/{twin_id}/download")
+async def marketplace_download(twin_id: str):
+    """下载分身"""
+    from api.saas import get_marketplace
+    result = get_marketplace().download(twin_id)
+    if not result:
+        raise HTTPException(404, "Twin not found")
+    return result
+
+
+@app.post("/api/v2/sso/initiate")
+async def sso_initiate(data: dict):
+    """发起SSO登录"""
+    from api.saas import get_sso_service
+    return get_sso_service().initiate_sso(
+        tenant_id=data["tenant_id"], provider=data["provider"],
+        redirect_uri=data.get("redirect_uri", "/"),
+    )
 
 
 # ──────────────────────────────────────────────
