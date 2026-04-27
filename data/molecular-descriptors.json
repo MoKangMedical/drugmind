@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "description": "分子描述符数据库",
+  "descriptor_categories": [
+    {
+      "id": "physicochemical",
+      "name": "物理化学描述符",
+      "descriptors": [
+        {"id": "MW", "name": "分子量", "unit": "Da", "range": [0, 900], "optimal_range": [150, 500]},
+        {"id": "LogP", "name": "脂水分配系数", "unit": "-", "range": [-5, 10], "optimal_range": [-0.5, 5]},
+        {"id": "HBD", "name": "氢键供体数", "unit": "count", "range": [0, 20], "optimal_range": [0, 5]},
+        {"id": "HBA", "name": "氢键受体数", "unit": "count", "range": [0, 20], "optimal_range": [0, 10]},
+        {"id": "TPSA", "name": "拓扑极性表面积", "unit": "Å²", "range": [0, 500], "optimal_range": [20, 140]},
+        {"id": "RotBonds", "name": "可旋转键数", "unit": "count", "range": [0, 30], "optimal_range": [0, 10]},
+        {"id": "HeavyAtoms", "name": "重原子数", "unit": "count", "range": [0, 100], "optimal_range": [10, 50]},
+        {"id": "RingCount", "name": "环数", "unit": "count", "range": [0, 15], "optimal_range": [1, 5]},
+        {"id": "AromaticRings", "name": "芳香环数", "unit": "count", "range": [0, 10], "optimal_range": [1, 3]},
+        {"id": "FractionCSP3", "name": "sp3碳比例", "unit": "ratio", "range": [0, 1], "optimal_range": [0.25, 0.7]}
+      ]
+    },
+    {
+      "id": "electronic",
+      "name": "电子描述符",
+      "descriptors": [
+        {"id": "DipoleMoment", "name": "偶极矩", "unit": "Debye"},
+        {"id": "HOMO", "name": "最高占据分子轨道能量", "unit": "eV"},
+        {"id": "LUMO", "name": "最低未占据分子轨道能量", "unit": "eV"},
+        {"id": "Electronegativity", "name": "电负性", "unit": "Pauling"},
+        {"id": "Hardness", "name": "化学硬度", "unit": "eV"}
+      ]
+    },
+    {
+      "id": "topological",
+      "name": "拓扑描述符",
+      "descriptors": [
+        {"id": "WienerIndex", "name": "Wiener指数", "unit": "-"},
+        {"id": "BalabanIndex", "name": "Balaban指数", "unit": "-"},
+        {"id": "RandicIndex", "name": "Randic指数", "unit": "-"},
+        {"id": "KierAlpha", "name": "Kier形状指数", "unit": "-"},
+        {"id": "ChiIndices", "name": "连接性指数", "unit": "-"}
+      ]
+    },
+    {
+      "id": "fingerprints",
+      "name": "分子指纹",
+      "types": [
+        {"id": "ECFP", "name": "扩展连接指纹", "radius": 2, "bits": 1024},
+        {"id": "FCFP", "name": "功能连接指纹", "radius": 2, "bits": 1024},
+        {"id": "MACCS", "name": "MACCS密钥指纹", "bits": 166},
+        {"id": "Morgan", "name": "Morgan指纹", "radius": 2, "bits": 2048},
+        {"id": "TopologicalTorsion", "name": "拓扑扭转指纹", "bits": 2048},
+        {"id": "AtomPair", "name": "原子对指纹", "bits": 2048}
+      ]
+    }
+  ],
+  "lipinski_rules": {
+    "name": "Lipinski五规则",
+    "description": "评估化合物类药性的经验规则",
+    "rules": [
+      {"property": "MW", "condition": "<=", "value": 500},
+      {"property": "LogP", "condition": "<=", "value": 5},
+      {"property": "HBD", "condition": "<=", "value": 5},
+      {"property": "HBA", "condition": "<=", "value": 10}
+    ],
+    "violation_threshold": 0
+  },
+  "veber_rules": {
+    "name": "Veber规则",
+    "rules": [
+      {"property": "RotBonds", "condition": "<=", "value": 10},
+      {"property": "TPSA", "condition": "<=", "value": 140}
+    ]
+  },
+  "calculators": [
+    {"name": "RDKit", "language": "Python", "open_source": true},
+    {"name": "Open Babel", "language": "C++", "open_source": true},
+    {"name": "CDK", "language": "Java", "open_source": true},
+    {"name": "Mordred", "language": "Python", "open_source": true},
+    {"name": "PaDEL", "language": "Java", "open_source": true}
+  ]
+}

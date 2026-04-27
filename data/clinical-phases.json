@@ -1,0 +1,141 @@
+{
+  "version": "1.0.0",
+  "description": "临床试验阶段定义",
+  "phases": [
+    {
+      "id": "preclinical",
+      "name": "临床前研究",
+      "description": "在人体试验前进行的实验室和动物研究",
+      "duration_months": [12, 36],
+      "activities": [
+        "体外药效学研究",
+        "体内药效学研究",
+        "毒理学研究",
+        "药代动力学研究",
+        "制剂开发",
+        "CMC研究"
+      ],
+      "success_rate": 0.30,
+      "endpoints": ["安全性和有效性初步数据", "候选药物确定"]
+    },
+    {
+      "id": "phase1",
+      "name": "I期临床试验",
+      "description": "首次人体试验，评估安全性和药代动力学",
+      "duration_months": [6, 12],
+      "participants": {"min": 20, "max": 100},
+      "population": "健康志愿者或患者",
+      "activities": [
+        "安全性评估",
+        "耐受性评估",
+        "药代动力学研究",
+        "药效动力学研究",
+        "剂量递增研究",
+        "食物影响研究"
+      ],
+      "success_rate": 0.60,
+      "endpoints": ["MTD", "DLT", "PK参数", "安全性数据"]
+    },
+    {
+      "id": "phase2",
+      "name": "II期临床试验",
+      "description": "初步评估疗效和安全性",
+      "duration_months": [12, 24],
+      "participants": {"min": 100, "max": 300},
+      "population": "目标适应症患者",
+      "sub_phases": [
+        {"id": "phase2a", "name": "IIa期", "description": "概念验证"},
+        {"id": "phase2b", "name": "IIb期", "description": "剂量探索"}
+      ],
+      "activities": [
+        "疗效初步评估",
+        "剂量-效应关系",
+        "安全性进一步评估",
+        "生物标志物探索",
+        "患者分层研究"
+      ],
+      "success_rate": 0.30,
+      "endpoints": ["初步疗效", "推荐剂量", "安全性谱"]
+    },
+    {
+      "id": "phase3",
+      "name": "III期临床试验",
+      "description": "确证性试验，评估获益-风险比",
+      "duration_months": [24, 48],
+      "participants": {"min": 300, "max": 5000},
+      "population": "大规模目标患者群体",
+      "activities": [
+        "随机对照试验",
+        "有效性确证",
+        "安全性监测",
+        "与标准治疗比较",
+        "亚组分析",
+        "生活质量评估"
+      ],
+      "success_rate": 0.50,
+      "endpoints": ["主要疗效终点", "次要终点", "安全性数据", "生活质量"]
+    },
+    {
+      "id": "phase4",
+      "name": "IV期临床试验",
+      "description": "上市后研究",
+      "duration_months": [12, 60],
+      "participants": {"min": 1000, "max": 100000},
+      "population": "广泛患者群体",
+      "activities": [
+        "长期安全性监测",
+        "罕见不良反应检测",
+        "药物经济学研究",
+        "真实世界证据",
+        "特殊人群研究",
+        "药物相互作用研究"
+      ],
+      "success_rate": 0.90,
+      "endpoints": ["长期安全性", "真实世界疗效", "药物经济学数据"]
+    }
+  ],
+  "trial_designs": [
+    {"id": "rct", "name": "随机对照试验", "type": "interventional"},
+    {"id": "crossover", "name": "交叉设计", "type": "interventional"},
+    {"id": "adaptive", "name": "适应性设计", "type": "interventional"},
+    {"id": "basket", "name": "篮式试验", "type": "interventional"},
+    {"id": "umbrella", "name": "伞式试验", "type": "interventional"},
+    {"id": "platform", "name": "平台试验", "type": "interventional"},
+    {"id": "observational", "name": "观察性研究", "type": "observational"},
+    {"id": "registry", "name": "登记研究", "type": "observational"}
+  ],
+  "endpoints": {
+    "primary": [
+      {"id": "OS", "name": "总生存期", "type": "time_to_event"},
+      {"id": "PFS", "name": "无进展生存期", "type": "time_to_event"},
+      {"id": "ORR", "name": "客观缓解率", "type": "binary"},
+      {"id": "CR", "name": "完全缓解", "type": "binary"},
+      {"id": "A1C", "name": "糖化血红蛋白", "type": "continuous"}
+    ],
+    "secondary": [
+      {"id": "QoL", "name": "生活质量", "type": "patient_reported"},
+      {"id": "DOR", "name": "缓解持续时间", "type": "time_to_event"},
+      {"id": "TTP", "name": "至疾病进展时间", "type": "time_to_event"},
+      {"id": "safety", "name": "安全性评价", "type": "safety"}
+    ],
+    "exploratory": [
+      {"id": "biomarker", "name": "生物标志物", "type": "biomarker"},
+      {"id": "PRO", "name": "患者报告结局", "type": "patient_reported"}
+    ]
+  },
+  "regulatory_milestones": [
+    {"id": "ind", "name": "IND申请", "phase": "preclinical"},
+    {"id": "eop1", "name": "I期结束会议", "phase": "phase1"},
+    {"id": "eop2", "name": "II期结束会议", "phase": "phase2"},
+    {"id": "nda", "name": "NDA/BLA申请", "phase": "phase3"},
+    {"id": "fda_review", "name": "FDA审评", "phase": "post_phase3"},
+    {"id": "approval", "name": "获批上市", "phase": "post_phase3"},
+    {"id": "post_market", "name": "上市后承诺", "phase": "phase4"}
+  ],
+  "registries": [
+    {"id": "clinicaltrials_gov", "name": "ClinicalTrials.gov", "url": "https://clinicaltrials.gov/"},
+    {"id": "chictr", "name": "中国临床试验注册中心", "url": "http://www.chictr.org.cn/"},
+    {"id": "eudra_ct", "name": "EU Clinical Trials Register", "url": "https://www.clinicaltrialsregister.eu/"},
+    {"id": "who_ictrp", "name": "WHO ICTRP", "url": "https://www.who.int/clinical-trials-registry-platform"}
+  ]
+}

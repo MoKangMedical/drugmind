@@ -6,12 +6,6 @@ PORT=${1:-8096}
 DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$DIR"
 
-if [ -f "$DIR/.env" ]; then
-  set -a
-  . "$DIR/.env"
-  set +a
-fi
-
 echo "🧠 DrugMind v1.0 部署"
 echo "========================"
 
@@ -26,13 +20,9 @@ sleep 1
 # 启动
 echo "🚀 启动 DrugMind API (端口: $PORT)..."
 cd "$DIR"
-export MIMO_BASE_URL="${MIMO_BASE_URL:-https://api.xiaomimimo.com/v1}"
-export MIMO_MODEL="${MIMO_MODEL:-mimo-v2-pro}"
-
-if [ -z "${MIMO_API_KEY:-}" ]; then
-  echo "❌ MIMO_API_KEY 未配置。请在环境变量或 .env 文件中设置。"
-  exit 1
-fi
+export MIMO_BASE_URL="https://api.xiaomimimo.com/v1"
+export MIMO_API_KEY="${MIMO_API_KEY:-}"
+export MIMO_MODEL="mimo-v2-pro"
 
 nohup python3 -m uvicorn api.api:app --host 0.0.0.0 --port "$PORT" --log-level info > drugmind.log 2>&1 &
 echo $! > drugmind.pid

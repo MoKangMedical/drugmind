@@ -4,12 +4,9 @@ DrugMind LLM集成 - 小米MIMO API
 
 import os
 import logging
-from dotenv import load_dotenv
 from openai import OpenAI
 
 logger = logging.getLogger(__name__)
-
-load_dotenv()
 
 # MIMO配置
 MIMO_BASE_URL = os.getenv("MIMO_BASE_URL", "https://api.xiaomimimo.com/v1")
@@ -19,8 +16,6 @@ MIMO_MODEL = os.getenv("MIMO_MODEL", "mimo-v2-pro")
 
 def get_mimo_client() -> OpenAI:
     """获取MIMO客户端"""
-    if not MIMO_API_KEY:
-        raise RuntimeError("MIMO_API_KEY 未配置。请在环境变量或 .env 文件中设置。")
     return OpenAI(base_url=MIMO_BASE_URL, api_key=MIMO_API_KEY)
 
 

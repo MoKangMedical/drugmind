@@ -21,9 +21,7 @@ DrugMind提供：
 import json
 import logging
 import http.client
-from dataclasses import dataclass, asdict, field
-from datetime import datetime
-from pathlib import Path
+from dataclasses import dataclass, asdict
 from typing import Optional
 
 logger = logging.getLogger(__name__)
@@ -42,23 +40,6 @@ class SecondMeInstance:
     description: str = ""
     public_url: str = ""
     status: str = "created"
-    expertise: list[str] = field(default_factory=list)
-    knowledge: list[str] = field(default_factory=list)
-    personality: str = "balanced"
-    linked_user_id: str = ""
-    linked_project_id: str = ""
-    linked_twin_id: str = ""
-    last_synced_at: str = ""
-    last_message_at: str = ""
-    created_at: str = ""
-    updated_at: str = ""
-
-    def __post_init__(self):
-        now = datetime.now().isoformat()
-        if not self.created_at:
-            self.created_at = now
-        if not self.updated_at:
-            self.updated_at = now
 
 
 class SecondMeIntegration:
@@ -70,23 +51,11 @@ class SecondMeIntegration:
     2. 本地模式 - 连接本地部署的Second Me
     """
 
-    def __init__(
-        self,
-        mode: str = "cloud",
-        local_url: str = "http://localhost:8002",
-        storage_dir: str = "./drugmind_data/second_me",
-        registry_url: str = SECOND_ME_REGISTRY,
-    ):
+    def __init__(self, mode: str = "cloud", local_url: str = "http://localhost:8002"):
         self.mode = mode
         self.local_url = local_url
-        self.registry_url = registry_url
-        self.storage_dir = Path(storage_dir)
-        self.storage_dir.mkdir(parents=True, exist_ok=True)
-        self._instances_path = self.storage_dir / "instances.json"
-        self._history_path = self.storage_dir / "history.json"
         self.instances: dict[str, SecondMeInstance] = {}
         self._conversation_history: dict[str, list] = {}
-        self._load()
 
     def create_pharma_twin(
         self,
@@ -95,9 +64,6 @@ class SecondMeIntegration:
         expertise: list[str],
         knowledge: list[str] = None,
         personality: str = "balanced",
-        user_id: str = "",
-        project_id: str = "",
-        local_twin_id: str = "",
     ) -> dict:
         """
         创建药物研发数字分身
@@ -114,12 +80,6 @@ class SecondMeIntegration:
             name=name,
             role=role,
             description=f"{name}的药物研发数字分身 — {role}",
-            expertise=expertise,
-            knowledge=knowledge or [],
-            personality=personality,
-            linked_user_id=user_id,
-            linked_project_id=project_id,
-            linked_twin_id=local_twin_id,
         )
         self.instances[instance_id] = instance
 
@@ -127,7 +87,6 @@ class SecondMeIntegration:
         self._conversation_history[instance_id] = [
             {"role": "system", "content": training_data}
         ]
-        self._save()
 
         return {
             "instance_id": instance_id,
@@ -162,85 +121,12 @@ class SecondMeIntegration:
         self._conversation_history[instance_id].append(
             {"role": "assistant", "content": response}
         )
-        instance.last_message_at = datetime.now().isoformat()
-        instance.updated_at = datetime.now().isoformat()
-        self._save()
 
         return {
             "instance_id": instance_id,
             "name": instance.name,
             "role": instance.role,
             "message": response,
-        }
-
-    def describe_capabilities(self) -> dict:
-        """Describe the current integration contract."""
-        return {
-            "mode": self.mode,
-            "local_url": self.local_url,
-            "registry_url": self.registry_url,
-            "instances_count": len(self.instances),
-            "features": [
-                "pharma_twin_creation",
-                "instance_chat",
-                "project_context_sync",
-                "implementation_blueprint_sync",
-                "drug_discovery_capability_sync",
-                "by_dmta_project_summary",
-                "second_me_export",
-                "share_url_generation",
-                "durable_instance_storage",
-            ],
-        }
-
-    def get_instance(self, instance_id: str) -> Optional[dict]:
-        instance = self.instances.get(instance_id)
-        return asdict(instance) if instance else None
-
-    def sync_project_context(
-        self,
-        instance_id: str,
-        *,
-        project: Optional[dict] = None,
-        workspace: Optional[dict] = None,
-        memory_entries: Optional[list[dict]] = None,
-        decisions: Optional[list[dict]] = None,
-        workflow_run: Optional[dict] = None,
-        sync_note: str = "",
-    ) -> dict:
-        """Attach project context to a Second Me instance as a durable sync snapshot."""
-        instance = self.instances.get(instance_id)
-        if not instance:
-            return {"error": f"实例 {instance_id} 不存在"}
-
-        memory_entries = memory_entries or []
-        decisions = decisions or []
-        sync_payload = {
-            "project": project or {},
-            "workspace": workspace or {},
-            "memory_entries": memory_entries[:8],
-            "decisions": decisions[:6],
-            "workflow_run": workflow_run or {},
-            "sync_note": sync_note,
-            "synced_at": datetime.now().isoformat(),
-        }
-        snapshot_text = self._build_project_snapshot(sync_payload)
-        self._conversation_history.setdefault(instance_id, []).append(
-            {"role": "system", "content": snapshot_text}
-        )
-        instance.last_synced_at = sync_payload["synced_at"]
-        instance.updated_at = sync_payload["synced_at"]
-        instance.status = "synced"
-        self._save()
-        return {
-            "instance_id": instance_id,
-            "status": "synced",
-            "mode": self.mode,
-            "summary": snapshot_text[:320],
-            "synced_at": sync_payload["synced_at"],
-            "memory_entries_count": len(memory_entries),
-            "decisions_count": len(decisions),
-            "workflow_run_id": (workflow_run or {}).get("run_id", ""),
         }
 
     def _chat_cloud(self, instance_id: str, message: str) -> str:
@@ -352,19 +238,20 @@ class SecondMeIntegration:
     def list_instances(self) -> list[dict]:
         """列出所有实例"""
         return [
-            asdict(inst)
+            {
+                "instance_id": inst.instance_id,
+                "name": inst.name,
+                "role": inst.role,
+                "description": inst.description,
+                "status": inst.status,
+            }
             for inst in self.instances.values()
         ]
 
     def get_share_url(self, instance_id: str) -> str:
         """获取分身分享链接"""
         if instance_id in self.instances:
-            instance = self.instances[instance_id]
-            if not instance.public_url:
-                instance.public_url = f"{self.registry_url}/chat/{instance_id}"
-                instance.updated_at = datetime.now().isoformat()
-                self._save()
-            return instance.public_url
+            return f"{SECOND_ME_REGISTRY}/chat/{instance_id}"
         return ""
 
     def export_for_second_me(self, instance_id: str) -> dict:
@@ -390,77 +277,3 @@ class SecondMeIntegration:
                 "platform": "DrugMind",
             },
         }
-
-    def _build_project_snapshot(self, sync_payload: dict) -> str:
-        project = sync_payload.get("project") or {}
-        workspace = sync_payload.get("workspace") or {}
-        memory_entries = sync_payload.get("memory_entries") or []
-        decisions = sync_payload.get("decisions") or []
-        workflow_run = sync_payload.get("workflow_run") or {}
-
-        lines = [
-            "## DrugMind Project Sync Snapshot",
-            f"- synced_at: {sync_payload.get('synced_at', '')}",
-            f"- project_id: {project.get('project_id', '')}",
-            f"- project_name: {project.get('name', '')}",
-            f"- stage: {project.get('stage', '')}",
-            f"- target: {project.get('target', '')}",
-            f"- disease: {project.get('disease', '')}",
-        ]
-        if workspace:
-            lines.extend([
-                f"- workspace_status: {workspace.get('status', '')}",
-                f"- linked_discussions: {len(workspace.get('linked_discussions', []))}",
-                f"- linked_workflows: {len(workspace.get('linked_workflows', []))}",
-                f"- linked_decisions: {len(workspace.get('linked_decisions', []))}",
-            ])
-        if workflow_run:
-            lines.extend([
-                f"- workflow_run_id: {workflow_run.get('run_id', '')}",
-                f"- workflow_template: {workflow_run.get('template_name', '')}",
-                f"- workflow_status: {workflow_run.get('status', '')}",
-            ])
-        if sync_payload.get("sync_note"):
-            lines.append(f"- note: {sync_payload['sync_note']}")
-
-        if memory_entries:
-            lines.append("### Key memory")
-            for entry in memory_entries[:5]:
-                lines.append(
-                    f"- [{entry.get('memory_type', 'note')}] {entry.get('title', '')}: "
-                    f"{(entry.get('content', '') or '')[:180]}"
-                )
-        if decisions:
-            lines.append("### Key decisions")
-            for decision in decisions[:4]:
-                lines.append(
-                    f"- {decision.get('topic', '')}: {decision.get('decision', '')} "
-                    f"(confidence={decision.get('confidence', 0)})"
-                )
-        return "\n".join(lines)
-
-    def _save(self):
-        instances_payload = {
-            instance_id: asdict(instance)
-            for instance_id, instance in self.instances.items()
-        }
-        self._instances_path.write_text(json.dumps(instances_payload, ensure_ascii=False, indent=2))
-        self._history_path.write_text(json.dumps(self._conversation_history, ensure_ascii=False, indent=2))
-
-    def _load(self):
-        if self._instances_path.exists():
-            try:
-                instances_data = json.loads(self._instances_path.read_text())
-                self.instances = {
-                    instance_id: SecondMeInstance(**payload)
-                    for instance_id, payload in instances_data.items()
-                }
-            except Exception as exc:
-                logger.warning("加载 Second Me instances 失败: %s", exc)
-                self.instances = {}
-        if self._history_path.exists():
-            try:
-                self._conversation_history = json.loads(self._history_path.read_text())
-            except Exception as exc:
-                logger.warning("加载 Second Me history 失败: %s", exc)
-                self._conversation_history = {}

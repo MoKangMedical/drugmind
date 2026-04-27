@@ -4,13 +4,9 @@ DrugMind v2.0 — 药物研发人员的数字分身协作平台
 """
 
 import sys
-import os
 import logging
 import argparse
 from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("drugmind")
@@ -19,150 +15,31 @@ STORAGE_DIR = str(Path(__file__).parent / "drugmind_data")
 
 
 def get_engines(use_llm=True):
-    from collaboration.decision_log import DecisionLogger
-    from collaboration.h2a import H2AThreadStore
-    from agents.registry import AgentRegistry
     from digital_twin.engine import DigitalTwinEngine
     from collaboration.discussion import DiscussionEngine
-    from drug_discovery import DrugDiscoveryImplementationHub
-    from integrations import BlatantWhyAdapter, MediPharmaAdapter
     from project.kanban import KanbanBoard
-    from project.workspace import ProjectWorkspaceStore
     from drug_modeling.compound_tracker import CompoundTracker
     from auth.user import UserManager
     from community.hub import DiscussionHub
-    from memory.project_memory import ProjectMemoryStore
-    from second_me.bindings import SecondMeBindingStore
     from second_me.integration import SecondMeIntegration
-    from skills.registry import SkillRegistry
-    from tools.registry import ToolRegistry
-    from workflows.orchestrator import WorkflowOrchestrator
 
     twin = DigitalTwinEngine(storage_dir=STORAGE_DIR, use_llm=use_llm)
     discussion = DiscussionEngine(twin)
-    decisions = DecisionLogger(f"{STORAGE_DIR}/decisions")
     kanban = KanbanBoard(f"{STORAGE_DIR}/projects")
-    workspace_store = ProjectWorkspaceStore(f"{STORAGE_DIR}/platform/workspaces")
     tracker = CompoundTracker(f"{STORAGE_DIR}/compounds")
     users = UserManager(f"{STORAGE_DIR}/users")
     hub = DiscussionHub(f"{STORAGE_DIR}/discussions")
-    h2a_threads = H2AThreadStore(f"{STORAGE_DIR}/platform/h2a")
-    second_me_bindings = SecondMeBindingStore(f"{STORAGE_DIR}/platform/second_me")
-    sm = SecondMeIntegration(
-        mode=os.getenv("SECOND_ME_MODE", "cloud"),
-        local_url=os.getenv("SECOND_ME_URL", "http://localhost:8002"),
-        storage_dir=f"{STORAGE_DIR}/second_me",
-        registry_url=os.getenv("SECOND_ME_REGISTRY_URL", "https://app.secondme.io"),
-    )
-    agent_registry = AgentRegistry(f"{STORAGE_DIR}/platform/agents")
-    skill_registry = SkillRegistry(f"{STORAGE_DIR}/platform/skills")
-    tool_registry = ToolRegistry(f"{STORAGE_DIR}/platform/tools")
-    project_memory = ProjectMemoryStore(f"{STORAGE_DIR}/platform/memory")
-    blatant_why_adapter = BlatantWhyAdapter()
-    medi_pharma_adapter = MediPharmaAdapter()
-    drug_discovery_hub = DrugDiscoveryImplementationHub(
-        f"{STORAGE_DIR}/platform/drug_discovery",
-        twin_engine=twin,
-        agent_registry=agent_registry,
-        skill_registry=skill_registry,
-        tool_registry=tool_registry,
-        kanban=kanban,
-        workspace_store=workspace_store,
-        project_memory=project_memory,
-        compound_tracker=tracker,
-        decision_logger=decisions,
-        second_me=sm,
-        second_me_bindings=second_me_bindings,
-        blatant_why_adapter=blatant_why_adapter,
-        medi_pharma_adapter=medi_pharma_adapter,
-    )
-    workflow_orchestrator = WorkflowOrchestrator(
-        f"{STORAGE_DIR}/platform/workflows",
-        agent_registry=agent_registry,
-        skill_registry=skill_registry,
-        tool_registry=tool_registry,
-        twin_engine=twin,
-        discussion_engine=discussion,
-        decision_logger=decisions,
-        workspace_store=workspace_store,
-        project_memory=project_memory,
-        kanban=kanban,
-        compound_tracker=tracker,
-        second_me=sm,
-        second_me_bindings=second_me_bindings,
-        drug_discovery_hub=drug_discovery_hub,
-        blatant_why_adapter=blatant_why_adapter,
-    )
+    sm = SecondMeIntegration(mode="cloud")
 
-    return (
-        twin,
-        discussion,
-        decisions,
-        kanban,
-        workspace_store,
-        tracker,
-        users,
-        hub,
-        sm,
-        second_me_bindings,
-        agent_registry,
-        skill_registry,
-        tool_registry,
-        project_memory,
-        drug_discovery_hub,
-        blatant_why_adapter,
-        medi_pharma_adapter,
-        workflow_orchestrator,
-        h2a_threads,
-    )
+    return twin, discussion, kanban, tracker, users, hub, sm
 
 
 def cmd_serve(args):
     import uvicorn
     from api.api import app, init_engines
 
-    (
-        twin,
-        discussion,
-        decisions,
-        kanban,
-        workspace_store,
-        tracker,
-        users,
-        hub,
-        sm,
-        second_me_bindings,
-        agent_registry,
-        skill_registry,
-        tool_registry,
-        project_memory,
-        drug_discovery_hub,
-        blatant_why_adapter,
-        medi_pharma_adapter,
-        workflow_orchestrator,
-        h2a_threads,
-    ) = get_engines(use_llm=True)
-    init_engines(
-        twin,
-        discussion,
-        decisions,
-        kanban,
-        workspace_store,
-        tracker,
-        users,
-        hub,
-        sm,
-        second_me_bindings,
-        agent_registry,
-        skill_registry,
-        tool_registry,
-        project_memory,
-        drug_discovery_hub,
-        blatant_why_adapter,
-        medi_pharma_adapter,
-        workflow_orchestrator,
-        h2a_threads,
-    )
+    twin, discussion, kanban, tracker, users, hub, sm = get_engines(use_llm=True)
+    init_engines(twin, discussion, kanban, tracker, users, hub, sm)
 
     # 创建默认团队
     for role_id, name in [
@@ -186,57 +63,8 @@ def cmd_test(args):
     except Exception as e:
         print(f"  MIMO: ❌ {e}")
 
-    (
-        twin,
-        disc,
-        decisions,
-        kanban,
-        workspace_store,
-        tracker,
-        users,
-        hub,
-        sm,
-        second_me_bindings,
-        agent_registry,
-        skill_registry,
-        tool_registry,
-        project_memory,
-        drug_discovery_hub,
-        blatant_why_adapter,
-        medi_pharma_adapter,
-        workflow_orchestrator,
-        h2a_threads,
-    ) = get_engines(use_llm=False)
+    twin, disc, kanban, tracker, users, hub, sm = get_engines(use_llm=False)
     print(f"  引擎: ✅ 数字分身/协作/项目/化合物/用户/社区")
-    print(
-        "  平台骨架: ✅ "
-        f"agents={agent_registry.count()} "
-        f"skills={skill_registry.count()} "
-        f"tools={tool_registry.count()} "
-        f"workflow_templates={len(workflow_orchestrator.templates)} "
-        f"capabilities={drug_discovery_hub.count_capabilities()}"
-    )
-    print(
-        "  项目上下文: ✅ "
-        f"workspaces={workspace_store.count()} "
-        f"decisions={decisions.count()} "
-        f"projects={kanban.count()} "
-        f"compounds={tracker.count()} "
-        f"second_me_bindings={second_me_bindings.count()} "
-        f"h2a_threads={h2a_threads.count()} "
-        f"capability_executions={drug_discovery_hub.count_executions()}"
-    )
-    print(
-        "  BY整合: ✅ "
-        f"mcp_servers={len(blatant_why_adapter.mcp_bridge.list_servers())} "
-        f"compute_provider={blatant_why_adapter.tamarind_client.describe()['provider']}"
-    )
-    medi_pharma_status = medi_pharma_adapter.probe_status()
-    print(
-        "  MediPharma: ✅ "
-        f"status={medi_pharma_status.get('status')} "
-        f"base_url={medi_pharma_status.get('base_url', '') or 'not_configured'}"
-    )
 
     try:
         from drug_modeling.admet_bridge import ADMETBridge

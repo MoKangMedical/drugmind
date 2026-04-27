@@ -1,0 +1,191 @@
+{
+  "version": "1.0.0",
+  "description": "ADMET预测规则库",
+  "categories": [
+    {
+      "id": "absorption",
+      "name": "吸收",
+      "abbreviation": "A",
+      "properties": [
+        {
+          "id": "oral_bioavailability",
+          "name": "口服生物利用度",
+          "unit": "%",
+          "rules": [
+            {"name": "Lipinski五规则", "condition": "MW≤500 AND LogP≤5 AND HBD≤5 AND HBA≤10", "prediction": "good_absorption"},
+            {"name": "Veber规则", "condition": "RotBonds≤10 AND TPSA≤140", "prediction": "good_absorption"},
+            {"name": "BCS分类", "classes": ["I:高溶高渗", "II:低溶高渗", "III:高溶低渗", "IV:低溶低渗"]}
+          ]
+        },
+        {
+          "id": "solubility",
+          "name": "溶解度",
+          "unit": "log(mol/L)",
+          "prediction_range": [-10, 2],
+          "factors": ["晶型", "分子量", "极性", "氢键", "温度"]
+        },
+        {
+          "id": "permeability",
+          "name": "渗透性",
+          "unit": "cm/s",
+          "methods": ["Caco-2", "PAMPA", "MDCK"],
+          "threshold": {"high": 1e-6, "low": 1e-7}
+        },
+        {
+          "id": "pgp_substrate",
+          "name": "P-gp底物",
+          "type": "binary",
+          "implication": "P-gp底物可能限制口服吸收和脑渗透"
+        }
+      ]
+    },
+    {
+      "id": "distribution",
+      "name": "分布",
+      "abbreviation": "D",
+      "properties": [
+        {
+          "id": "vd",
+          "name": "分布容积",
+          "unit": "L/kg",
+          "interpretation": [
+            {"range": [0, 0.5], "meaning": "主要分布在血液"},
+            {"range": [0.5, 3], "meaning": "分布在组织"},
+            {"range": [3, 100], "meaning": "广泛分布"}
+          ]
+        },
+        {
+          "id": "protein_binding",
+          "name": "血浆蛋白结合率",
+          "unit": "%",
+          "categories": [
+            {"range": [0, 50], "level": "低结合"},
+            {"range": [50, 90], "level": "中等结合"},
+            {"range": [90, 100], "level": "高结合"}
+          ]
+        },
+        {
+          "id": "bbb_penetration",
+          "name": "血脑屏障渗透",
+          "rules": [
+            {"name": "BBB规则", "condition": "PSA<90 AND MW<450 AND HBD<3", "prediction": "BBB+"},
+            {"name": "CNS MPO", "factors": ["cLogP", "cLogD", "MW", "TPSA", "HBD", "pKa"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "metabolism",
+      "name": "代谢",
+      "abbreviation": "M",
+      "properties": [
+        {
+          "id": "cyp_inhibition",
+          "name": "CYP酶抑制",
+          "enzymes": ["CYP1A2", "CYP2C9", "CYP2C19", "CYP2D6", "CYP3A4"],
+          "prediction": "binary",
+          "implication": "CYP抑制可能导致药物相互作用"
+        },
+        {
+          "id": "cyp_induction",
+          "name": "CYP酶诱导",
+          "enzymes": ["CYP1A2", "CYP2B6", "CYP3A4"],
+          "implication": "CYP诱导可能降低其他药物浓度"
+        },
+        {
+          "id": "metabolic_stability",
+          "name": "代谢稳定性",
+          "assays": ["肝微粒体", "肝细胞", "S9"],
+          "metrics": ["t1/2", "CLint", "%remaining"]
+        },
+        {
+          "id": "reactive_metabolites",
+          "name": "反应性代谢物",
+          "alerts": ["苯胺", "呋喃", "噻吩", "迈克尔受体", "环氧"],
+          "risk": "高反应性可能导致毒性"
+        }
+      ]
+    },
+    {
+      "id": "excretion",
+      "name": "排泄",
+      "abbreviation": "E",
+      "properties": [
+        {
+          "id": "renal_clearance",
+          "name": "肾脏清除率",
+          "unit": "mL/min/kg",
+          "factors": ["肾小球滤过", "肾小管分泌", "肾小管重吸收"]
+        },
+        {
+          "id": "biliary_excretion",
+          "name": "胆汁排泄",
+          "MW_threshold": 500,
+          "implication": "高分子量化合物倾向胆汁排泄"
+        },
+        {
+          "id": "half_life",
+          "name": "半衰期",
+          "unit": "hours",
+          "categories": [
+            {"range": [0, 2], "level": "极短"},
+            {"range": [2, 6], "level": "短"},
+            {"range": [6, 24], "level": "中等"},
+            {"range": [24, 168], "level": "长"},
+            {"range": [168, 999], "level": "极长"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "toxicity",
+      "name": "毒性",
+      "abbreviation": "T",
+      "properties": [
+        {
+          "id": "herg",
+          "name": "hERG毒性",
+          "type": "binary",
+          "implication": "hERG抑制可能导致QT延长和心律失常",
+          "rules": [
+            {"name": "hERG警报", "condition": "MW>300 AND LogP>3", "risk": "increased"}
+          ]
+        },
+        {
+          "id": "hepatotoxicity",
+          "name": "肝毒性",
+          "alerts": ["反应性代谢物", "胆汁淤积", "线粒体毒性"],
+          "assays": ["HepG2", "原代肝细胞"]
+        },
+        {
+          "id": "mutagenicity",
+          "name": "致突变性",
+          "assays": ["Ames试验", "体内微核"],
+          "alerts": ["烷化基团", "芳香胺", "亚硝基"]
+        },
+        {
+          "id": "ld50",
+          "name": "半数致死量",
+          "unit": "mg/kg",
+          "species": ["小鼠", "大鼠"]
+        }
+      ]
+    }
+  ],
+  "prediction_tools": [
+    {"name": "SwissADME", "url": "http://www.swissadme.ch/", "type": "web", "free": true},
+    {"name": "pkCSM", "url": "http://biosig.unimelb.edu.au/pkcsm/", "type": "web", "free": true},
+    {"name": "admetSAR", "url": "http://lmmd.ecust.edu.cn/admetsar2/", "type": "web", "free": true},
+    {"name": "Schrödinger QikProp", "type": "commercial"},
+    {"name": "Cresset Flare", "type": "commercial"}
+  ],
+  "structural_alerts": [
+    {"id": "nitroaromatic", "name": "芳香硝基", "risk": "致突变性"},
+    {"id": "aniline", "name": "苯胺", "risk": "反应性代谢物"},
+    {"id": "epoxide", "name": "环氧基", "risk": "烷化DNA"},
+    {"id": "aldehyde", "name": "醛基", "risk": "反应性"},
+    {"id": "michael_acceptor", "name": "迈克尔受体", "risk": "亲电反应性"},
+    {"id": "acyl_halide", "name": "酰卤", "risk": "反应性"},
+    {"id": "aziridine", "name": "氮丙啶", "risk": "烷化剂"}
+  ]
+}

@@ -78,21 +78,6 @@ class DigitalTwinEngine:
             "status": "created",
         }
 
-    def ensure_twin(
-        self,
-        role_id: str,
-        name: str,
-        custom_expertise: Optional[list[str]] = None,
-    ) -> str:
-        """Ensure a twin exists for the given role/name pair."""
-        twin_id = f"{role_id}_{name}"
-        if twin_id not in self.personality._profiles:
-            self.create_twin(role_id, name, custom_expertise=custom_expertise)
-        elif twin_id not in self.memories:
-            self.memories[twin_id] = HierarchicalMemory(f"{self.storage_dir}/memory")
-            self.memories[twin_id].load(twin_id)
-        return twin_id
-
     def ask_twin(
         self,
         twin_id: str,
@@ -164,74 +149,6 @@ class DigitalTwinEngine:
             reasoning="模板回复（LLM未连接）",
         )
 
-    def ask_agent(
-        self,
-        agent_id: str,
-        question: str,
-        context: str = "",
-        *,
-        agent_profile: Optional[dict] = None,
-        temperature: float = 0.35,
-    ) -> TwinResponse:
-        """Ask a registered agent, routing domain agents through twins."""
-        agent = agent_profile or {}
-        if not agent:
-            return TwinResponse(
-                twin_id=agent_id,
-                name=agent_id,
-                role="Unknown agent",
-                emoji="🤖",
-                message=f"找不到 agent {agent_id}",
-                confidence=0,
-                reasoning="agent registry lookup failed",
-            )
-
-        role_id = agent.get("role_id", "")
-        if role_id:
-            twin_id = self.ensure_twin(role_id, agent.get("name", role_id))
-            return self.ask_twin(
-                twin_id=twin_id,
-                question=question,
-                context=context,
-                temperature=temperature,
-            )
-
-        system_prompt = self._build_agent_system_prompt(agent)
-        full_prompt = question
-        if context:
-            full_prompt += f"\n\n【项目与会话上下文】\n{context}"
-
-        if self.use_llm and self._llm_fn:
-            try:
-                message = self._llm_fn(
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": full_prompt},
-                    ],
-                    temperature=temperature,
-                )
-                return TwinResponse(
-                    twin_id=agent_id,
-                    name=agent.get("name", agent_id),
-                    role=agent.get("category", "platform"),
-                    emoji=self._agent_emoji(agent_id),
-                    message=message,
-                    confidence=0.82,
-                    reasoning=f"基于 {agent.get('name', agent_id)} 的平台职责生成回复",
-                )
-            except Exception as exc:
-                logger.error("平台 agent 调用失败: %s", exc)
-
-        return TwinResponse(
-            twin_id=agent_id,
-            name=agent.get("name", agent_id),
-            role=agent.get("category", "platform"),
-            emoji=self._agent_emoji(agent_id),
-            message=self._platform_template_response(agent, question),
-            confidence=0.28,
-            reasoning="模板回复（LLM未连接）",
-        )
-
     def teach_twin(self, twin_id: str, content: str, source: str = ""):
         """教数字分身新知识"""
         if twin_id in self.memories:
@@ -260,38 +177,3 @@ class DigitalTwinEngine:
             "project_lead": "综合考虑，我建议先明确Go/No-Go标准，再评估各项指标。",
         }
         return templates.get(role_id, "需要更多信息才能给出建议。")
-
-    def _build_agent_system_prompt(self, agent: dict) -> str:
-        allowed_tools = ", ".join(agent.get("allowed_tools", [])[:8]) or "暂无明确工具"
-        default_skills = ", ".join(agent.get("default_skills", [])[:8]) or "暂无明确技能"
-        return (
-            f"你是 DrugMind 平台中的 {agent.get('name', agent.get('agent_id', 'Agent'))}。\n"
-            f"角色类型: {agent.get('category', 'platform')}\n"
-            f"职责说明: {agent.get('description', '')}\n"
-            f"默认技能: {default_skills}\n"
-            f"可用工具: {allowed_tools}\n\n"
-            "你正在与一位真实的药物研发工作人员对话。"
-            "请直接给出判断，不要空泛地讲平台介绍。"
-            "输出格式默认遵守：\n"
-            "1. 先给结论\n"
-            "2. 再给关键依据\n"
-            "3. 最后给下一步动作\n"
-            "4. 如果存在风险或审批门，明确指出。"
-        )
-
-    def _platform_template_response(self, agent: dict, question: str) -> str:
-        name = agent.get("name", "Agent")
-        return (
-            f"{name} 已收到你的问题：{question}\n"
-            "当前我建议先把问题拆成可执行步骤，明确 owner、artifact 和下一步动作，"
-            "再进入流程推进。"
-        )
-
-    def _agent_emoji(self, agent_id: str) -> str:
-        if agent_id == "agent.orchestrator":
-            return "🛰️"
-        if agent_id == "agent.reviewer":
-            return "✅"
-        if agent_id == "agent.integration":
-            return "🔗"
-        return "🤖"

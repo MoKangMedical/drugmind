@@ -39,7 +39,6 @@ class CompoundTracker:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.compounds: dict[str, Compound] = {}
-        self._load()
 
     def add_compound(self, compound_id: str, smiles: str, **kwargs) -> Compound:
         """添加化合物"""
@@ -47,19 +46,6 @@ class CompoundTracker:
         self.compounds[compound_id] = comp
         self._save()
         return comp
-
-    def get_compound(self, compound_id: str) -> dict | None:
-        comp = self.compounds.get(compound_id)
-        return asdict(comp) if comp else None
-
-    def list_compounds(self, project_id: str = "", stage: str = "") -> list[dict]:
-        compounds = list(self.compounds.values())
-        if project_id:
-            compounds = [comp for comp in compounds if comp.project_id == project_id]
-        if stage:
-            compounds = [comp for comp in compounds if comp.stage == stage]
-        compounds.sort(key=lambda comp: comp.updated_at or comp.created_at, reverse=True)
-        return [asdict(comp) for comp in compounds]
 
     def update_stage(self, compound_id: str, new_stage: str):
         """更新开发阶段"""
@@ -96,17 +82,8 @@ class CompoundTracker:
                 })
         return pipeline
 
-    def count(self) -> int:
-        return len(self.compounds)
-
     def _save(self):
         """持久化"""
         data = {k: asdict(v) for k, v in self.compounds.items()}
         path = self.data_dir / "compounds.json"
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
-
-    def _load(self):
-        path = self.data_dir / "compounds.json"
-        if path.exists():
-            data = json.loads(path.read_text())
-            self.compounds = {k: Compound(**v) for k, v in data.items()}

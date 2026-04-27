@@ -1,0 +1,225 @@
+{
+  "version": "1.0",
+  "description": "DrugMind 药物研发管线模板 — 从靶点发现到上市后监测的完整流程",
+  "last_updated": "2026-04-26",
+  "pipeline_stages": [
+    {
+      "stage_id": "S01",
+      "name": "靶点发现与验证",
+      "phase": "discovery",
+      "duration_months": "6-18",
+      "description": "基于组学数据和文献挖掘识别潜在药物靶点，通过实验和计算方法验证可成药性",
+      "key_activities": [
+        "基因组学/蛋白质组学数据分析",
+        "知识图谱构建与靶点关联挖掘",
+        "GWAS与孟德尔随机化因果推断",
+        "靶点可成药性评估",
+        "专利自由度分析"
+      ],
+      "deliverables": [
+        "靶点优先级排名报告",
+        "靶点验证实验方案",
+        "可成药性评估报告"
+      ],
+      "success_criteria": "确认靶点与疾病因果关系，可成药性评分 > 0.7",
+      "digital_twin_model": "TargetTwin — 基因-疾病-药物网络模型"
+    },
+    {
+      "stage_id": "S02",
+      "name": "先导化合物发现",
+      "phase": "discovery",
+      "duration_months": "6-12",
+      "description": "通过虚拟筛选和AI分子生成发现苗头化合物，优化为先导化合物",
+      "key_activities": [
+        "基于结构的虚拟筛选（分子对接）",
+        "基于配体的药效团模型",
+        "AI分子生成（VAE/GAN/扩散模型）",
+        "高通量虚拟筛选",
+        "苗头化合物确认与SAR分析"
+      ],
+      "deliverables": [
+        "苗头化合物清单",
+        "先导化合物优化建议",
+        "初步构效关系分析"
+      ],
+      "success_criteria": "获得 IC50 < 1μM 的苗头化合物",
+      "digital_twin_model": "MoleculeTwin — 化合物-活性-选择性模型"
+    },
+    {
+      "stage_id": "S03",
+      "name": "先导化合物优化",
+      "phase": "discovery",
+      "duration_months": "6-12",
+      "description": "多目标优化先导化合物，平衡活性、选择性、ADMET性质",
+      "key_activities": [
+        "多目标优化（活性+选择性+ADMET）",
+        "ADMET性质预测与优化",
+        "药效团约束下的结构修饰",
+        "合成可及性评估",
+        "知识产权布局"
+      ],
+      "deliverables": [
+        "候选化合物清单（3-5个）",
+        "ADMET预测报告",
+        "合成路线建议"
+      ],
+      "success_criteria": "候选化合物满足成药性标准（Lipinski五规则+ADMET阈值）",
+      "digital_twin_model": "OptimizationTwin — 多目标优化模拟器"
+    },
+    {
+      "stage_id": "S04",
+      "name": "临床前研究",
+      "phase": "preclinical",
+      "duration_months": "12-24",
+      "description": "体内外药效学、药代动力学、毒理学研究，支持IND申报",
+      "key_activities": [
+        "体外药效学验证（细胞水平）",
+        "体内药效学研究（动物模型）",
+        "药代动力学（PK）研究",
+        "毒理学研究（急性/亚慢性/慢性）",
+        "制剂开发与稳定性研究",
+        "IND申报材料准备"
+      ],
+      "deliverables": [
+        "药效学研究报告",
+        "PK/PD分析报告",
+        "毒理学研究报告",
+        "IND申报材料包"
+      ],
+      "success_criteria": "满足IND申报要求，无不可接受的毒性信号",
+      "digital_twin_model": "PreclinicalTwin — 动物模型外推预测器"
+    },
+    {
+      "stage_id": "S05",
+      "name": "I期临床试验",
+      "phase": "clinical",
+      "duration_months": "12-18",
+      "description": "首次人体试验，评估安全性、耐受性、药代动力学",
+      "key_activities": [
+        "健康志愿者或患者入组",
+        "剂量递增（3+3或BOIN设计）",
+        "安全性与耐受性评估",
+        "PK/PD特征分析",
+        "最大耐受剂量（MTD）确定"
+      ],
+      "deliverables": [
+        "I期临床试验报告",
+        "MTD/RP2D推荐",
+        "安全性数据库"
+      ],
+      "success_criteria": "确定安全剂量范围，无剂量限制性毒性",
+      "digital_twin_model": "PhaseITwin — 剂量-反应模拟器"
+    },
+    {
+      "stage_id": "S06",
+      "name": "II期临床试验",
+      "phase": "clinical",
+      "duration_months": "18-36",
+      "description": "探索性疗效研究，初步评估药物在目标患者中的疗效",
+      "key_activities": [
+        "目标患者入组",
+        "剂量探索与优化",
+        "初步疗效评估（ORR/PFS）",
+        "生物标志物分析",
+        "安全性持续监测"
+      ],
+      "deliverables": [
+        "II期临床试验报告",
+        "推荐III期剂量（RP3D）",
+        "生物标志物分析报告"
+      ],
+      "success_criteria": "达到预设疗效终点，安全性可接受",
+      "digital_twin_model": "PhaseIITwin — 疗效预测模拟器"
+    },
+    {
+      "stage_id": "S07",
+      "name": "III期临床试验",
+      "phase": "clinical",
+      "duration_months": "24-48",
+      "description": "确证性临床试验，与标准治疗对比，支持上市申请",
+      "key_activities": [
+        "大规模随机对照试验",
+        "主要终点评估（OS/PFS）",
+        "亚组分析与生物标志物验证",
+        "安全性数据积累",
+        "统计分析计划执行"
+      ],
+      "deliverables": [
+        "III期临床试验报告",
+        "统计分析报告",
+        "NDA/BLA申报材料包"
+      ],
+      "success_criteria": "主要终点达到统计学显著性，获益-风险比支持上市",
+      "digital_twin_model": "PhaseIIITwin — 试验设计与功效模拟器"
+    },
+    {
+      "stage_id": "S08",
+      "name": "注册申报",
+      "phase": "regulatory",
+      "duration_months": "12-24",
+      "description": "向FDA/NMPA/EMA提交上市申请，接受监管审评",
+      "key_activities": [
+        "NDA/BLA材料准备与提交",
+        "CMC（化学、制造和控制）资料",
+        "审评沟通与补充资料",
+        "GMP现场检查",
+        "标签与说明书协商"
+      ],
+      "deliverables": [
+        "NDA/BLA申报材料",
+        "审评回复文件",
+        "上市许可批件"
+      ],
+      "success_criteria": "获得上市许可",
+      "digital_twin_model": "RegulatoryTwin — 申报材料自动生成器"
+    },
+    {
+      "stage_id": "S09",
+      "name": "上市后监测",
+      "phase": "post_marketing",
+      "duration_months": "持续",
+      "description": "真实世界数据收集与分析，药物警戒，市场准入",
+      "key_activities": [
+        "药物警戒与不良反应监测",
+        "真实世界数据（RWD）收集与分析",
+        "真实世界证据（RWE）生成",
+        "上市后研究（IV期临床）",
+        "市场准入与医保谈判"
+      ],
+      "deliverables": [
+        "定期安全性更新报告（PSUR）",
+        "RWE分析报告",
+        "药物经济学评价报告"
+      ],
+      "success_criteria": "持续安全性监测无新信号，RWE支持临床价值",
+      "digital_twin_model": "RWDTwin — 真实世界数据分析引擎"
+    }
+  ],
+  "gate_review_criteria": {
+    "discovery_to_preclinical": [
+      "靶点验证充分",
+      "先导化合物满足成药性标准",
+      "IP自由度确认"
+    ],
+    "preclinical_to_phaseI": [
+      "IND申报材料完整",
+      "毒理学数据支持首次人体试验",
+      "GMP级药物可生产"
+    ],
+    "phaseI_to_phaseII": [
+      "安全性可接受",
+      "MTD/RP2D确定",
+      "PK特征支持给药方案"
+    ],
+    "phaseII_to_phaseIII": [
+      "初步疗效信号明确",
+      "RP3D确定",
+      "安全性特征清晰"
+    ],
+    "phaseIII_to_nda": [
+      "主要终点达到统计学显著性",
+      "获益-风险比支持上市",
+      "CMC数据完整"
+    ]
+  }
+}
