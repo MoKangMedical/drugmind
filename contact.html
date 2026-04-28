@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - DrugMind — AI Drug Design Platform</title>
+<meta name="description" content="Get in touch with DrugMind — AI Drug Design Platform for partnerships, enterprise solutions, and support.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--s:#12121a;--t:#e2e8f0;--m:#94a3b8;--p:#6366f1;--b:rgba(255,255,255,.06)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);line-height:1.6}
+a{color:var(--p);text-decoration:none}
+.nav{position:fixed;top:0;left:0;right:0;background:rgba(10,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);z-index:1000;padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.nb{font-size:1.2rem;font-weight:700;color:var(--p)}
+.nl{display:flex;gap:1.5rem;align-items:center}
+.nl a{color:var(--m);font-size:.85rem;transition:color .2s}
+.nl a:hover{color:var(--t)}
+.page{max-width:800px;margin:0 auto;padding:8rem 2rem 4rem}
+h1{font-size:2.5rem;font-weight:800;margin-bottom:1rem;background:linear-gradient(135deg,#fff,var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:var(--m);margin-bottom:3rem;font-size:1.1rem}
+.form{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:2.5rem}
+.form h2{font-size:1.5rem;margin-bottom:1.5rem}
+.field{margin-bottom:1.5rem}
+.field label{display:block;font-size:.85rem;color:var(--m);margin-bottom:.5rem;font-weight:500}
+.field input,.field select,.field textarea{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.05);border:1px solid var(--b);border-radius:8px;color:var(--t);font-size:.95rem;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--p)}
+.field textarea{min-height:120px;resize:vertical}
+.btn{display:inline-block;padding:.8rem 2rem;background:var(--p);color:#fff;border-radius:8px;font-weight:600;border:none;cursor:pointer;font-size:1rem;transition:all .2s;width:100%}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,.3)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.success{display:none;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:1.5rem;text-align:center;margin-top:1rem}
+.success.show{display:block}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:3rem}
+.info-card{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:1.5rem;text-align:center}
+.info-card h3{font-size:1rem;margin-bottom:.5rem}
+.info-card p{color:var(--m);font-size:.85rem}
+footer{text-align:center;padding:2rem;color:var(--m);font-size:.8rem;border-top:1px solid var(--b);margin-top:4rem}
+@media(max-width:768px){.row{grid-template-columns:1fr}.nl{display:none}}
+</style>
+</head>
+<body>
+<nav class="nav">
+<a href="https://mokangmedical.github.io/opc-homepage/" class="nb">DrugMind — AI Drug Design Platform</a>
+<div class="nl">
+<a href="https://mokangmedical.github.io/opc-homepage/">Home</a>
+<a href="https://github.com/DrugMind — AI Drug Design Platform">GitHub</a>
+</div>
+</nav>
+<div class="page">
+<h1>Get in Touch</h1>
+<p class="sub">Whether you need enterprise solutions, research partnerships, or technical support, we're here to help.</p>
+
+<div class="form">
+<h2>Contact Form</h2>
+<form id="contactForm" onsubmit="handleSubmit(event)">
+<div class="row">
+<div class="field">
+<label for="name">Full Name *</label>
+<input type="text" id="name" name="name" required placeholder="Dr. Jane Smith">
+</div>
+<div class="field">
+<label for="email">Email *</label>
+<input type="email" id="email" name="email" required placeholder="jane@hospital.org">
+</div>
+</div>
+<div class="row">
+<div class="field">
+<label for="org">Organization</label>
+<input type="text" id="org" name="org" placeholder="General Hospital">
+</div>
+<div class="field">
+<label for="role">Role</label>
+<select id="role" name="role">
+<option value="">Select role</option>
+<option value="physician">Physician</option>
+<option value="researcher">Researcher</option>
+<option value="admin">Hospital Admin</option>
+<option value="pharma">Pharma/Biotech</option>
+<option value="investor">Investor</option>
+<option value="other">Other</option>
+</select>
+</div>
+</div>
+<div class="field">
+<label for="interest">Product Interest</label>
+<select id="interest" name="interest">
+<option value="">Select product</option>
+<option value="DrugMind">DrugMind - Drug Discovery AI</option>
+<option value="PharmaSim">PharmaSim - Market Simulation</option>
+<option value="Tianyan">Tianyan - Business Intelligence</option>
+<option value="MediChat-RD">MediChat-RD - Rare Disease AI</option>
+<option value="VirtualCell">Virtual Cell - Single-Cell AI</option>
+<option value="DigitalSage">Digital Sage - Course Platform</option>
+<option value="enterprise">Enterprise Solutions</option>
+<option value="partnership">Partnership</option>
+<option value="other">Other</option>
+</select>
+</div>
+<div class="field">
+<label for="message">Message *</label>
+<textarea id="message" name="message" required placeholder="Tell us about your needs..."></textarea>
+</div>
+<button type="submit" class="btn">Send Message</button>
+</form>
+<div class="success" id="successMsg">
+<h3>Thank you for your interest!</h3>
+<p>We'll get back to you within 24 hours.</p>
+</div>
+</div>
+
+<div class="info">
+<div class="info-card">
+<h3>Enterprise Sales</h3>
+<p>contact@DrugMind.com</p>
+</div>
+<div class="info-card">
+<h3>Research Partnerships</h3>
+<p>contact@DrugMind.com</p>
+</div>
+<div class="info-card">
+<h3>Technical Support</h3>
+<p>contact@DrugMind.com</p>
+</div>
+</div>
+</div>
+<footer>
+<p>&copy; 2025 DrugMind — AI Drug Design Platform. All rights reserved.</p>
+</footer>
+<script>
+function handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('contactForm');
+    const btn = form.querySelector('.btn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    
+    // Simulate submission
+    setTimeout(() => {
+        form.style.display = 'none';
+        document.getElementById('successMsg').classList.add('show');
+    }, 1500);
+}
+
+// Smooth reveal
+const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            obs.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.info-card, .form').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s ease';
+    obs.observe(el);
+});
+</script>
+</body>
+</html>

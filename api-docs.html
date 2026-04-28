@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Documentation - DrugMind</title>
+<meta name="description" content="Comprehensive API documentation for DrugMind AI drug discovery platform.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c18;--bg2:#0c1124;--card:#111827;--text:#f1f5f9;--dim:#94a3b8;--border:#1e293b;--indigo:#6366f1;--cyan:#06b6d4;--green:#10b981;--amber:#f59e0b;--red:#ef4444}
+body{background:var(--bg);color:var(--dim);font-family:'Inter',-apple-system,sans-serif;line-height:1.6}
+a{color:var(--indigo);text-decoration:none}
+code{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:var(--bg2);padding:.2rem .4rem;border-radius:4px;color:var(--cyan)}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,12,24,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(30,41,59,.5);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-weight:800;font-size:1.2rem;color:var(--text)}
+.nav-links{display:flex;gap:.3rem}
+.nav-links a{padding:.4rem .9rem;border-radius:8px;font-size:.83rem;font-weight:500;color:var(--dim);transition:all .25s}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,.04)}
+
+.layout{display:grid;grid-template-columns:250px 1fr;gap:0;padding-top:60px;min-height:100vh}
+
+/* Sidebar */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.sidebar h3{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.05em}
+.sidebar-nav{display:flex;flex-direction:column;gap:.3rem}
+.sidebar-link{padding:.5rem .8rem;border-radius:8px;font-size:.85rem;color:var(--dim);transition:all .2s;cursor:pointer}
+.sidebar-link:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.sidebar-link.active{background:rgba(99,102,241,.1);color:var(--indigo)}
+.sidebar-section{margin-bottom:1.5rem}
+
+/* Main Content */
+.main{padding:2rem;max-width:900px}
+.main h1{font-size:2.2rem;font-weight:900;color:var(--text);margin-bottom:1rem}
+.main h2{font-size:1.5rem;font-weight:800;color:var(--text);margin:2rem 0 1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.main h3{font-size:1.2rem;font-weight:700;color:var(--text);margin:1.5rem 0 .8rem}
+.main p{margin-bottom:1rem}
+
+/* Code Block */
+.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:1.6;color:var(--text)}
+.code-block .comment{color:var(--dim)}
+.code-block .keyword{color:var(--indigo)}
+.code-block .string{color:var(--green)}
+.code-block .number{color:var(--amber)}
+
+/* Endpoint */
+.endpoint{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.5rem 0}
+.endpoint-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.method{padding:.3rem .8rem;border-radius:6px;font-size:.8rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.method-get{background:rgba(16,185,129,.1);color:var(--green)}
+.method-post{background:rgba(99,102,241,.1);color:var(--indigo)}
+.method-put{background:rgba(245,158,11,.1);color:var(--amber)}
+.method-delete{background:rgba(239,68,68,.1);color:var(--red)}
+.endpoint-path{font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text)}
+.endpoint-desc{color:var(--dim);font-size:.9rem;margin-bottom:1rem}
+
+/* Parameters */
+.params-table{width:100%;border-collapse:collapse;margin:1rem 0}
+.params-table th{text-align:left;padding:.6rem .8rem;font-size:.8rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border)}
+.params-table td{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.03);font-size:.85rem}
+.params-table .param-name{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-weight:600}
+.params-table .param-type{font-size:.8rem;color:var(--dim)}
+.params-table .param-required{font-size:.75rem;padding:.2rem .4rem;border-radius:4px;background:rgba(239,68,68,.1);color:var(--red)}
+.params-table .param-optional{font-size:.75rem;padding:.2rem .4rem;border-radius:4px;background:rgba(148,163,184,.1);color:var(--dim)}
+
+/* Response */
+.response-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+.response-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.status-code{font-family:'JetBrains Mono',monospace;font-weight:700}
+.status-200{color:var(--green)}
+.status-400{color:var(--amber)}
+.status-401{color:var(--red)}
+.status-404{color:var(--red)}
+
+/* Try It */
+.try-it{background:linear-gradient(135deg,rgba(99,102,241,.05),rgba(6,182,212,.05));border:1px solid var(--indigo);border-radius:14px;padding:1.5rem;margin:1.5rem 0}
+.try-it h4{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem}
+.try-form{display:flex;gap:1rem;align-items:end}
+.try-input{flex:1}
+.try-input label{display:block;font-size:.8rem;color:var(--dim);margin-bottom:.3rem}
+.try-input input,.try-input select{width:100%;padding:.6rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;font-size:.85rem}
+.try-btn{padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;background:var(--indigo);color:#fff;transition:all .2s}
+.try-btn:hover{background:var(--indigo)}
+.try-result{margin-top:1rem;background:var(--bg2);border-radius:8px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;max-height:200px;overflow-y:auto;color:var(--text)}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">DrugMind API</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="api-docs.html" class="active">API</a>
+  </div>
+</nav>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Getting Started</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link active" href="#introduction">Introduction</a>
+        <a class="sidebar-link" href="#authentication">Authentication</a>
+        <a class="sidebar-link" href="#rate-limits">Rate Limits</a>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Molecular</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link" href="#search">Search Molecules</a>
+        <a class="sidebar-link" href="#properties">Get Properties</a>
+        <a class="sidebar-link" href="#predict">Predict ADMET</a>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Screening</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link" href="#virtual-screen">Virtual Screen</a>
+        <a class="sidebar-link" href="#docking">Molecular Docking</a>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Agents</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link" href="#agents-list">List Agents</a>
+        <a class="sidebar-link" href="#agent-run">Run Agent</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <h1>DrugMind API Documentation</h1>
+    <p>Welcome to the DrugMind API. This documentation covers all available endpoints for molecular analysis, virtual screening, and AI agent interactions.</p>
+
+    <div class="code-block">
+      <pre><span class="comment"># Base URL</span>
+https://api.drugmind.ai/v1
+
+<span class="comment"># Example: Search for molecules</span>
+curl -X GET <span class="string">"https://api.drugmind.ai/v1/molecules/search?q=aspirin"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></pre>
+    </div>
+
+    <h2 id="authentication">Authentication</h2>
+    <p>All API requests require an API key passed in the Authorization header:</p>
+    <div class="code-block">
+      <pre>Authorization: Bearer YOUR_API_KEY</pre>
+    </div>
+
+    <h2 id="rate-limits">Rate Limits</h2>
+    <p>API rate limits vary by plan:</p>
+    <table class="params-table">
+      <thead><tr><th>Plan</th><th>Requests/min</th><th>Requests/day</th></tr></thead>
+      <tbody>
+        <tr><td>Free</td><td>10</td><td>1,000</td></tr>
+        <tr><td>Pro</td><td>100</td><td>50,000</td></tr>
+        <tr><td>Enterprise</td><td>Unlimited</td><td>Unlimited</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="search">Search Molecules</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/molecules/search</span>
+      </div>
+      <div class="endpoint-desc">Search for molecules by name, SMILES, or structural similarity.</div>
+      <h4>Parameters</h4>
+      <table class="params-table">
+        <thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="param-name">q</td><td class="param-type">string</td><td><span class="param-required">Required</span></td><td>Search query (name, SMILES, or InChI)</td></tr>
+          <tr><td class="param-name">limit</td><td class="param-type">integer</td><td><span class="param-optional">Optional</span></td><td>Max results (default: 20, max: 100)</td></tr>
+          <tr><td class="param-name">similarity</td><td class="param-type">float</td><td><span class="param-optional">Optional</span></td><td>Similarity threshold (0.0-1.0)</td></tr>
+        </tbody>
+      </table>
+      <h4>Response</h4>
+      <div class="response-block">
+        <div class="response-header"><span class="status-code status-200">200</span> OK</div>
+        <div class="code-block"><pre>{
+  <span class="string">"results"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="string">"mol_001"</span>,
+      <span class="string">"name"</span>: <span class="string">"Aspirin"</span>,
+      <span class="string">"smiles"</span>: <span class="string">"CC(=O)OC1=CC=CC=C1C(=O)O"</span>,
+      <span class="string">"mw"</span>: <span class="number">180.16</span>,
+      <span class="string">"logp"</span>: <span class="number">1.2</span>
+    }
+  ],
+  <span class="string">"total"</span>: <span class="number">1</span>
+}</pre></div>
+      </div>
+    </div>
+
+    <div class="try-it">
+      <h4>Try It Out</h4>
+      <div class="try-form">
+        <div class="try-input">
+          <label>Search Query</label>
+          <input type="text" id="searchQuery" value="aspirin" placeholder="Enter molecule name or SMILES">
+        </div>
+        <button class="try-btn" onclick="trySearch()">Send</button>
+      </div>
+      <div class="try-result" id="searchResult" style="display:none"></div>
+    </div>
+
+    <h2 id="properties">Get Molecular Properties</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/molecules/{id}/properties</span>
+      </div>
+      <div class="endpoint-desc">Get detailed molecular properties including ADMET predictions.</div>
+      <h4>Response</h4>
+      <div class="response-block">
+        <div class="response-header"><span class="status-code status-200">200</span> OK</div>
+        <div class="code-block"><pre>{
+  <span class="string">"molecular_weight"</span>: <span class="number">180.16</span>,
+  <span class="string">"logp"</span>: <span class="number">1.2</span>,
+  <span class="string">"hba"</span>: <span class="number">4</span>,
+  <span class="string">"hbd"</span>: <span class="number">1</span>,
+  <span class="string">"psa"</span>: <span class="number">63.6</span>,
+  <span class="string">"admet"</span>: {
+    <span class="string">"absorption"</span>: <span class="number">0.95</span>,
+    <span class="string">"distribution"</span>: <span class="number">0.85</span>,
+    <span class="string">"metabolism"</span>: <span class="number">0.70</span>,
+    <span class="string">"excretion"</span>: <span class="number">0.80</span>,
+    <span class="string">"toxicity_risk"</span>: <span class="number">0.15</span>
+  }
+}</pre></div>
+      </div>
+    </div>
+
+    <h2 id="predict">Predict ADMET</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/predict/admet</span>
+      </div>
+      <div class="endpoint-desc">Run ADMET prediction on a molecule using our AI models.</div>
+      <h4>Request Body</h4>
+      <div class="code-block"><pre>{
+  <span class="string">"smiles"</span>: <span class="string">"CC(=O)OC1=CC=CC=C1C(=O)O"</span>,
+  <span class="string">"model"</span>: <span class="string">"admet-v2"</span>
+}</pre></div>
+    </div>
+
+    <h2 id="virtual-screen">Virtual Screening</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/screen/virtual</span>
+      </div>
+      <div class="endpoint-desc">Run virtual screening against a target protein using DrugCLIP model.</div>
+      <h4>Request Body</h4>
+      <div class="code-block"><pre>{
+  <span class="string">"target_pdb"</span>: <span class="string">"1ABC"</span>,
+  <span class="string">"library"</span>: <span class="string">"chembl"</span>,
+  <span class="string">"num_results"</span>: <span class="number">100</span>,
+  <span class="string">"min_score"</span>: <span class="number">0.7</span>
+}</pre></div>
+    </div>
+
+    <h2 id="docking">Molecular Docking</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/dock/molecular</span>
+      </div>
+      <div class="endpoint-desc">Perform molecular docking simulation using AutoDock Vina.</div>
+    </div>
+
+    <h2 id="agents-list">List Agents</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/agents</span>
+      </div>
+      <div class="endpoint-desc">List all available AI agents and their capabilities.</div>
+      <h4>Response</h4>
+      <div class="response-block">
+        <div class="response-header"><span class="status-code status-200">200</span> OK</div>
+        <div class="code-block"><pre>{
+  <span class="string">"agents"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="string">"agent_001"</span>,
+      <span class="string">"name"</span>: <span class="string">"MolDesigner"</span>,
+      <span class="string">"role"</span>: <span class="string">"Molecular Design"</span>,
+      <span class="string">"status"</span>: <span class="string">"active"</span>
+    }
+  ]
+}</pre></div>
+      </div>
+    </div>
+
+    <h2 id="agent-run">Run Agent</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/agents/{id}/run</span>
+      </div>
+      <div class="endpoint-desc">Execute an AI agent task with specified parameters.</div>
+      <h4>Request Body</h4>
+      <div class="code-block"><pre>{
+  <span class="string">"task"</span>: <span class="string">"Analyze binding pocket for PDB 1ABC"</span>,
+  <span class="string">"parameters"</span>: {
+    <span class="string">"depth"</span>: <span class="string">"detailed"</span>,
+    <span class="string">"include_3d"</span>: <span class="keyword">true</span>
+  }
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function trySearch() {
+  const query = document.getElementById('searchQuery').value;
+  const result = document.getElementById('searchResult');
+  result.style.display = 'block';
+  result.innerHTML = '<span style="color:var(--dim)">Loading...</span>';
+  
+  setTimeout(() => {
+    result.innerHTML = JSON.stringify({
+      results: [
+        { id: 'mol_001', name: 'Aspirin', smiles: 'CC(=O)OC1=CC=CC=C1C(=O)O', mw: 180.16, logp: 1.2 },
+        { id: 'mol_002', name: 'Ibuprofen', smiles: 'CC(C)CC1=CC=C(C=C1)C(C)C(=O)O', mw: 206.28, logp: 3.97 }
+      ],
+      total: 2,
+      query: query
+    }, null, 2);
+  }, 500);
+}
+</script>
+</body>
+</html>

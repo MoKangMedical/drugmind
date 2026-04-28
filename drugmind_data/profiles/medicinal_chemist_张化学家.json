@@ -1,0 +1,11 @@
+{
+  "role_id": "medicinal_chemist",
+  "name": "张化学家",
+  "avatar_emoji": "🧪",
+  "custom_expertise": [],
+  "custom_system_prompt": "",
+  "risk_tolerance_override": null,
+  "innovation_style_override": null,
+  "knowledge_files": [],
+  "memory_entries": []
+}

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — DrugMind</title>
+<meta name="description" content="Frequently asked questions about DrugMind: AI drug discovery, molecular docking, ADMET prediction, pricing, security, integration.">
+<meta property="og:title" content="FAQ — DrugMind">
+<meta property="og:description" content="Frequently asked questions about DrugMind AI drug discovery platform.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mokangmedical.github.io/DrugMind/faq.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://mokangmedical.github.io/DrugMind/faq.html">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="stylesheet" href="https://mokangmedical.github.io/opc-homepage/shared-design-system.css">
+<style>
+.faq-container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.faq-section { padding: 40px 0 80px; }
+.faq-category { margin-bottom: 40px; }
+.faq-category-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-light, #818cf8); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.faq-category-title::before { content: ''; width: 4px; height: 20px; background: var(--accent, #6366f1); border-radius: 2px; }
+.faq-item { background: var(--bg-card, #111); border: 1px solid var(--border, #1e293b); border-radius: var(--radius, 12px); margin-bottom: 10px; overflow: hidden; transition: border-color 0.3s; }
+.faq-item:hover { border-color: var(--accent, #6366f1); }
+.faq-item.open { border-color: var(--accent-light, #818cf8); background: linear-gradient(180deg, rgba(99,102,241,0.05), var(--bg-card, #111)); }
+.faq-question { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; cursor: pointer; gap: 16px; user-select: none; }
+.faq-question h3 { font-size: 0.95rem; font-weight: 600; flex: 1; line-height: 1.5; color: var(--text, #e2e8f0); }
+.faq-icon { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border, #1e293b); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-muted, #64748b); transition: all 0.3s; flex-shrink: 0; }
+.faq-item.open .faq-icon { background: var(--accent, #6366f1); color: #fff; border-color: var(--accent, #6366f1); transform: rotate(45deg); }
+.faq-answer { display: none; padding: 0 24px 20px; color: var(--text-muted, #94a3b8); font-size: 0.9rem; line-height: 1.8; }
+.faq-answer p { margin-bottom: 10px; }
+.faq-answer p:last-child { margin-bottom: 0; }
+.faq-answer ul, .faq-answer ol { padding-left: 22px; margin: 8px 0; }
+.faq-answer li { margin: 5px 0; }
+.faq-answer strong { color: var(--text, #e2e8f0); }
+.faq-answer a { color: var(--accent-light, #818cf8); text-decoration: underline; text-underline-offset: 3px; }
+.faq-nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 40px; }
+.faq-nav-btn { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border, #1e293b); background: var(--bg-card, #111); color: var(--text-muted, #94a3b8); }
+.faq-nav-btn:hover { border-color: var(--accent, #6366f1); color: var(--accent-light, #818cf8); background: rgba(99,102,241,0.08); }
+@media(max-width:768px) {
+  .faq-question { padding: 14px 16px; }
+  .faq-answer { padding: 0 16px 16px; }
+  .faq-question h3 { font-size: 0.88rem; }
+}
+</style>
+</head>
+<body style="padding-top:56px!important">
+<!-- OPC Ecosystem Nav -->
+<nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng3)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng3)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng3" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
+    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">DrugMind — AI Drug Design Platform</span>
+  </a>
+  <div style="display:flex;gap:6px;align-items:center">
+    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">Ecosystem</a>
+    <a href="https://github.com/DrugMind — AI Drug Design Platform" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
+    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
+  </div>
+</nav>
+
+<!-- Project Nav -->
+<nav class="eco-nav">
+  <a class="nav-brand" href="index.html">DrugMind</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="api-docs.html">API</a>
+    <a href="faq.html" class="active">FAQ</a>
+    <a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind">GitHub</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">Support</div>
+  <h1>Frequently Asked <span style="color:var(--accent-light,#818cf8)">Questions</span></h1>
+  <p class="subtitle">Everything you need to know about DrugMind — AI drug discovery, molecular design, ADMET prediction, and more.</p>
+</section>
+
+<!-- FAQ Content -->
+<div class="faq-container faq-section">
+
+  <div class="faq-nav">
+    <a href="#cat-platform" class="faq-nav-btn">Platform</a>
+    <a href="#cat-technical" class="faq-nav-btn">Technical</a>
+    <a href="#cat-pricing" class="faq-nav-btn">Pricing</a>
+    <a href="#cat-security" class="faq-nav-btn">Security</a>
+    <a href="#cat-integration" class="faq-nav-btn">Integration</a>
+    <a href="#cat-data" class="faq-nav-btn">Data</a>
+    <a href="#cat-support" class="faq-nav-btn">Support</a>
+  </div>
+
+  <!-- Platform -->
+  <div class="faq-category" id="cat-platform">
+    <div class="faq-category-title">Platform</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What is DrugMind and how does it work?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind is a <strong>multi-agent AI platform for drug discovery</strong> that accelerates the journey from target identification to lead optimization. It combines four specialized AI agents working in concert:</p>
+        <ul>
+          <li><strong>Molecular Generator</strong> — creates novel drug-like molecules using diffusion models and reinforcement learning</li>
+          <li><strong>Docking Agent</strong> — performs GPU-accelerated molecular docking against protein targets</li>
+          <li><strong>ADMET Predictor</strong> — evaluates absorption, distribution, metabolism, excretion, and toxicity properties</li>
+          <li><strong>Lead Optimizer</strong> — iteratively refines candidates to balance potency, selectivity, and drug-likeness</li>
+        </ul>
+        <p>The platform has analyzed <strong>10,847+ molecules</strong> and maintains 95% binding accuracy against benchmark datasets.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What types of drug targets does DrugMind support?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind supports a wide range of target types:</p>
+        <ul>
+          <li><strong>Kinases</strong> — EGFR, BRAF, ALK, and 200+ kinase targets</li>
+          <li><strong>GPCRs</strong> — serotonin, dopamine, adrenergic receptors</li>
+          <li><strong>Nuclear receptors</strong> — estrogen, androgen, PPARs</li>
+          <li><strong>Protein-protein interactions</strong> — PD-1/PD-L1, MDM2/p53</li>
+          <li><strong>Enzymes</strong> — proteases, phosphatases, epigenetic targets</li>
+          <li><strong>Ion channels</strong> — sodium, potassium, calcium channels</li>
+        </ul>
+        <p>You can also upload custom PDB structures for novel or proprietary targets.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What is the Lipinski Rule of Five and does DrugMind enforce it?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>Lipinski's Rule of Five is a set of guidelines for predicting drug-likeness: molecular weight ≤500 Da, LogP ≤5, H-bond donors ≤5, H-bond acceptors ≤10. DrugMind provides <strong>real-time Lipinski compliance checking</strong> during the design process.</p>
+        <p>You can choose to strictly enforce Lipinski rules, apply them as soft constraints, or ignore them entirely for specialized use cases (e.g., PROTACs, macrocycles, or peptide therapeutics that often violate traditional rules).</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Who is DrugMind designed for?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <ul>
+          <li><strong>Medicinal chemists</strong> — rapid hit-to-lead optimization with AI-guided suggestions</li>
+          <li><strong>Computational chemistry teams</strong> — GPU-accelerated virtual screening at scale</li>
+          <li><strong>Biotech startups</strong> — cost-effective early-stage drug design without massive compute infrastructure</li>
+          <li><strong>Pharma R&amp;D</strong> — supplementing internal CADD capabilities with multi-agent AI</li>
+          <li><strong>Academic researchers</strong> — accessible drug design tools for published research</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical -->
+  <div class="faq-category" id="cat-technical">
+    <div class="faq-category-title">Technical</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What AI models power DrugMind?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind uses a combination of state-of-the-art models:</p>
+        <ul>
+          <li><strong>Molecular generation</strong> — diffusion-based generative models (similar to DiffusionDB) fine-tuned on ChEMBL and ZINC datasets</li>
+          <li><strong>Molecular docking</strong> — GPU-accelerated AutoDock Vina with custom scoring functions</li>
+          <li><strong>ADMET prediction</strong> — graph neural networks trained on 2M+ experimental ADMET data points</li>
+          <li><strong>Lead optimization</strong> — multi-objective reinforcement learning with Pareto optimization</li>
+        </ul>
+        <p>All models are regularly retrained with new data and benchmarked against public datasets (MoleculeNet, PDBbind).</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>How fast is DrugMind's virtual screening?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind achieves <strong>100x speedup</strong> over traditional docking methods:</p>
+        <ul>
+          <li>Screen 1 million compounds against a single target in ~2 hours (GPU cluster)</li>
+          <li>ADMET prediction for 10,000 compounds in ~5 minutes</li>
+          <li>Full lead optimization cycle (generation → screening → optimization) in ~30 minutes</li>
+        </ul>
+        <p>Exact speed depends on your plan tier and target complexity.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="faq-category" id="cat-pricing">
+    <div class="faq-category-title">Pricing</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What pricing plans does DrugMind offer?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <ul>
+          <li><strong>Academic (Free)</strong> — limited to 100 molecules/month, basic docking, educational use</li>
+          <li><strong>Researcher ($299/mo)</strong> — 10,000 molecules/month, full ADMET, API access</li>
+          <li><strong>Professional ($999/mo)</strong> — unlimited molecules, GPU priority, lead optimization, custom targets</li>
+          <li><strong>Enterprise (Custom)</strong> — dedicated GPU cluster, on-premise option, SLA, custom model training</li>
+        </ul>
+        <p>Annual billing saves 20%. Volume discounts available for multi-seat licenses.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Is there a free trial for paid plans?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>Yes. The Academic plan is <strong>permanently free</strong> for educational and non-commercial use. For commercial plans, we offer a <strong>14-day free trial</strong> of the Researcher tier — no credit card required. Contact us for extended trials of Professional or Enterprise tiers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security -->
+  <div class="faq-category" id="cat-security">
+    <div class="faq-category-title">Security &amp; Compliance</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>How does DrugMind protect my proprietary molecular data?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind takes molecular data security seriously:</p>
+        <ul>
+          <li><strong>End-to-end encryption</strong> — AES-256 at rest, TLS 1.3 in transit</li>
+          <li><strong>No model training on user molecules</strong> — your structures are never used to train our AI</li>
+          <li><strong>Tenant isolation</strong> — each organization's molecular library is completely isolated</li>
+          <li><strong>Audit logging</strong> — full traceability of who accessed what data and when</li>
+          <li><strong>SOC 2 Type II</strong> certified infrastructure</li>
+          <li><strong>Enterprise on-premise</strong> deployment available for maximum data control</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Is DrugMind GDPR compliant?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>Yes. DrugMind is fully GDPR compliant with:</p>
+        <ul>
+          <li>Data Processing Agreements (DPA) available for all EU customers</li>
+          <li>EU data center option (Frankfurt) for data residency requirements</li>
+          <li>Right to erasure — complete data deletion within 30 days of request</li>
+          <li>Data portability — export all your data in standard formats at any time</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integration -->
+  <div class="faq-category" id="cat-integration">
+    <div class="faq-category-title">Integration</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Does DrugMind have an API?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>Yes. DrugMind provides a comprehensive <strong>RESTful API</strong> (Researcher plan and above) supporting:</p>
+        <ul>
+          <li>Programmatic molecule submission and screening</li>
+          <li>Batch virtual screening jobs</li>
+          <li>ADMET prediction endpoints</li>
+          <li>Result retrieval and export</li>
+          <li>Webhook callbacks for job completion</li>
+        </ul>
+        <p>Full documentation at <a href="api-docs.html">api-docs.html</a>. Python and JavaScript SDKs available.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Can DrugMind integrate with other OPC ecosystem tools?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind is a core member of the OPC ecosystem:</p>
+        <ul>
+          <li><strong>PharmaSim</strong> — feed DrugMind candidates into market simulations for commercial potential scoring</li>
+          <li><strong>Tianyan</strong> — pull competitive intelligence on similar molecules in development</li>
+          <li><strong>MediChat-RD</strong> — identify rare disease targets and evaluate orphan drug potential</li>
+        </ul>
+        <p>Cross-platform workflows are available via shared API keys on Professional plans.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data -->
+  <div class="faq-category" id="cat-data">
+    <div class="faq-category-title">Data Handling</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What training data does DrugMind use?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>DrugMind's models are trained on curated, high-quality datasets:</p>
+        <ul>
+          <li><strong>ChEMBL</strong> — 2M+ bioactivity records</li>
+          <li><strong>ZINC</strong> — 230M+ commercially available compounds</li>
+          <li><strong>PDBbind</strong> — 20K+ protein-ligand binding structures</li>
+          <li><strong>PubChem</strong> — 100M+ compound records</li>
+          <li><strong>ADMET experimental data</strong> — 2M+ measured ADMET properties</li>
+        </ul>
+        <p>Data is refreshed quarterly with new literature and database releases.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Can I upload my own molecular libraries?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>Yes. Researcher plan and above support uploading custom molecular libraries via:</p>
+        <ul>
+          <li><strong>SDF / MOL2 files</strong> — standard structure file formats</li>
+          <li><strong>SMILES strings</strong> — bulk import via CSV or API</li>
+          <li><strong>PDB files</strong> — custom protein structures for docking</li>
+        </ul>
+        <p>Uploaded data is private to your account and never shared with other users.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support -->
+  <div class="faq-category" id="cat-support">
+    <div class="faq-category-title">Support &amp; Customization</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What support options are available?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <ul>
+          <li><strong>Academic</strong> — community forum, documentation, GitHub issues</li>
+          <li><strong>Researcher</strong> — email support (24h response), video tutorials, knowledge base</li>
+          <li><strong>Professional</strong> — priority email + chat support (4h SLA), onboarding session</li>
+          <li><strong>Enterprise</strong> — dedicated account manager, Slack/Teams integration, 1h SLA, custom training</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Can DrugMind be customized for specific research needs?</h3>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        <p>Enterprise customers can customize:</p>
+        <ul>
+          <li><strong>Custom scoring functions</strong> — train docking models on your proprietary binding data</li>
+          <li><strong>Custom ADMET models</strong> — integrate your internal ADMET datasets for organization-specific predictions</li>
+          <li><strong>Workflow automation</strong> — build custom multi-step pipelines via the API</li>
+          <li><strong>On-premise deployment</strong> — run DrugMind on your own GPU infrastructure</li>
+        </ul>
+        <p>Contact our team to discuss your specific requirements.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<section style="text-align:center;padding:4rem 2rem;background:linear-gradient(135deg,rgba(99,102,241,.1),transparent)">
+  <h2 style="font-size:1.8rem;margin-bottom:1rem">Ready to accelerate drug discovery?</h2>
+  <p style="color:#94a3b8;margin-bottom:2rem">Start designing novel molecules with DrugMind today</p>
+  <a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind" style="display:inline-block;padding:.8rem 2rem;background:var(--accent,#6366f1);color:#fff;border-radius:8px;font-weight:600;text-decoration:none">Get Started Free</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="https://mokangmedical.github.io/opc-homepage/">Ecosystem</a>
+    <a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind">GitHub</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+  <p>&copy; 2025 DrugMind — AI Drug Design Platform</p>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  var item = el.parentElement;
+  var answer = item.querySelector('.faq-answer');
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-answer').style.display = 'none';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.display = 'block';
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var first = document.querySelector('.faq-item');
+  if (first) {
+    first.classList.add('open');
+    first.querySelector('.faq-answer').style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
