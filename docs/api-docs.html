@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Documentation — DrugMind</title>
+<meta name="description" content="DrugMind RESTful API文档，60+端点覆盖分子对接、ADMET预测、虚拟筛选、知识图谱等药物研发全流程。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.api-hero{padding:140px 2rem 60px;text-align:center;background:linear-gradient(180deg,rgba(139,92,246,0.05),transparent)}
+.api-hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;margin-bottom:1rem}
+.api-hero h1 span{background:var(--gradient2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.api-hero p{color:var(--dim);font-size:1.1rem;max-width:600px;margin:0 auto 2rem}
+.api-quick{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.api-quick .btn{font-size:0.85rem;padding:0.6rem 1.5rem}
+.api-section{max-width:1200px;margin:0 auto;padding:2rem}
+.api-group{margin-bottom:3rem}
+.api-group-title{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border)}
+.endpoint{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;transition:all 0.3s}
+.endpoint:hover{border-color:var(--accent)}
+.endpoint-header{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.8rem}
+.method{font-family:var(--mono);font-size:0.75rem;font-weight:700;padding:0.3rem 0.8rem;border-radius:6px;text-transform:uppercase}
+.method.get{background:rgba(16,185,129,0.15);color:var(--green)}
+.method.post{background:rgba(6,182,212,0.15);color:var(--accent)}
+.method.put{background:rgba(245,158,11,0.15);color:var(--orange)}
+.method.delete{background:rgba(239,68,68,0.15);color:var(--red)}
+.endpoint-path{font-family:var(--mono);font-size:0.9rem;color:var(--text);font-weight:500}
+.endpoint-desc{color:var(--dim);font-size:0.85rem;line-height:1.6}
+.endpoint-params{margin-top:1rem}
+.param-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.param-table th{text-align:left;color:var(--dim);font-weight:500;padding:0.5rem 0.8rem;border-bottom:1px solid var(--border)}
+.param-table td{padding:0.5rem 0.8rem;border-bottom:1px solid rgba(30,45,74,0.3)}
+.param-name{font-family:var(--mono);color:var(--accent);font-weight:500}
+.param-type{font-family:var(--mono);color:var(--purple);font-size:0.78rem}
+.param-required{color:var(--red);font-size:0.72rem;font-weight:600}
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-top:0.8rem;font-family:var(--mono);font-size:0.8rem;color:var(--dim);overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .kw{color:var(--purple)}
+.code-block .str{color:var(--green)}
+.code-block .num{color:var(--orange)}
+.auth-notice{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius);padding:1rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:0.8rem;font-size:0.9rem;color:var(--orange)}
+.rate-limit{background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:var(--radius);padding:1rem 1.5rem;margin-bottom:2rem;font-size:0.85rem;color:var(--accent)}
+.sdk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+.sdk-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;text-align:center;transition:all 0.3s}
+.sdk-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.sdk-icon{font-size:2rem;margin-bottom:0.5rem}
+.sdk-card h4{font-size:0.95rem;margin-bottom:0.3rem}
+.sdk-card p{color:var(--dim);font-size:0.8rem}
+.nav-links a[href="api-docs.html"]{color:var(--accent)!important}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">💊</div>
+    <span class="nav-logo-text">DrugMind</span>
+    <span class="nav-logo-badge">AI Platform</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#features">Features</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="api-docs.html" class="active">API</a>
+    <a href="index.html#pricing">Pricing</a>
+  </div>
+  <a class="nav-cta" href="index.html#pricing">Get Started</a>
+</nav>
+
+<section class="api-hero">
+  <h1>DrugMind <span>API Documentation</span></h1>
+  <p>60+ RESTful API端点，覆盖药物研发全流程。从分子对接到ADMET预测，一行代码调用AI能力。</p>
+  <div class="api-quick">
+    <a class="btn btn-primary" href="#auth">🔑 Authentication</a>
+    <a class="btn btn-secondary" href="#endpoints">📡 Endpoints</a>
+    <a class="btn btn-secondary" href="#sdks">📦 SDKs</a>
+  </div>
+</section>
+
+<section class="api-section">
+  <!-- Auth -->
+  <div id="auth" class="auth-notice">
+    🔑 <span>所有API请求需要Bearer Token认证。在<a href="index.html#pricing" style="color:var(--accent)">控制台</a>获取API Key。</span>
+  </div>
+
+  <div class="rate-limit">
+    ⚡ <strong>Rate Limits:</strong> Starter 100次/月 | Professional 无限 | Enterprise 自定义。响应头 <code>X-RateLimit-Remaining</code> 显示剩余配额。
+  </div>
+
+  <!-- Molecular Docking -->
+  <div class="api-group">
+    <h2 class="api-group-title">🔬 Molecular Docking 分子对接</h2>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/api/v1/docking/run</span>
+      </div>
+      <p class="endpoint-desc">执行分子对接计算。支持批量对接、柔性对接和共价对接模式。返回结合能、结合位点和3D坐标。</p>
+      <div class="endpoint-params">
+        <table class="param-table">
+          <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+          <tr><td><span class="param-name">protein_pdb</span> <span class="param-required">required</span></td><td><span class="param-type">string</span></td><td>PDB ID或上传的蛋白质结构文件</td></tr>
+          <tr><td><span class="param-name">ligands</span> <span class="param-required">required</span></td><td><span class="param-type">string[]</span></td><td>SMILES数组，最多1000个分子</td></tr>
+          <tr><td><span class="param-name">mode</span></td><td><span class="param-type">string</span></td><td>docking模式: standard | flexible | covalent</td></tr>
+          <tr><td><span class="param-name">exhaustiveness</span></td><td><span class="param-type">int</span></td><td>搜索彻底性，默认32，范围8-256</td></tr>
+        </table>
+      </div>
+      <div class="code-block"><span class="kw">curl</span> -X POST https://api.drugmind.ai/api/v1/docking/run \
+  -H <span class="str">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "protein_pdb": "1M17",
+    "ligands": ["CC(=O)OC1=CC=CC=C1C(=O)O", "CC1=CC=C(C=C1)S(=O)(=O)N"],
+    "mode": "standard",
+    "exhaustiveness": 32
+  }'</span></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/api/v1/docking/{job_id}/results</span>
+      </div>
+      <p class="endpoint-desc">获取对接任务结果。包含每个配体的结合能(kcal/mol)、RMSD、3D坐标和可视化数据。</p>
+    </div>
+  </div>
+
+  <!-- ADMET -->
+  <div class="api-group">
+    <h2 class="api-group-title">📊 ADMET Prediction</h2>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/api/v1/admet/predict</span>
+      </div>
+      <p class="endpoint-desc">ADMET五维预测。覆盖吸收(Caco-2, HIA)、分布(BBB, PPB)、代谢(CYP450)、排泄(CL)、毒性(hERG, Ames, LD50)等25+终点。</p>
+      <div class="endpoint-params">
+        <table class="param-table">
+          <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+          <tr><td><span class="param-name">smiles</span> <span class="param-required">required</span></td><td><span class="param-type">string[]</span></td><td>SMILES数组</td></tr>
+          <tr><td><span class="param-name">endpoints</span></td><td><span class="param-type">string[]</span></td><td>指定预测终点，默认全部</td></tr>
+          <tr><td><span class="param-name">confidence</span></td><td><span class="param-type">float</span></td><td>置信度阈值，默认0.7</td></tr>
+        </table>
+      </div>
+      <div class="code-block"><span class="kw">curl</span> -X POST https://api.drugmind.ai/api/v1/admet/predict \
+  -H <span class="str">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -d <span class="str">'{"smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]}'</span>
+
+<span class="kw"># Response</span>
+{
+  <span class="str">"absorption"</span>: { <span class="str">"caco2"</span>: <span class="num">-4.2</span>, <span class="str">"hia"</span>: <span class="num">0.92</span> },
+  <span class="str">"distribution"</span>: { <span class="str">"bbb"</span>: <span class="num">0.15</span>, <span class="str">"ppb"</span>: <span class="num">85.3</span> },
+  <span class="str">"metabolism"</span>: { <span class="str">"cyp3a4_inhibit"</span>: <span class="num">0.23</span> },
+  <span class="str">"toxicity"</span>: { <span class="str">"herg"</span>: <span class="num">0.08</span>, <span class="str">"ames"</span>: <span class="num">0.12</span> }
+}</div>
+    </div>
+  </div>
+
+  <!-- Virtual Screening -->
+  <div class="api-group">
+    <h2 class="api-group-title">🎯 Virtual Screening 虚拟筛选</h2>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/api/v1/screening/run</span>
+      </div>
+      <p class="endpoint-desc">从百万级化合物库中虚拟筛选。支持DrugCLIP深度学习模型和传统分子对接两种策略。返回Top-N候选化合物。</p>
+      <div class="endpoint-params">
+        <table class="param-table">
+          <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+          <tr><td><span class="param-name">target</span> <span class="param-required">required</span></td><td><span class="param-type">string</span></td><td>靶点PDB ID或蛋白质序列</td></tr>
+          <tr><td><span class="param-name">library</span></td><td><span class="param-type">string</span></td><td>化合物库: chembl | zinc | enamine | custom</td></tr>
+          <tr><td><span class="param-name">strategy</span></td><td><span class="param-type">string</span></td><td>筛选策略: clip | docking | hybrid</td></tr>
+          <tr><td><span class="param-name">top_n</span></td><td><span class="param-type">int</span></td><td>返回Top N候选物，默认100</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Knowledge Graph -->
+  <div class="api-group">
+    <h2 class="api-group-title">🕸️ Knowledge Graph 知识图谱</h2>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/api/v1/kg/search</span>
+      </div>
+      <p class="endpoint-desc">查询药物知识图谱。支持实体搜索、关系查询、路径发现。整合DrugBank、ChEMBL、PubChem等20+数据源。</p>
+      <div class="endpoint-params">
+        <table class="param-table">
+          <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+          <tr><td><span class="param-name">query</span> <span class="param-required">required</span></td><td><span class="param-type">string</span></td><td>搜索关键词或实体名称</td></tr>
+          <tr><td><span class="param-name">type</span></td><td><span class="param-type">string</span></td><td>实体类型: drug | gene | disease | pathway</td></tr>
+          <tr><td><span class="param-name">depth</span></td><td><span class="param-type">int</span></td><td>关系深度，默认2，最大4</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/api/v1/kg/drug-repurpose</span>
+      </div>
+      <p class="endpoint-desc">药物重定位推荐。基于知识图谱推理，为给定疾病推荐已上市药物的新适应症。</p>
+    </div>
+  </div>
+
+  <!-- Digital Twin -->
+  <div class="api-group">
+    <h2 class="api-group-title">🤖 Digital Twin 数字孪生</h2>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/api/v1/twin/create</span>
+      </div>
+      <p class="endpoint-desc">创建药物项目数字孪生。模拟药物在虚拟患者体内的ADME过程，预测PK/PD曲线和临床试验成功率。</p>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/api/v1/twin/{twin_id}/simulate</span>
+      </div>
+      <p class="endpoint-desc">运行数字孪生模拟。支持剂量探索、给药方案优化、虚拟临床试验等场景。</p>
+    </div>
+  </div>
+
+  <!-- SDKs -->
+  <div id="sdks" class="api-group">
+    <h2 class="api-group-title">📦 SDK & Integration</h2>
+    <div class="sdk-grid">
+      <div class="sdk-card">
+        <div class="sdk-icon">🐍</div>
+        <h4>Python SDK</h4>
+        <p>pip install drugmind</p>
+      </div>
+      <div class="sdk-card">
+        <div class="sdk-icon">📜</div>
+        <h4>JavaScript SDK</h4>
+        <p>npm install @drugmind/sdk</p>
+      </div>
+      <div class="sdk-card">
+        <div class="sdk-icon">☕</div>
+        <h4>Java SDK</h4>
+        <p>Maven Central</p>
+      </div>
+      <div class="sdk-card">
+        <div class="sdk-icon">🔬</div>
+        <h4>PyMOL Plugin</h4>
+        <p>可视化对接结果</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html"><div class="nav-logo-icon">💊</div><span class="nav-logo-text">DrugMind</span></a>
+      <p>AI驱动的药物研发平台。多Agent协作，加速药物发现。</p>
+    </div>
+    <div><h4>Product</h4><ul class="footer-links"><li><a href="index.html#features">Features</a></li><li><a href="pipeline.html">Pipeline</a></li><li><a href="index.html#pricing">Pricing</a></li></ul></div>
+    <div><h4>Resources</h4><ul class="footer-links"><li><a href="api-docs.html">API Docs</a></li><li><a href="index.html#cases">Case Studies</a></li><li><a href="https://github.com/MoKangMedical/DrugMind">GitHub</a></li></ul></div>
+    <div><h4>Company</h4><ul class="footer-links"><li><a href="https://mokangmedical.github.io/opc-homepage/">OPC Alliance</a></li><li><a href="https://github.com/MoKangMedical">GitHub Org</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 MoKangMedical. DrugMind — AI Drug Discovery Platform.</div>
+</footer>
+
+<script>
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
+</script>
+</body>
+</html>
