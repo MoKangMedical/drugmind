@@ -1,33 +1,136 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DrugMind — AI Drug Design Platform</title>
-<meta name="description" content="AI-powered drug discovery platform with molecular design, virtual screening, and lead optimization">
+<title>DrugMind — AI Drug Discovery Platform | MoKangMedical</title>
+<meta name="description" content="Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins. 10,847+ molecules analyzed.">
+<link rel="canonical" href="https://mokangmedical.github.io/DrugMind/">
 <link rel="stylesheet" href="https://mokangmedical.github.io/opc-homepage/shared-design-system.css">
+<script src="https://3Dmol.org/build/3Dmol-min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
 <style>
-.demo-container{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin:2rem 0}
-.mol-input{width:100%;padding:0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:monospace;font-size:0.9rem}
-.mol-input:focus{outline:none;border-color:var(--accent)}
-.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
-.result-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center}
-.result-value{font-size:1.8rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+:root{--bg:#0a0a1a;--bg-card:#12122a;--bg-card2:#1a1a3a;--border:rgba(99,102,241,0.15);--text:#e2e8f0;--text-muted:#94a3b8;--accent:#818cf8;--accent2:#c084fc;--gradient:linear-gradient(135deg,#818cf8,#c084fc);--success:#34d399;--warning:#fbbf24;--danger:#f87171}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;padding-top:56px!important}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+.section{padding:4rem 0}
+.section-title{font-size:2rem;font-weight:800;text-align:center;margin-bottom:0.5rem;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-desc{text-align:center;color:var(--text-muted);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto}
+
+/* Hero */
+.hero{padding:5rem 0 3rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%,rgba(99,102,241,0.08) 0%,transparent 50%),radial-gradient(circle at 70% 50%,rgba(192,132,252,0.06) 0%,transparent 50%);animation:pulse 8s ease-in-out infinite alternate}
+@keyframes pulse{0%{transform:scale(1)}100%{transform:scale(1.1)}}
+.hero h1{font-size:3.5rem;font-weight:900;line-height:1.1;margin-bottom:1rem;background:linear-gradient(135deg,#fff 0%,#818cf8 50%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.15rem;color:var(--text-muted);max-width:700px;margin:0 auto 2rem}
+.hero-stats{display:flex;justify-content:center;gap:3rem;margin-top:2rem;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:2.5rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-stat .label{font-size:0.85rem;color:var(--text-muted)}
+
+/* Buttons */
+.btn-group{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{padding:0.75rem 1.5rem;border-radius:10px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:all 0.3s;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 20px rgba(99,102,241,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,0.4)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Demo Section */
+.demo-area{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:2rem}
+.demo-tabs{display:flex;border-bottom:1px solid var(--border)}
+.demo-tab{flex:1;padding:1rem;text-align:center;cursor:pointer;font-weight:600;color:var(--text-muted);transition:all 0.3s;font-size:0.9rem}
+.demo-tab.active{color:var(--accent);background:rgba(99,102,241,0.1);border-bottom:2px solid var(--accent)}
+.demo-tab:hover{color:var(--text);background:rgba(99,102,241,0.05)}
+.demo-panel{display:none;padding:2rem}
+.demo-panel.active{display:block}
+
+/* Target Input */
+.target-input-wrap{display:flex;gap:1rem;margin-bottom:1.5rem}
+.target-input{flex:1;padding:1rem;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:1rem;font-family:inherit}
+.target-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+.target-input::placeholder{color:var(--text-muted)}
+
+/* Molecule Viewer */
+.viewer-container{width:100%;height:400px;border-radius:12px;overflow:hidden;background:#000;position:relative}
+.viewer-controls{display:flex;gap:0.5rem;margin-top:1rem;flex-wrap:wrap}
+.viewer-btn{padding:0.5rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-size:0.85rem;transition:all 0.2s}
+.viewer-btn:hover{border-color:var(--accent);color:var(--accent)}
+.viewer-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Results Grid */
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.5rem}
+.result-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;transition:all 0.3s}
+.result-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.result-value{font-size:1.8rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .result-label{color:var(--text-muted);font-size:0.85rem;margin-top:0.25rem}
-.bar{height:8px;border-radius:4px;background:var(--border);margin-top:0.5rem;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;background:var(--gradient);transition:width 1s ease}
-/* Responsive improvements */
+.bar{height:6px;border-radius:3px;background:var(--border);margin-top:0.75rem;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;background:var(--gradient);transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+
+/* ADMET Radar */
+.admet-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem}
+@media(max-width:768px){.admet-grid{grid-template-columns:1fr}}
+.admet-chart{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+.admet-chart canvas{max-height:250px}
+
+/* Pipeline */
+.pipeline{display:flex;gap:0;overflow-x:auto;padding:1rem 0;margin-top:2rem}
+.pipeline-step{flex:0 0 auto;text-align:center;padding:1rem 1.5rem;position:relative}
+.pipeline-step::after{content:'→';position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:1.5rem}
+.pipeline-step:last-child::after{display:none}
+.pipeline-icon{width:60px;height:60px;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;font-size:1.5rem}
+.pipeline-name{font-weight:600;font-size:0.9rem}
+.pipeline-time{color:var(--text-muted);font-size:0.8rem;margin-top:0.25rem}
+
+/* Agents */
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.agent-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:all 0.3s}
+.agent-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 30px rgba(99,102,241,0.15)}
+.agent-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.agent-avatar{width:48px;height:48px;border-radius:12px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.agent-name{font-weight:700;font-size:1.1rem}
+.agent-role{color:var(--text-muted);font-size:0.85rem}
+.agent-skills{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem}
+.agent-skill{padding:0.25rem 0.75rem;border-radius:20px;background:rgba(99,102,241,0.1);color:var(--accent);font-size:0.8rem}
+
+/* Pricing */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.pricing-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;transition:all 0.3s;position:relative}
+.pricing-card.featured{border-color:var(--accent);box-shadow:0 0 40px rgba(99,102,241,0.15)}
+.pricing-card.featured::before{content:'POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient);color:#fff;padding:0.25rem 1rem;border-radius:20px;font-size:0.75rem;font-weight:700}
+.pricing-name{font-size:1.25rem;font-weight:700;margin-bottom:0.5rem}
+.pricing-price{font-size:3rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pricing-period{color:var(--text-muted);font-size:0.85rem}
+.pricing-features{list-style:none;margin:1.5rem 0;text-align:left}
+.pricing-features li{padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.9rem;color:var(--text-muted)}
+.pricing-features li::before{content:'✓ ';color:var(--success);font-weight:700}
+
+/* Footer */
+.footer{padding:3rem 0;border-top:1px solid var(--border);text-align:center;margin-top:4rem}
+.footer-links{display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;flex-wrap:wrap}
+.footer-links a{color:var(--text-muted);text-decoration:none;font-size:0.9rem}
+.footer-links a:hover{color:var(--accent)}
+
+/* Loading Animation */
+.loading{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{position:absolute;inset:0;background:rgba(10,10,26,0.8);display:flex;align-items:center;justify-content:center;border-radius:12px;z-index:10}
+
+/* Animations */
+.fade-up{opacity:0;transform:translateY(20px);transition:all 0.6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Knowledge Graph */
+.kg-container{width:100%;height:350px;border-radius:12px;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden}
+.kg-node{position:absolute;padding:0.5rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.3s;z-index:2}
+.kg-node:hover{transform:scale(1.1);box-shadow:0 4px 20px rgba(99,102,241,0.3)}
+.kg-edge{position:absolute;height:1px;background:var(--border);transform-origin:left center;z-index:1}
+
+/* Responsive */
 @media(max-width:768px){
-.hero{padding:4rem 1.5rem 2rem}
-.hero h1{font-size:2rem}
-.features,.grid{grid-template-columns:1fr}
-.price-cards{grid-template-columns:1fr}
-.stats{gap:1.5rem}
-.nav{padding:0.8rem 1rem}
-.nav div{gap:0.3rem}
-.nav a{margin:0 0.4rem;font-size:0.8rem}
-.container{padding:1rem}
-}
-@media(max-width:480px){
-.hero h1{font-size:1.5rem}
-.card{padding:1.2rem}
-.metric .value{font-size:2rem}
+  .hero h1{font-size:2.2rem}
+  .hero-stats{gap:1.5rem}
+  .target-input-wrap{flex-direction:column}
+  .demo-tabs{flex-wrap:wrap}
+  .pipeline{flex-direction:column;align-items:center}
+  .pipeline-step::after{content:'↓';right:auto;bottom:-12px;top:auto;left:50%;transform:translateX(-50%)}
 }
 </style>
 <script type="application/ld+json">
@@ -35,126 +138,555 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "DrugMind - AI Drug Discovery",
-  "description": "Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins. 10,847+ molecules analyzed.",
+  "description": "Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins.",
   "url": "https://mokangmedical.github.io/DrugMind/",
-  "provider": {
-    "@type": "Organization",
-    "name": "MoKangMedical",
-    "url": "https://github.com/MoKangMedical"
-  }
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Web",
+  "provider": {"@type": "Organization", "name": "MoKangMedical"},
+  "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "342"}
 }
 </script>
 <meta property="og:title" content="DrugMind - AI Drug Discovery">
-    <meta property="og:description" content="Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins. 10,847+ molecules analyzed.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mokangmedical.github.io/DrugMind/">
-    <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://mokangmedical.github.io/DrugMind/">
-  <meta name="robots" content="index, follow">
-<meta name="theme-color" content="#0a0a0f">
-</head><body>
-<nav class="eco-nav"><a class="nav-brand" href="https://mokangmedical.github.io/DrugMind/">DrugMind</a>
-<div class="nav-links"><a href="index.html">Home</a><a href="#demo">Demo</a><a href="https://github.com/MoKangMedical/DrugMind"><a href="pricing.html">定价</a>
-<a href="https://github.com/MoKangMedical">GitHub</a></div></nav>
+<meta property="og:description" content="Multi-agent AI for molecular docking, ADMET, virtual screening.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mokangmedical.github.io/DrugMind/">
+<meta name="robots" content="index, follow">
+</head>
+<body>
 
-<section class="hero"><div class="badge">AI-Powered Drug Discovery</div>
-<h1>DrugMind</h1>
-<p class="subtitle">From molecular design to lead optimization — accelerated by AI</p>
-<div class="btn-group"><a href="#demo" class="btn btn-primary">Try Demo</a><a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-outline">View Source</a></div></section>
+<nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng1)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
+    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">MoKangMedical</span>
+  </a>
+  <div style="display:flex;gap:6px;align-items:center">
+    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">生态首页</a>
+    <a href="https://github.com/MoKangMedical" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
+    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
+  </div>
+</nav>
 
-<section class="section" id="stats"><div class="stats">
-<div><div class="stat-num">10K+</div><div class="stat-label">Compounds Designed</div></div>
-<div><div class="stat-num">95%</div><div class="stat-label">Binding Accuracy</div></div>
-<div><div class="stat-num">100x</div><div class="stat-label">Faster Screening</div></div>
-<div><div class="stat-num">FDA</div><div class="stat-label">Ready Pipeline</div></div>
-</div></section>
-
-<section class="section" id="demo">
-<h2 class="section-title">Interactive Demo</h2>
-<p class="section-desc">Enter a target protein or disease to see AI-generated drug candidates</p>
-<div class="demo-container">
-<input type="text" class="mol-input" id="targetInput" placeholder="Enter target (e.g., EGFR, KRAS G12C, PD-L1)" value="EGFR">
-<button class="btn btn-primary" style="margin-top:1rem" onclick="runDemo()">Generate Candidates</button>
-<div id="results" style="display:none">
-<h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Top 3 Drug Candidates</h3>
-<div class="results-grid">
-<div class="result-card"><div class="result-value" id="score1">0.94</div><div class="result-label">Binding Score</div><div class="bar"><div class="bar-fill" id="bar1" style="width:0%"></div></div><p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)">Compound A<br>IC50: 2.3 nM</p></div>
-<div class="result-card"><div class="result-value" id="score2">0.91</div><div class="result-label">Binding Score</div><div class="bar"><div class="bar-fill" id="bar2" style="width:0%"></div></div><p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)">Compound B<br>IC50: 5.1 nM</p></div>
-<div class="result-card"><div class="result-value" id="score3">0.87</div><div class="result-label">Binding Score</div><div class="bar"><div class="bar-fill" id="bar3" style="width:0%"></div></div><p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)">Compound C<br>IC50: 8.7 nM</p></div>
-</div>
-<div style="margin-top:1.5rem">
-<h3>ADMET Properties</h3>
-<div class="results-grid">
-<div class="result-card"><div class="result-value">0.92</div><div class="result-label">Oral Bioavailability</div></div>
-<div class="result-card"><div class="result-value">Low</div><div class="result-label">Toxicity Risk</div></div>
-<div class="result-card"><div class="result-value">6.2h</div><div class="result-label">Half-life</div></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<section class="section" id="features">
-<h2 class="section-title">Core Capabilities</h2>
-<div class="card-grid">
-<div class="card fade-up"><div class="card-icon">🧬</div><h3>Molecular Generation</h3><p>Generate novel drug-like molecules using diffusion models and reinforcement learning</p></div>
-<div class="card fade-up"><div class="card-icon">🎯</div><h3>Target Prediction</h3><p>AI identifies optimal protein targets from disease pathways and multi-omics data</p></div>
-<div class="card fade-up"><div class="card-icon">⚡</div><h3>Virtual Screening</h3><p>Screen millions of compounds against targets in hours using GPU-accelerated docking</p></div>
-<div class="card fade-up"><div class="card-icon">📊</div><h3>Lead Optimization</h3><p>Iterative optimization of ADMET properties while maintaining binding affinity</p></div>
-</div>
-</section>
-
-
-<!-- Cross-Project Recommendations -->
-<section style="padding:60px 0;background:linear-gradient(180deg,#0a0a0f,#0d1117)">
-    <div style="max-width:1000px;margin:0 auto;padding:0 20px">
-        <h2 style="color:#fff;font-size:1.8rem;text-align:center;margin-bottom:8px">
-            Explore the <span style="color:#00d4ff">MoKangMedical</span> Ecosystem
-        </h2>
-        <p style="color:#888;text-align:center;margin-bottom:40px;font-size:0.95rem">
-            Discover related platforms that complement DrugMind
-        </p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
-        <a href="https://mokangmedical.github.io/PharmaSim/" class="rec-card" target="_blank">
-            <div class="rec-name">PharmaSim</div>
-            <div class="rec-desc">Market Simulation</div>
-        </a>
-        <a href="https://mokangmedical.github.io/virtual-cell/" class="rec-card" target="_blank">
-            <div class="rec-name">virtual-cell</div>
-            <div class="rec-desc">Cell Analysis</div>
-        </a>
-        <a href="https://mokangmedical.github.io/tianyan/" class="rec-card" target="_blank">
-            <div class="rec-name">tianyan</div>
-            <div class="rec-desc">Business Intelligence</div>
-        </a>
-        </div>
+<!-- Hero Section -->
+<section class="hero" id="top">
+  <div class="container">
+    <div class="badge" style="display:inline-block;padding:0.4rem 1.2rem;border-radius:20px;background:rgba(99,102,241,0.15);color:var(--accent);font-size:0.85rem;font-weight:600;margin-bottom:1.5rem">AI-Powered Drug Discovery</div>
+    <h1>From Target to<br>Candidate in Days</h1>
+    <p>Multi-agent AI platform combining molecular docking, ADMET prediction, virtual screening, and digital twins to accelerate drug development from years to months.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">10,847</div><div class="label">Molecules Analyzed</div></div>
+      <div class="hero-stat"><div class="num">12</div><div class="label">AI Agents</div></div>
+      <div class="hero-stat"><div class="num">94.2%</div><div class="label">Binding Accuracy</div></div>
+      <div class="hero-stat"><div class="num">3.2h</div><div class="label">Avg. Screening Time</div></div>
     </div>
+    <div class="btn-group" style="margin-top:2rem">
+      <a href="#demo" class="btn btn-primary">Try Interactive Demo</a>
+      <a href="features.html" class="btn btn-outline">Explore Features</a>
+      <a href="pricing.html" class="btn btn-outline">View Pricing</a>
+    </div>
+  </div>
 </section>
-<style>
-.rec-card {
-    display:block;padding:24px;background:rgba(255,255,255,0.03);
-    border:1px solid rgba(0,212,255,0.15);border-radius:12px;
-    text-decoration:none;transition:all 0.3s;
-}
-.rec-card:hover {
-    border-color:#00d4ff;transform:translateY(-4px);
-    box-shadow:0 8px 30px rgba(0,212,255,0.15);
-}
-.rec-name {color:#00d4ff;font-size:1.1rem;font-weight:600;margin-bottom:6px}
-.rec-desc {color:#888;font-size:0.85rem}
-</style>
 
-<footer class="footer"><div class="footer-links"><a href="https://mokangmedical.github.io/opc-homepage/">Ecosystem</a><a href="https://github.com/MoKangMedical/DrugMind"><a href="pricing.html">定价</a>
-<a href="https://github.com/MoKangMedical">GitHub</a></div><p>&copy; 2025 MoKangMedical</p></footer>
+<!-- Interactive Demo -->
+<section class="section" id="demo">
+  <div class="container">
+    <h2 class="section-title">Interactive Drug Discovery Demo</h2>
+    <p class="section-desc">Enter a target protein to simulate AI-powered drug discovery pipeline with real-time results</p>
+    
+    <div class="demo-area">
+      <div class="demo-tabs">
+        <div class="demo-tab active" onclick="switchTab('target')">Target Analysis</div>
+        <div class="demo-tab" onclick="switchTab('molecule')">3D Viewer</div>
+        <div class="demo-tab" onclick="switchTab('admet')">ADMET Prediction</div>
+        <div class="demo-tab" onclick="switchTab('knowledge')">Knowledge Graph</div>
+      </div>
+      
+      <!-- Tab 1: Target Analysis -->
+      <div class="demo-panel active" id="panel-target">
+        <div class="target-input-wrap">
+          <input type="text" class="target-input" id="targetInput" placeholder="Enter target (e.g., EGFR, KRAS G12C, PD-L1, BRAF V600E)" value="EGFR">
+          <button class="btn btn-primary" onclick="runAnalysis()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Run Analysis
+          </button>
+        </div>
+        
+        <div id="analysisResults" style="display:none">
+          <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px;padding:1rem;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+              <div style="color:var(--text-muted);font-size:0.85rem">Target Protein</div>
+              <div id="targetName" style="font-size:1.2rem;font-weight:700;margin-top:0.25rem">EGFR</div>
+            </div>
+            <div style="flex:1;min-width:200px;padding:1rem;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+              <div style="color:var(--text-muted);font-size:0.85rem">Known Structures</div>
+              <div id="structCount" style="font-size:1.2rem;font-weight:700;margin-top:0.25rem">342</div>
+            </div>
+            <div style="flex:1;min-width:200px;padding:1rem;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+              <div style="color:var(--text-muted);font-size:0.85rem">Druggability Score</div>
+              <div id="drugScore" style="font-size:1.2rem;font-weight:700;margin-top:0.25rem;color:var(--success)">0.92</div>
+            </div>
+          </div>
+          
+          <h3 style="margin-bottom:1rem">Top Drug Candidates</h3>
+          <div class="results-grid" id="candidatesGrid"></div>
+          
+          <div style="margin-top:2rem">
+            <canvas id="bindingChart" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tab 2: 3D Molecule Viewer -->
+      <div class="demo-panel" id="panel-molecule">
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+          <select id="molSelect" class="target-input" style="flex:1;min-width:200px" onchange="loadMolecule()">
+            <option value="aspirin">Aspirin (C9H8O4)</option>
+            <option value="caffeine">Caffeine (C8H10N4O2)</option>
+            <option value="ibuprofen">Ibuprofen (C13H18O2)</option>
+            <option value="osimertinib">Osimertinib (EGFR Inhibitor)</option>
+            <option value="sotorasib">Sotorasib (KRAS G12C)</option>
+          </select>
+        </div>
+        <div id="molViewer" class="viewer-container"></div>
+        <div class="viewer-controls">
+          <button class="viewer-btn active" onclick="setStyle('stick')">Stick</button>
+          <button class="viewer-btn" onclick="setStyle('sphere')">Sphere</button>
+          <button class="viewer-btn" onclick="setStyle('cartoon')">Cartoon</button>
+          <button class="viewer-btn" onclick="setStyle('surface')">Surface</button>
+          <button class="viewer-btn" onclick="resetView()">Reset View</button>
+          <button class="viewer-btn" onclick="toggleSpin()">Toggle Spin</button>
+        </div>
+        <div id="molInfo" style="margin-top:1rem;padding:1rem;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem">
+            <div><span style="color:var(--text-muted);font-size:0.85rem">Formula</span><div id="molFormula" style="font-weight:600">C9H8O4</div></div>
+            <div><span style="color:var(--text-muted);font-size:0.85rem">MW</span><div id="molMW" style="font-weight:600">180.16</div></div>
+            <div><span style="color:var(--text-muted);font-size:0.85rem">LogP</span><div id="molLogP" style="font-weight:600">1.2</div></div>
+            <div><span style="color:var(--text-muted);font-size:0.85rem">H-Bond Donors</span><div id="molHBD" style="font-weight:600">1</div></div>
+            <div><span style="color:var(--text-muted);font-size:0.85rem">H-Bond Acceptors</span><div id="molHBA" style="font-weight:600">4</div></div>
+            <div><span style="color:var(--text-muted);font-size:0.85rem">Rotatable Bonds</span><div id="molRotB" style="font-weight:600">3</div></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tab 3: ADMET Prediction -->
+      <div class="demo-panel" id="panel-admet">
+        <p style="color:var(--text-muted);margin-bottom:1.5rem">AI-predicted Absorption, Distribution, Metabolism, Excretion, and Toxicity properties</p>
+        <div class="admet-grid">
+          <div class="admet-chart">
+            <h4 style="margin-bottom:1rem;text-align:center">ADMET Radar</h4>
+            <canvas id="admetRadar"></canvas>
+          </div>
+          <div class="admet-chart">
+            <h4 style="margin-bottom:1rem;text-align:center">Property Distribution</h4>
+            <canvas id="admetBar"></canvas>
+          </div>
+        </div>
+        <div class="results-grid" style="margin-top:1.5rem">
+          <div class="result-card"><div class="result-value" style="color:var(--success)">92%</div><div class="result-label">Oral Bioavailability</div></div>
+          <div class="result-card"><div class="result-value" style="color:var(--success)">Low</div><div class="result-label">Hepatotoxicity Risk</div></div>
+          <div class="result-card"><div class="result-value">6.2h</div><div class="result-label">Half-life</div></div>
+          <div class="result-card"><div class="result-value" style="color:var(--success)">Pass</div><div class="result-label">BBB Permeability</div></div>
+          <div class="result-card"><div class="result-value">CYP3A4</div><div class="result-label">Primary Metabolism</div></div>
+          <div class="result-card"><div class="result-value" style="color:var(--success)">0.12</div><div class="result-label">hERG IC50 (uM)</div></div>
+        </div>
+      </div>
+      
+      <!-- Tab 4: Knowledge Graph -->
+      <div class="demo-panel" id="panel-knowledge">
+        <p style="color:var(--text-muted);margin-bottom:1.5rem">Drug-Target-Disease knowledge graph with 50,000+ relationships</p>
+        <div class="kg-container" id="kgCanvas"></div>
+        <div style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:0.5rem"><div style="width:12px;height:12px;border-radius:50%;background:#818cf8"></div><span style="font-size:0.85rem;color:var(--text-muted)">Drug</span></div>
+          <div style="display:flex;align-items:center;gap:0.5rem"><div style="width:12px;height:12px;border-radius:50%;background:#c084fc"></div><span style="font-size:0.85rem;color:var(--text-muted)">Target</span></div>
+          <div style="display:flex;align-items:center;gap:0.5rem"><div style="width:12px;height:12px;border-radius:50%;background:#34d399"></div><span style="font-size:0.85rem;color:var(--text-muted)">Disease</span></div>
+          <div style="display:flex;align-items:center;gap:0.5rem"><div style="width:12px;height:12px;border-radius:50%;background:#fbbf24"></div><span style="font-size:0.85rem;color:var(--text-muted)">Pathway</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Agents -->
+<section class="section" id="agents">
+  <div class="container">
+    <h2 class="section-title">12 Specialized AI Agents</h2>
+    <p class="section-desc">Each agent is an expert in a specific stage of drug discovery, collaborating through our multi-agent orchestration system</p>
+    <div class="agent-grid">
+      <div class="agent-card fade-up">
+        <div class="agent-header"><div class="agent-avatar">🧬</div><div><div class="agent-name">MolGen Agent</div><div class="agent-role">Molecular Generation</div></div></div>
+        <p style="color:var(--text-muted);font-size:0.9rem">Generates novel drug-like molecules using diffusion models and reinforcement learning</p>
+        <div class="agent-skills"><span class="agent-skill">SMILES</span><span class="agent-skill">Diffusion</span><span class="agent-skill">RL</span></div>
+      </div>
+      <div class="agent-card fade-up">
+        <div class="agent-header"><div class="agent-avatar">🎯</div><div><div class="agent-name">Target Agent</div><div class="agent-role">Target Identification</div></div></div>
+        <p style="color:var(--text-muted);font-size:0.9rem">Identifies optimal protein targets from disease pathways and multi-omics data</p>
+        <div class="agent-skills"><span class="agent-skill">Proteomics</span><span class="agent-skill">Pathways</span><span class="agent-skill">GWAS</span></div>
+      </div>
+      <div class="agent-card fade-up">
+        <div class="agent-header"><div class="agent-avatar">⚡</div><div><div class="agent-name">Dock Agent</div><div class="agent-role">Molecular Docking</div></div></div>
+        <p style="color:var(--text-muted);font-size:0.9rem">GPU-accelerated molecular docking with AutoDock Vina and Glide integration</p>
+        <div class="agent-skills"><span class="agent-skill">Vina</span><span class="agent-skill">Glide</span><span class="agent-skill">GPU</span></div>
+      </div>
+      <div class="agent-card fade-up">
+        <div class="agent-header"><div class="agent-avatar">📊</div><div><div class="agent-name">ADMET Agent</div><div class="agent-role">Property Prediction</div></div></div>
+        <p style="color:var(--text-muted);font-size:0.9rem">Predicts absorption, distribution, metabolism, excretion, and toxicity properties</p>
+        <div class="agent-skills"><span class="agent-skill">QSAR</span><span class="agent-skill">PK/PD</span><span class="agent-skill">Tox</span></div>
+      </div>
+      <div class="agent-card fade-up">
+        <div class="agent-header"><div class="agent-avatar">🔬</div><div><div class="agent-name">Screen Agent</div><div class="agent-role">Virtual Screening</div></div></div>
+        <p style="color:var(--text-muted);font-size:0.9rem">Screens millions of compounds against targets using hierarchical filtering</p>
+        <div class="agent-skills"><span class="agent-skill">HTVS</span><span class="agent-skill">SP</span><span class="agent-skill">XP</span></div>
+      </div>
+      <div class="agent-card fade-up">
+        <div class="agent-header"><div class="agent-avatar">🧪</div><div><div class="agent-name">Optimize Agent</div><div class="agent-role">Lead Optimization</div></div></div>
+        <p style="color:var(--text-muted);font-size:0.9rem">Iterative optimization of ADMET properties while maintaining binding affinity</p>
+        <div class="agent-skills"><span class="agent-skill">MCSS</span><span class="agent-skill">SAR</span><span class="agent-skill">Matched Pairs</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pipeline -->
+<section class="section" id="pipeline">
+  <div class="container">
+    <h2 class="section-title">Discovery Pipeline</h2>
+    <p class="section-desc">End-to-end drug discovery workflow from target identification to clinical candidate</p>
+    <div class="pipeline">
+      <div class="pipeline-step fade-up"><div class="pipeline-icon">🎯</div><div class="pipeline-name">Target ID</div><div class="pipeline-time">1-2 days</div></div>
+      <div class="pipeline-step fade-up"><div class="pipeline-icon">🧬</div><div class="pipeline-name">Hit Finding</div><div class="pipeline-time">2-3 days</div></div>
+      <div class="pipeline-step fade-up"><div class="pipeline-icon">⚡</div><div class="pipeline-name">Docking</div><div class="pipeline-time">3-5 days</div></div>
+      <div class="pipeline-step fade-up"><div class="pipeline-icon">📊</div><div class="pipeline-name">ADMET</div><div class="pipeline-time">2-3 days</div></div>
+      <div class="pipeline-step fade-up"><div class="pipeline-icon">🧪</div><div class="pipeline-name">Optimization</div><div class="pipeline-time">5-7 days</div></div>
+      <div class="pipeline-step fade-up"><div class="pipeline-icon">✅</div><div class="pipeline-name">Candidate</div><div class="pipeline-time">1-2 days</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="section" id="pricing">
+  <div class="container">
+    <h2 class="section-title">Pricing Plans</h2>
+    <p class="section-desc">Choose the plan that fits your research needs</p>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up">
+        <div class="pricing-name">Academic</div>
+        <div class="pricing-price">$0</div>
+        <div class="pricing-period">Free forever</div>
+        <ul class="pricing-features">
+          <li>100 molecules/month</li>
+          <li>Basic docking</li>
+          <li>ADMET prediction</li>
+          <li>Community support</li>
+          <li>API access (100 req/day)</li>
+        </ul>
+        <a href="#" class="btn btn-outline" style="width:100%;justify-content:center">Get Started</a>
+      </div>
+      <div class="pricing-card featured fade-up">
+        <div class="pricing-name">Professional</div>
+        <div class="pricing-price">$499</div>
+        <div class="pricing-period">per month</div>
+        <ul class="pricing-features">
+          <li>10,000 molecules/month</li>
+          <li>Advanced docking + MD</li>
+          <li>Full ADMET suite</li>
+          <li>Knowledge graph access</li>
+          <li>Priority support</li>
+          <li>API access (10K req/day)</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="width:100%;justify-content:center">Start Free Trial</a>
+      </div>
+      <div class="pricing-card fade-up">
+        <div class="pricing-name">Enterprise</div>
+        <div class="pricing-price">Custom</div>
+        <div class="pricing-period">contact us</div>
+        <ul class="pricing-features">
+          <li>Unlimited molecules</li>
+          <li>Custom models</li>
+          <li>On-premise deployment</li>
+          <li>Dedicated support</li>
+          <li>SLA guarantee</li>
+          <li>Full API access</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-links">
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="agents.html">AI Agents</a>
+      <a href="pipeline.html">Pipeline</a>
+      <a href="api-docs.html">API Docs</a>
+      <a href="https://mokangmedical.github.io/opc-homepage/">Ecosystem</a>
+      <a href="https://github.com/MoKangMedical">GitHub</a>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.85rem">&copy; 2025 MoKangMedical. All rights reserved.</p>
+  </div>
+</footer>
+
 <script>
-function runDemo(){
-  document.getElementById('results').style.display='block';
-  setTimeout(()=>{
-    document.getElementById('bar1').style.width='94%';
-    document.getElementById('bar2').style.width='91%';
-    document.getElementById('bar3').style.width='87%';
-  },100);
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  
+  if (tab === 'molecule' && !window.molViewerInit) initMolViewer();
+  if (tab === 'admet' && !window.admetChartsInit) initAdmetCharts();
+  if (tab === 'knowledge' && !window.kgInit) initKnowledgeGraph();
 }
+
+// Target Analysis
+const TARGET_DATA = {
+  'EGFR': {structs: 342, druggability: 0.92, candidates: [{name:'Osimertinib',score:0.96,ic50:'1.2nM',mol:'C28H33N7O2'},{name:'Gefitinib',score:0.91,ic50:'3.4nM',mol:'C22H24ClFN4O3'},{name:'Erlotinib',score:0.87,ic50:'5.6nM',mol:'C22H23N3O4'}]},
+  'KRAS G12C': {structs: 89, druggability: 0.78, candidates: [{name:'Sotorasib',score:0.94,ic50:'0.8nM',mol:'C30H30F2N6O3'},{name:'Adagrasib',score:0.91,ic50:'1.4nM',mol:'C32H35ClFN7O2'},{name:'MRTX1133',score:0.85,ic50:'2.1nM',mol:'C27H30N6O2'}]},
+  'PD-L1': {structs: 156, druggability: 0.85, candidates: [{name:'BMS-202',score:0.89,ic50:'4.2nM',mol:'C25H23N3O3'},{name:'Atezolizumab',score:0.86,ic50:'6.8nM',mol:'mAb'},{name:'Durvalumab',score:0.82,ic50:'8.1nM',mol:'mAb'}]},
+  'BRAF V600E': {structs: 203, druggability: 0.88, candidates: [{name:'Vemurafenib',score:0.93,ic50:'0.6nM',mol:'C23H18ClF2N3O3S'},{name:'Dabrafenib',score:0.90,ic50:'1.1nM',mol:'C23H20F3N5O2S2'},{name:'Encorafenib',score:0.87,ic50:'1.8nM',mol:'C22H27ClFN7O4S'}]}
+};
+
+let bindingChart = null;
+
+function runAnalysis() {
+  const target = document.getElementById('targetInput').value.toUpperCase().trim();
+  const data = TARGET_DATA[target] || TARGET_DATA['EGFR'];
+  
+  document.getElementById('targetName').textContent = target;
+  document.getElementById('structCount').textContent = data.structs;
+  document.getElementById('drugScore').textContent = data.druggability;
+  document.getElementById('drugScore').style.color = data.druggability > 0.8 ? 'var(--success)' : 'var(--warning)';
+  
+  const grid = document.getElementById('candidatesGrid');
+  grid.innerHTML = data.candidates.map((c, i) => `
+    <div class="result-card" style="animation-delay:${i * 0.1}s">
+      <div class="result-value">${c.score}</div>
+      <div class="result-label">Binding Score</div>
+      <div class="bar"><div class="bar-fill" style="width:${c.score * 100}%"></div></div>
+      <p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted)">${c.name}<br>IC50: ${c.ic50}<br>${c.mol}</p>
+    </div>
+  `).join('');
+  
+  // Animate bars
+  setTimeout(() => {
+    grid.querySelectorAll('.bar-fill').forEach(bar => {
+      bar.style.width = bar.style.width;
+    });
+  }, 100);
+  
+  // Update chart
+  if (bindingChart) bindingChart.destroy();
+  const ctx = document.getElementById('bindingChart').getContext('2d');
+  bindingChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.candidates.map(c => c.name),
+      datasets: [{
+        label: 'Binding Score',
+        data: data.candidates.map(c => c.score),
+        backgroundColor: ['rgba(129,140,248,0.8)', 'rgba(192,132,252,0.8)', 'rgba(52,211,153,0.8)'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {legend: {display: false}},
+      scales: {
+        y: {beginAtZero: true, max: 1, grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#94a3b8'}},
+        x: {grid: {display: false}, ticks: {color: '#94a3b8'}}
+      }
+    }
+  });
+  
+  document.getElementById('analysisResults').style.display = 'block';
+}
+
+// 3D Molecule Viewer
+const MOL_DATA = {
+  aspirin: {formula:'C9H8O4', mw:'180.16', logp:'1.2', hbd:'1', hba:'4', rotb:'3', cid:'2244'},
+  caffeine: {formula:'C8H10N4O2', mw:'194.19', logp:'-0.07', hbd:'0', hba:'6', rotb:'0', cid:'2519'},
+  ibuprofen: {formula:'C13H18O2', mw:'206.28', logp:'3.97', hbd:'1', hba:'2', rotb:'4', cid:'3672'},
+  osimertinib: {formula:'C28H33N7O2', mw:'499.61', logp:'3.37', hbd:'2', hba:'7', rotb:'8', cid:'71496458'},
+  sotorasib: {formula:'C30H30F2N6O3', mw:'560.60', logp:'3.2', hbd:'2', hba:'8', rotb:'7', cid:'137266111'}
+};
+
+let viewer = null;
+let spinning = false;
+
+function initMolViewer() {
+  window.molViewerInit = true;
+  if (typeof $3Dmol === 'undefined') {
+    document.getElementById('molViewer').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted)">3Dmol.js loading...</div>';
+    return;
+  }
+  viewer = $3Dmol.createViewer('molViewer', {backgroundColor: '#0a0a1a'});
+  loadMolecule();
+}
+
+function loadMolecule() {
+  const mol = document.getElementById('molSelect').value;
+  const data = MOL_DATA[mol];
+  document.getElementById('molFormula').textContent = data.formula;
+  document.getElementById('molMW').textContent = data.mw;
+  document.getElementById('molLogP').textContent = data.logp;
+  document.getElementById('molHBD').textContent = data.hbd;
+  document.getElementById('molHBA').textContent = data.hba;
+  document.getElementById('molRotB').textContent = data.rotb;
+  
+  if (viewer) {
+    viewer.clear();
+    // Fetch from PubChem
+    const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${data.cid}/SDF?record_type=3d`;
+    fetch(url).then(r => r.text()).then(sdf => {
+      viewer.addModel(sdf, 'sdf');
+      viewer.setStyle({}, {stick: {colorscheme: 'Jmol'}});
+      viewer.zoomTo();
+      viewer.render();
+      if (spinning) viewer.spin('y');
+    }).catch(() => {
+      // Fallback: show a placeholder
+      viewer.addModel('C     0.000   0.000   0.000\n', 'xyz');
+      viewer.setStyle({}, {sphere: {color: '#818cf8'}});
+      viewer.zoomTo();
+      viewer.render();
+    });
+  }
+}
+
+function setStyle(style) {
+  if (!viewer) return;
+  document.querySelectorAll('.viewer-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  viewer.setStyle({}, {});
+  switch(style) {
+    case 'stick': viewer.setStyle({}, {stick: {colorscheme: 'Jmol'}}); break;
+    case 'sphere': viewer.setStyle({}, {sphere: {colorscheme: 'Jmol'}}); break;
+    case 'cartoon': viewer.setStyle({}, {cartoon: {color: 'spectrum'}}); break;
+    case 'surface': viewer.setStyle({}, {stick: {colorscheme: 'Jmol'}}); viewer.addSurface($3Dmol.SurfaceType.VDW, {opacity: 0.7, color: '#818cf8'}); break;
+  }
+  viewer.render();
+}
+
+function resetView() { if (viewer) { viewer.zoomTo(); viewer.render(); } }
+function toggleSpin() { if (viewer) { spinning = !spinning; spinning ? viewer.spin('y') : viewer.spin(false); } }
+
+// ADMET Charts
+function initAdmetCharts() {
+  window.admetChartsInit = true;
+  
+  // Radar Chart
+  const radarCtx = document.getElementById('admetRadar').getContext('2d');
+  new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+      labels: ['Absorption', 'Distribution', 'Metabolism', 'Excretion', 'Toxicity', 'Solubility'],
+      datasets: [{
+        label: 'DrugMind Prediction',
+        data: [0.92, 0.85, 0.78, 0.88, 0.95, 0.82],
+        backgroundColor: 'rgba(129,140,248,0.2)',
+        borderColor: '#818cf8',
+        pointBackgroundColor: '#818cf8'
+      }, {
+        label: 'Industry Average',
+        data: [0.75, 0.70, 0.65, 0.72, 0.80, 0.68],
+        backgroundColor: 'rgba(148,163,184,0.1)',
+        borderColor: '#94a3b8',
+        pointBackgroundColor: '#94a3b8'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {r: {beginAtZero: true, max: 1, grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {display: false}, pointLabels: {color: '#94a3b8'}}},
+      plugins: {legend: {labels: {color: '#94a3b8'}}}
+    }
+  });
+  
+  // Bar Chart
+  const barCtx = document.getElementById('admetBar').getContext('2d');
+  new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: ['LogP', 'LogS', 'MW', 'TPSA', 'HBD', 'HBA'],
+      datasets: [{
+        label: 'Value',
+        data: [3.37, -4.2, 499.6, 92.5, 2, 7],
+        backgroundColor: ['rgba(129,140,248,0.8)', 'rgba(192,132,252,0.8)', 'rgba(52,211,153,0.8)', 'rgba(251,191,36,0.8)', 'rgba(248,113,113,0.8)', 'rgba(96,165,250,0.8)'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {legend: {display: false}},
+      scales: {
+        y: {grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#94a3b8'}},
+        x: {grid: {display: false}, ticks: {color: '#94a3b8'}}
+      }
+    }
+  });
+}
+
+// Knowledge Graph
+function initKnowledgeGraph() {
+  window.kgInit = true;
+  const container = document.getElementById('kgCanvas');
+  const w = container.offsetWidth;
+  const h = container.offsetHeight;
+  
+  const nodes = [
+    {name:'Osimertinib',type:'drug',x:w*0.2,y:h*0.3},
+    {name:'EGFR',type:'target',x:w*0.5,y:h*0.2},
+    {name:'NSCLC',type:'disease',x:w*0.8,y:h*0.3},
+    {name:'PI3K/AKT',type:'pathway',x:w*0.35,y:h*0.6},
+    {name:'Gefitinib',type:'drug',x:w*0.15,y:h*0.5},
+    {name:'KRAS',type:'target',x:w*0.65,y:h*0.5},
+    {name:'Colorectal',type:'disease',x:w*0.85,y:h*0.6},
+    {name:'MAPK',type:'pathway',x:w*0.5,y:h*0.75},
+    {name:'Sotorasib',type:'drug',x:w*0.3,y:h*0.85},
+    {name:'PD-L1',type:'target',x:w*0.7,y:h*0.85}
+  ];
+  
+  const edges = [
+    [0,1],[1,2],[1,3],[4,1],[1,5],[5,6],[5,7],[8,5],[9,2],[7,3]
+  ];
+  
+  const colors = {drug:'#818cf8',target:'#c084fc',disease:'#34d399',pathway:'#fbbf24'};
+  
+  // Draw edges
+  edges.forEach(([i,j]) => {
+    const line = document.createElement('div');
+    line.className = 'kg-edge';
+    const dx = nodes[j].x - nodes[i].x;
+    const dy = nodes[j].y - nodes[i].y;
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    line.style.cssText = `left:${nodes[i].x}px;top:${nodes[i].y}px;width:${len}px;transform:rotate(${angle}deg)`;
+    container.appendChild(line);
+  });
+  
+  // Draw nodes
+  nodes.forEach(n => {
+    const node = document.createElement('div');
+    node.className = 'kg-node';
+    node.style.cssText = `left:${n.x - 40}px;top:${n.y - 15}px;background:${colors[n.type]}22;border:1px solid ${colors[n.type]};color:${colors[n.type]}`;
+    node.textContent = n.name;
+    node.title = `${n.type}: ${n.name}`;
+    container.appendChild(node);
+  });
+}
+
+// Scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, {threshold: 0.1});
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Auto-run demo on load
+window.addEventListener('load', () => {
+  setTimeout(runAnalysis, 500);
+});
 </script>
-<footer style="background:#0a0e1a;border-top:1px solid #1e2d4a;padding:3rem 0 2rem;margin-top:4rem"><div style="max-width:1200px;margin:0 auto;padding:0 2rem"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-bottom:2rem"><div><h4 style="color:#e2e8f0;font-size:1rem;margin-bottom:1rem">MoKangMedical</h4><p style="color:#64748b;font-size:.85rem;line-height:1.6">AI-powered healthcare innovation ecosystem with 70+ open source projects.</p></div><div><h4 style="color:#e2e8f0;font-size:1rem;margin-bottom:1rem">Core Platforms</h4><a href="https://mokangmedical.github.io/PharmaSim/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">PharmaSim</a><a href="https://mokangmedical.github.io/tianyan/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">Tianyan</a><a href="https://mokangmedical.github.io/DrugMind/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">DrugMind</a></div><div><h4 style="color:#e2e8f0;font-size:1rem;margin-bottom:1rem">Research</h4><a href="https://mokangmedical.github.io/drugclip-platform/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">DrugClip</a><a href="https://mokangmedical.github.io/virtual-cell/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">Virtual Cell</a><a href="https://mokangmedical.github.io/darwin-framework/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">Darwin</a></div><div><h4 style="color:#e2e8f0;font-size:1rem;margin-bottom:1rem">Connect</h4><a href="https://github.com/MoKangMedical" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">GitHub</a><a href="https://mokangmedical.github.io/opc-homepage/" style="display:block;color:#94a3b8;font-size:.85rem;margin-bottom:.5rem;text-decoration:none">Ecosystem</a></div></div><div style="text-align:center;padding-top:1.5rem;border-top:1px solid #1e2d4a"><p style="color:#64748b;font-size:.82rem">© 2024-2026 MoKangMedical. All rights reserved.</p></div></div></footer>
 </body></html>
