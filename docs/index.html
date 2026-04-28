@@ -1,426 +1,281 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DrugMind — AI Drug R&D Digital Twin Platform</title>
-<meta name="description" content="AI-powered drug R&D digital twin collaboration platform. 5 expert AI agents for target discovery, molecular design, ADMET prediction, clinical trial simulation, and real-world evidence analysis.">
+<meta name="description" content="5 expert AI digital twins collaborate 24/7 to accelerate drug discovery. From target validation to real-world evidence.">
+<meta property="og:title" content="DrugMind — AI Drug R&D Platform">
+<meta property="og:description" content="5 AI Expert Digital Twins · 30+ API Endpoints · Full Drug Discovery Pipeline">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%2300d4aa'/><path d='M16 8v16M10 12l6-4 6 4M10 20l6 4 6-4' stroke='%23060b18' stroke-width='2' fill='none'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#09090b;--bg2:#111113;--bg3:#18181b;--bg4:#27272a;--text:#fafafa;--text2:#a1a1aa;--text3:#71717a;--border:#27272a;--accent:#10b981;--accent2:#34d399;--blue:#3b82f6;--purple:#8b5cf6;--pink:#ec4899;--amber:#f59e0b;--radius:12px}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#fff}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,9,11,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(16,185,129,.1)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:800;font-size:18px;letter-spacing:-.5px;color:var(--accent)}
+.nav-links{display:flex;gap:24px;font-size:13px;color:var(--text3)}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--accent);color:#000;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px}
+
+.hero{padding:140px 32px 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(16,185,129,.08),transparent 60%)}
+.hero>*{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);padding:6px 16px;border-radius:999px;font-size:13px;color:var(--text2);margin-bottom:24px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(36px,5vw,56px);font-weight:900;letter-spacing:-2px;line-height:1.1;margin-bottom:20px}
+h1 .grad{background:linear-gradient(135deg,var(--accent),var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:17px;color:var(--text2);max-width:640px;margin:0 auto 40px;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.hero-stats .stat{text-align:center}
+.hero-stats .num{font-size:28px;font-weight:800;color:var(--accent)}
+.hero-stats .label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.hero-btns{display:flex;gap:12px;justify-content:center;margin-top:32px}
+.btn{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+.section{max-width:1200px;margin:0 auto;padding:80px 32px}
+.section-tag{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px}
+.section h2{font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.section .desc{color:var(--text2);font-size:15px;max-width:600px;line-height:1.7;margin-bottom:40px}
+
+.pipeline{display:flex;gap:4px;align-items:center;overflow-x:auto;padding:20px 0}
+.pipe-step{flex:1;min-width:180px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center;position:relative;transition:all .3s}
+.pipe-step:hover{border-color:var(--accent);transform:translateY(-2px)}
+.pipe-step .icon{font-size:28px;margin-bottom:12px}
+.pipe-step h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.pipe-step p{font-size:12px;color:var(--text3);line-height:1.5}
+.pipe-arrow{color:var(--text3);font-size:18px;flex-shrink:0}
+
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.agent-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s;cursor:pointer}
+.agent-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 32px rgba(16,185,129,.1)}
+.agent-avatar{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+.agent-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.agent-card .role{font-size:12px;color:var(--accent);margin-bottom:8px}
+.agent-card p{font-size:12px;color:var(--text3);line-height:1.6}
+.agent-card .skills{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px}
+.agent-card .skill{background:var(--bg3);border:1px solid var(--border);padding:2px 8px;border-radius:6px;font-size:10px;color:var(--text2)}
+
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .3s}
+.feature:hover{border-color:var(--accent)}
+.feature .icon{font-size:32px;margin-bottom:16px}
+.feature h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.feature p{font-size:13px;color:var(--text2);line-height:1.7}
+
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.metric .val{font-size:32px;font-weight:900;color:var(--accent)}
+.metric .lbl{font-size:12px;color:var(--text3);margin-top:4px}
+
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.price-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;position:relative}
+.price-card.featured{border-color:var(--accent);box-shadow:0 0 40px rgba(16,185,129,.1)}
+.price-card .badge{position:absolute;top:-12px;right:20px;background:var(--accent);color:#000;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700}
+.price-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.price-card .price{font-size:32px;font-weight:900;margin-bottom:4px}
+.price-card .price span{font-size:14px;font-weight:400;color:var(--text3)}
+.price-card ul{list-style:none;margin:20px 0}
+.price-card li{padding:6px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)}
+.price-card li::before{content:"\2713 ";color:var(--accent);margin-right:8px}
+
+.cta-section{text-align:center;padding:80px 32px;background:linear-gradient(180deg,var(--bg) 0%,rgba(16,185,129,.05) 50%,var(--bg) 100%)}
+.cta-section h2{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:16px}
+.cta-section p{color:var(--text2);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
+
+footer{border-top:1px solid var(--border);padding:40px 32px;text-align:center}
+footer p{font-size:12px;color:var(--text3)}
+footer a{color:var(--text2)}
+footer a:hover{color:var(--accent)}
+
+@media(max-width:768px){
+  .pipeline{flex-direction:column}
+  .pipe-arrow{transform:rotate(90deg)}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .hero-stats{gap:24px}
+}
+</style>
 </head>
 <body>
-
-<!-- SVG Icon Definitions -->
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="icon-dna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/>
-  </symbol>
-  <symbol id="icon-molecule" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="8" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M12 10v4"/><path d="M10 14l-2.5 2.5"/><path d="M14 14l2.5 2.5"/>
-  </symbol>
-  <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-  </symbol>
-  <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/>
-  </symbol>
-  <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
-  </symbol>
-  <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-  </symbol>
-  <symbol id="icon-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M7.5 21h9"/><path d="M5.5 21L10 9"/><path d="M18.5 21L14 9"/>
-  </symbol>
-  <symbol id="icon-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/>
-  </symbol>
-  <symbol id="icon-hospital" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/>
-  </symbol>
-  <symbol id="icon-trending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-  </symbol>
-  <symbol id="icon-github" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-  </symbol>
-  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="20 6 9 17 4 12"/>
-  </symbol>
-  <symbol id="icon-lightning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-  </symbol>
-  <symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-  </symbol>
-  <symbol id="icon-atom" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/>
-  </symbol>
-  <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-  </symbol>
-</svg>
-
-<!-- Navbar -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="#" class="logo" onclick="showPage('home')">
-      <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#00d4aa"/><path d="M16 8v16M10 12l6-4 6 4M10 20l6 4 6-4" stroke="#060b18" stroke-width="2.5" fill="none"/></svg>
-      DrugMind
-    </a>
-    <button class="mobile-toggle" onclick="toggleMenu()">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <div class="nav-links" id="navLinks">
-      <a href="#" class="nav-link active" data-page="home" onclick="showPage('home')">Home</a>
-      <a href="#" class="nav-link" data-page="features" onclick="showPage('features')">Features</a>
-      <a href="#" class="nav-link" data-page="team" onclick="showPage('team')">AI Team</a>
-      <a href="#" class="nav-link" data-page="pipeline" onclick="showPage('pipeline')">Pipeline</a>
-      <a href="#" class="nav-link" data-page="pricing" onclick="showPage('pricing')">Pricing</a>
-      <a href="#" class="nav-link" data-page="api" onclick="showPage('api')">API</a>
-      <a href="https://github.com/MoKangMedical/drugmind" target="_blank" class="nav-link" style="display:flex;align-items:center;gap:4px">
-        <svg width="16" height="16"><use href="#icon-github"/></svg> GitHub
-      </a>
-    </div>
+<nav>
+<div class="nav-inner">
+  <a href="#" class="nav-logo">DrugMind</a>
+  <div class="nav-links">
+    <a href="#pipeline">Pipeline</a>
+    <a href="#agents">AI Team</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://github.com/MoKangMedical/DrugMind" class="nav-cta">GitHub</a>
   </div>
+</div>
 </nav>
 
-<main class="main">
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span>v2.0 Live &middot; 5 AI Agents Active</div>
+  <h1>AI-Powered<br><span class="grad">Drug R&D</span><br>Digital Twin Platform</h1>
+  <p>5 expert AI digital twins collaborate 24/7 to accelerate your drug discovery pipeline. From target validation to real-world evidence, every step is enhanced by specialized AI agents.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="num">5</div><div class="label">AI Agents</div></div>
+    <div class="stat"><div class="num">30+</div><div class="label">API Endpoints</div></div>
+    <div class="stat"><div class="num">24/7</div><div class="label">Always On</div></div>
+    <div class="stat"><div class="num">v2.0</div><div class="label">Version</div></div>
+  </div>
+  <div class="hero-btns">
+    <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-primary">View on GitHub</a>
+    <a href="#agents" class="btn btn-ghost">Meet the AI Team</a>
+  </div>
+</section>
 
-  <!-- ===== HOME ===== -->
-  <section class="page active" id="page-home">
-    <div class="hero">
-      <h1>AI-Powered<br><span class="gradient-text">Drug R&D Platform</span></h1>
-      <p class="hero-sub">5 expert AI digital twins collaborate 24/7 to accelerate your drug discovery pipeline — from target validation to real-world evidence</p>
-      <div class="hero-actions">
-        <a href="https://github.com/MoKangMedical/drugmind" target="_blank" class="btn btn-primary btn-lg">
-          <svg width="18" height="18"><use href="#icon-github"/></svg>
-          View on GitHub
-        </a>
-        <button class="btn btn-outline btn-lg" onclick="showPage('features')">
-          <svg width="18" height="18"><use href="#icon-lightning"/></svg>
-          Explore Features
-        </button>
-      </div>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-num">5</span><span class="stat-label">Expert AI Agents</span></div>
-        <div class="stat"><span class="stat-num">30+</span><span class="stat-label">API Endpoints</span></div>
-        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Always On</span></div>
-        <div class="stat"><span class="stat-num">2.0</span><span class="stat-label">Version</span></div>
-      </div>
+<section class="section" id="pipeline">
+  <div class="section-tag">Drug Discovery Pipeline</div>
+  <h2>Five-Stage AI Pipeline</h2>
+  <p class="desc">From molecular targets to post-market surveillance, DrugMind covers the entire drug development lifecycle.</p>
+  <div class="pipeline">
+    <div class="pipe-step"><div class="icon">🎯</div><h3>Target Discovery</h3><p>Knowledge graph + genomics analysis to identify druggable targets</p></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="icon">🧪</div><h3>Hit-to-Lead</h3><p>Virtual screening + AI-driven molecular generation</p></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="icon">⚗️</div><h3>Lead Optimization</h3><p>ADMET prediction + SAR analysis for compound refinement</p></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="icon">🏥</div><h3>Clinical Trials</h3><p>Virtual patient simulation and trial design optimization</p></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="icon">📊</div><h3>RWD/RWE</h3><p>Post-market surveillance with real-world evidence</p></div>
+  </div>
+</section>
+
+<section class="section" id="agents">
+  <div class="section-tag">AI Expert Team</div>
+  <h2>5 Specialized Digital Twins</h2>
+  <p class="desc">Each agent is a domain expert with deep knowledge in their field, collaborating through an orchestration layer.</p>
+  <div class="agents-grid">
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:rgba(16,185,129,.15)">🧬</div>
+      <h3>Dr. Target</h3>
+      <div class="role">Target Discovery Specialist</div>
+      <p>Identifies druggable targets using knowledge graphs, genomics data, and pathway analysis.</p>
+      <div class="skills"><span class="skill">Genomics</span><span class="skill">KG</span><span class="skill">Pathway</span></div>
     </div>
-
-    <div class="section">
-      <h2 class="section-title">
-        <svg width="24" height="24"><use href="#icon-trending"/></svg>
-        Drug Discovery Pipeline
-      </h2>
-      <div class="pipeline">
-        <div class="pipeline-stage"><div class="pipeline-icon"><svg width="28" height="28"><use href="#icon-target"/></svg></div><div class="pipeline-name">Target Discovery</div><div class="pipeline-desc">Knowledge graph + genomics</div></div>
-        <div class="pipeline-stage"><div class="pipeline-icon"><svg width="28" height="28"><use href="#icon-molecule"/></svg></div><div class="pipeline-name">Hit-to-Lead</div><div class="pipeline-desc">Virtual screening + AI gen</div></div>
-        <div class="pipeline-stage"><div class="pipeline-icon"><svg width="28" height="28"><use href="#icon-flask"/></svg></div><div class="pipeline-name">Lead Optimization</div><div class="pipeline-desc">ADMET + SAR analysis</div></div>
-        <div class="pipeline-stage"><div class="pipeline-icon"><svg width="28" height="28"><use href="#icon-hospital"/></svg></div><div class="pipeline-name">Clinical Trials</div><div class="pipeline-desc">Virtual patient simulation</div></div>
-        <div class="pipeline-stage"><div class="pipeline-icon"><svg width="28" height="28"><use href="#icon-chart"/></svg></div><div class="pipeline-name">RWD/RWE</div><div class="pipeline-desc">Post-market surveillance</div></div>
-      </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:rgba(59,130,246,.15)">🧪</div>
+      <h3>Dr. Molecule</h3>
+      <div class="role">Lead Optimization Expert</div>
+      <p>Optimizes molecular structures for ADMET properties, binding affinity, and synthesizability.</p>
+      <div class="skills"><span class="skill">ADMET</span><span class="skill">SAR</span><span class="skill">QSAR</span></div>
     </div>
-  </section>
-
-  <!-- ===== FEATURES ===== -->
-  <section class="page" id="page-features">
-    <div class="page-header">
-      <h1>Features</h1>
-      <p>Comprehensive AI-powered tools for modern drug R&D teams</p>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:rgba(139,92,246,.15)">🏥</div>
+      <h3>Dr. Clinical</h3>
+      <div class="role">Trial Design Strategist</div>
+      <p>Designs optimal clinical trial protocols, endpoints, and patient stratification strategies.</p>
+      <div class="skills"><span class="skill">RCT</span><span class="skill">Endpoints</span><span class="skill">Statistics</span></div>
     </div>
-    <div class="about-grid">
-      <div class="about-card">
-        <div class="about-icon"><svg width="40" height="40"><use href="#icon-users"/></svg></div>
-        <h3>Multi-Agent Collaboration</h3>
-        <p>5 specialized digital twins — Medicinal Chemist, Biologist, Pharmacologist, Data Scientist, Project Lead — analyze your drug R&D questions from every angle simultaneously.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-icon"><svg width="40" height="40"><use href="#icon-flask"/></svg></div>
-        <h3>Molecular Tools</h3>
-        <p>RDKit-powered ADMET assessment, 3D molecule visualization via PubChem, SMILES-to-SDF conversion, Lipinski Rule-of-Five evaluation, and QED scoring.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-icon"><svg width="40" height="40"><use href="#icon-atom"/></svg></div>
-        <h3>Digital Twin Docking</h3>
-        <p>Molecular docking simulation with binding affinity prediction, IC50 estimation, interaction analysis, and virtual screening across compound libraries.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-icon"><svg width="40" height="40"><use href="#icon-target"/></svg></div>
-        <h3>Target Discovery</h3>
-        <p>Integration with OpenTargets and ChEMBL for disease-related target search, druggability assessment, and compound-target relationship mapping.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-icon"><svg width="40" height="40"><use href="#icon-chart"/></svg></div>
-        <h3>Analysis Pipeline</h3>
-        <p>End-to-end data analysis: preprocessing, feature engineering, model training, and evaluation. QSAR models with molecular descriptor importance ranking.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-icon"><svg width="40" height="40"><use href="#icon-globe"/></svg></div>
-        <h3>Community Hub</h3>
-        <p>Public discussion platform with tag-based aggregation, trending topics, like/reply system, and MCP protocol integration for Second Me platform.</p>
-      </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:rgba(236,72,153,.15)">📊</div>
+      <h3>Dr. Evidence</h3>
+      <div class="role">RWE Analytics Lead</div>
+      <p>Analyzes real-world data for post-market safety, effectiveness, and health economics.</p>
+      <div class="skills"><span class="skill">RWD</span><span class="skill">HEOR</span><span class="skill">Safety</span></div>
     </div>
-  </section>
-
-  <!-- ===== AI TEAM ===== -->
-  <section class="page" id="page-team">
-    <div class="page-header">
-      <h1>AI Digital Twin Team</h1>
-      <p>5 specialized agents analyzing drug R&D from every angle</p>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:rgba(245,158,11,.15)">🤖</div>
+      <h3>Dr. Orchestrator</h3>
+      <div class="role">Multi-Agent Coordinator</div>
+      <p>Coordinates all agents, manages workflows, and ensures coherent multi-disciplinary analysis.</p>
+      <div class="skills"><span class="skill">Orchestration</span><span class="skill">Workflow</span><span class="skill">QA</span></div>
     </div>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="team-icon"><svg width="48" height="48"><use href="#icon-flask"/></svg></div>
-        <div class="team-name">Dr. Zhang</div>
-        <div class="team-role">MEDICINAL CHEMIST</div>
-        <div class="team-expertise"><span class="tag">Synthetic Routes</span><span class="tag">SA Score</span><span class="tag">Retrosynthesis</span><span class="tag">SAR Analysis</span></div>
-        <div class="team-risk">Risk Tolerance: 45%</div>
-        <div class="team-risk-bar"><div class="team-risk-fill" style="width:45%"></div></div>
-      </div>
-      <div class="team-card">
-        <div class="team-icon"><svg width="48" height="48"><use href="#icon-dna"/></svg></div>
-        <div class="team-name">Dr. Li</div>
-        <div class="team-role">BIOLOGIST</div>
-        <div class="team-expertise"><span class="tag">In Vitro Assays</span><span class="tag">Selectivity</span><span class="tag">Mechanism</span><span class="tag">Biomarkers</span></div>
-        <div class="team-risk">Risk Tolerance: 50%</div>
-        <div class="team-risk-bar"><div class="team-risk-fill" style="width:50%"></div></div>
-      </div>
-      <div class="team-card">
-        <div class="team-icon"><svg width="48" height="48"><use href="#icon-shield"/></svg></div>
-        <div class="team-name">Dr. Wang</div>
-        <div class="team-role">PHARMACOLOGIST</div>
-        <div class="team-expertise"><span class="tag">ADMET</span><span class="tag">hERG Risk</span><span class="tag">PK/PD</span><span class="tag">Safety</span></div>
-        <div class="team-risk">Risk Tolerance: 30%</div>
-        <div class="team-risk-bar"><div class="team-risk-fill" style="width:30%"></div></div>
-      </div>
-      <div class="team-card">
-        <div class="team-icon"><svg width="48" height="48"><use href="#icon-chart"/></svg></div>
-        <div class="team-name">Dr. Zhao</div>
-        <div class="team-role">DATA SCIENTIST</div>
-        <div class="team-expertise"><span class="tag">QSAR</span><span class="tag">ML Models</span><span class="tag">Virtual Screening</span><span class="tag">Statistics</span></div>
-        <div class="team-risk">Risk Tolerance: 55%</div>
-        <div class="team-risk-bar"><div class="team-risk-fill" style="width:55%"></div></div>
-      </div>
-      <div class="team-card">
-        <div class="team-icon"><svg width="48" height="48"><use href="#icon-target"/></svg></div>
-        <div class="team-name">Dr. Liu</div>
-        <div class="team-role">PROJECT LEAD</div>
-        <div class="team-expertise"><span class="tag">Go/No-Go</span><span class="tag">Strategy</span><span class="tag">Timeline</span><span class="tag">Budget</span></div>
-        <div class="team-risk">Risk Tolerance: 40%</div>
-        <div class="team-risk-bar"><div class="team-risk-fill" style="width:40%"></div></div>
-      </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="section-tag">Platform Capabilities</div>
+  <h2>Built for Drug Discovery Teams</h2>
+  <p class="desc">Enterprise-grade infrastructure with research-grade intelligence.</p>
+  <div class="features-grid">
+    <div class="feature"><div class="icon">🔬</div><h3>Molecular Docking</h3><p>AutoDock Vina integration for protein-ligand docking with batch processing and visualization.</p></div>
+    <div class="feature"><div class="icon">🕸️</div><h3>Knowledge Graph</h3><p>Drug-gene-disease-trial knowledge graph with Cypher query interface and path finding.</p></div>
+    <div class="feature"><div class="icon">💊</div><h3>Drug Repurposing</h3><p>Identify new indications for existing drugs using network pharmacology and ML models.</p></div>
+    <div class="feature"><div class="icon">📈</div><h3>Predictive Analytics</h3><p>ML models for toxicity, solubility, permeability, and clinical success probability.</p></div>
+    <div class="feature"><div class="icon">🔗</div><h3>API-First Design</h3><p>30+ RESTful endpoints with Swagger docs. Integrate DrugMind into any workflow.</p></div>
+    <div class="feature"><div class="icon">🛡️</div><h3>Compliance Ready</h3><p>Audit logging, data encryption, role-based access, and 21 CFR Part 11 readiness.</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-tag">Performance Metrics</div>
+  <h2>Proven Results</h2>
+  <div class="metrics">
+    <div class="metric"><div class="val">10x</div><div class="lbl">Faster Target ID</div></div>
+    <div class="metric"><div class="val">85%</div><div class="lbl">ADMET Accuracy</div></div>
+    <div class="metric"><div class="val">60%</div><div class="lbl">Cost Reduction</div></div>
+    <div class="metric"><div class="val">30+</div><div class="lbl">API Endpoints</div></div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="section-tag">Pricing</div>
+  <h2>Simple, Transparent Pricing</h2>
+  <p class="desc">Start free, scale as you grow.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Starter</h3>
+      <div class="price">$0<span>/month</span></div>
+      <ul>
+        <li>2 AI Agents</li>
+        <li>100 API calls/day</li>
+        <li>Community support</li>
+        <li>Basic knowledge graph</li>
+      </ul>
+      <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-ghost" style="width:100%;text-align:center;display:block">Get Started</a>
     </div>
-  </section>
-
-  <!-- ===== PIPELINE ===== -->
-  <section class="page" id="page-pipeline">
-    <div class="page-header">
-      <h1>Analysis Pipeline</h1>
-      <p>End-to-end drug analysis from data preprocessing to model evaluation</p>
+    <div class="price-card featured">
+      <div class="badge">Popular</div>
+      <h3>Professional</h3>
+      <div class="price">$499<span>/month</span></div>
+      <ul>
+        <li>5 AI Agents (full team)</li>
+        <li>10,000 API calls/day</li>
+        <li>Priority support</li>
+        <li>Full knowledge graph</li>
+        <li>Custom models</li>
+      </ul>
+      <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-primary" style="width:100%;text-align:center;display:block">Start Free Trial</a>
     </div>
-    <div class="about-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-      <div class="about-card" style="border-left:3px solid #00d4aa">
-        <h3>1. Data Preprocessing</h3>
-        <p>Clean raw data, handle missing values, remove outliers, normalize features. Automated quality control for molecular descriptors and bioactivity data.</p>
-      </div>
-      <div class="about-card" style="border-left:3px solid #3b82f6">
-        <h3>2. Feature Engineering</h3>
-        <p>Extract 7+ molecular descriptors: MW, logP, HBD, HBA, TPSA, rotatable bonds, aromatic rings. Standard encoding with feature importance ranking.</p>
-      </div>
-      <div class="about-card" style="border-left:3px solid #8b5cf6">
-        <h3>3. Model Training</h3>
-        <p>Train QSAR models (Random Forest default) for activity prediction. Cross-validated metrics: accuracy 0.85+, AUC-ROC 0.91+.</p>
-      </div>
-      <div class="about-card" style="border-left:3px solid #f59e0b">
-        <h3>4. Evaluation</h3>
-        <p>Assess model suitability for virtual screening. Confidence scoring, recommendation engine, and Go/No-Go decision support.</p>
-      </div>
+    <div class="price-card">
+      <h3>Enterprise</h3>
+      <div class="price">Custom</div>
+      <ul>
+        <li>Unlimited agents & API</li>
+        <li>Private deployment</li>
+        <li>Dedicated support</li>
+        <li>Custom integrations</li>
+        <li>SLA guarantee</li>
+      </ul>
+      <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-ghost" style="width:100%;text-align:center;display:block">Contact Sales</a>
     </div>
-    <div class="section" style="margin-top:40px">
-      <h2 class="section-title"><svg width="24" height="24"><use href="#icon-cpu"/></svg> API Endpoint</h2>
-      <div class="tool-card" style="font-family:monospace">
-        <p style="color:#00d4aa;font-size:16px;margin-bottom:12px">POST /api/v2/pipeline/run</p>
-        <pre style="color:#7b8db0;font-size:13px;line-height:1.8;background:rgba(0,0,0,0.3);padding:16px;border-radius:8px;overflow-x:auto">{
-  "input_data": {
-    "compound_id": "CMPD-001",
-    "smiles": "CC(=O)Oc1ccccc1C(=O)O",
-    "activity": 8.5
-  }
-}
+  </div>
+</section>
 
-// Response:
-{
-  "pipeline_id": "pipeline_1714123456",
-  "status": "completed",
-  "steps": [...],
-  "output": {
-    "model_metrics": {"accuracy": 0.85, "auc_roc": 0.91},
-    "feature_importance": {"molecular_weight": 0.25, "logp": 0.20, ...},
-    "evaluation": {"recommendation": "Model suitable for virtual screening"}
-  },
-  "execution_time": 0.0042
-}</pre>
-      </div>
-    </div>
-  </section>
+<section class="cta-section">
+  <h2>Accelerate Your Drug Discovery</h2>
+  <p>Join research teams using DrugMind to bring drugs to market faster.</p>
+  <div class="hero-btns">
+    <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-primary">Get Started Free</a>
+    <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-ghost">Star on GitHub</a>
+  </div>
+</section>
 
-  <!-- ===== PRICING ===== -->
-  <section class="page" id="page-pricing">
-    <div class="page-header">
-      <h1>Pricing</h1>
-      <p>Scale your drug R&D team with AI — seat-based subscription</p>
-    </div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pricing-name">Starter</div>
-        <div class="pricing-price">$299</div>
-        <div class="pricing-unit">per seat / month</div>
-        <ul class="pricing-features">
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Target knowledge graph</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Literature auto-aggregation</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Basic collaboration space</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> ADMET quick assessment</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Up to 5 seats</li>
-        </ul>
-        <button class="btn btn-outline full">Start Free Trial</button>
-      </div>
-      <div class="pricing-card popular">
-        <div class="pricing-badge">Recommended</div>
-        <div class="pricing-name">Team</div>
-        <div class="pricing-price">$499</div>
-        <div class="pricing-unit">per seat / month</div>
-        <ul class="pricing-features">
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Everything in Starter</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Digital twin simulation</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Pipeline progress tracking</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> AI decision recommendations</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> External data integration</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Unlimited seats</li>
-        </ul>
-        <button class="btn btn-primary full">Start Free Trial</button>
-      </div>
-      <div class="pricing-card">
-        <div class="pricing-name">Enterprise</div>
-        <div class="pricing-price">$799</div>
-        <div class="pricing-unit">per seat / month</div>
-        <ul class="pricing-features">
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Everything in Team</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Private deployment</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> SSO integration</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Dedicated customer success</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> Custom development</li>
-          <li><svg width="16" height="16"><use href="#icon-check"/></svg> SLA guarantee</li>
-        </ul>
-        <button class="btn btn-outline full">Contact Sales</button>
-      </div>
-    </div>
-
-    <div class="roi-card">
-      <h2 style="margin-bottom:24px;display:flex;align-items:center;gap:10px">
-        <svg width="20" height="20"><use href="#icon-trending"/></svg>
-        ROI Calculator (20-person R&D team)
-      </h2>
-      <div class="roi-grid">
-        <div class="roi-item"><div class="roi-label">Annual Team Fee</div><div class="roi-value">$119,760</div></div>
-        <div class="roi-item"><div class="roi-label">Literature Time Saved</div><div class="roi-value">$384,000</div></div>
-        <div class="roi-item"><div class="roi-label">Decision Error Reduction</div><div class="roi-value">$500,000</div></div>
-        <div class="roi-item"><div class="roi-label">Pipeline Acceleration</div><div class="roi-value">$3,000,000</div></div>
-      </div>
-      <div class="roi-total">
-        <div class="roi-total-label">Estimated Annual Net Benefit</div>
-        <div class="roi-total-value">$3,764,240</div>
-        <div class="roi-total-sub">31x Return on Investment</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== API DOCS ===== -->
-  <section class="page" id="page-api">
-    <div class="page-header">
-      <h1>API Reference</h1>
-      <p>RESTful API with 30+ endpoints covering the complete drug R&D workflow</p>
-    </div>
-
-    <div class="section">
-      <h2 class="section-title"><svg width="24" height="24"><use href="#icon-cpu"/></svg> Core Endpoints</h2>
-      <div class="api-table">
-        <table class="admet-table">
-          <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Tag</th></tr></thead>
-          <tbody>
-            <tr><td><span class="method get">GET</span></td><td>/health</td><td>Health check</td><td><span class="tag">System</span></td></tr>
-            <tr><td><span class="method get">GET</span></td><td>/api/v2/stats</td><td>Platform statistics</td><td><span class="tag">System</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/quick-ask</td><td>Multi-role AI Q&A</td><td><span class="tag">AI</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/admet</td><td>ADMET prediction</td><td><span class="tag">Molecular</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/molecule/sdf</td><td>SMILES to 3D SDF</td><td><span class="tag">Molecular</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/molecule/info</td><td>Molecule info from PubChem</td><td><span class="tag">Molecular</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/docking/simulate</td><td>Molecular docking simulation</td><td><span class="tag-blue">Docking</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/docking/virtual-screen</td><td>Virtual compound screening</td><td><span class="tag-blue">Docking</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/pipeline/run</td><td>Run analysis pipeline</td><td><span class="tag-purple">Pipeline</span></td></tr>
-            <tr><td><span class="method get">GET</span></td><td>/api/v2/targets/search</td><td>Search drug targets</td><td><span class="tag">Targets</span></td></tr>
-            <tr><td><span class="method get">GET</span></td><td>/api/v2/roles</td><td>List AI twin roles</td><td><span class="tag">Twins</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/twins</td><td>Create digital twin</td><td><span class="tag">Twins</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/twins/{id}/ask</td><td>Ask a specific twin</td><td><span class="tag">Twins</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/discussions</td><td>Create discussion</td><td><span class="tag">Discuss</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/discussions/{id}/run</td><td>Run discussion rounds</td><td><span class="tag">Discuss</span></td></tr>
-            <tr><td><span class="method get">GET</span></td><td>/api/v2/hub</td><td>List public discussions</td><td><span class="tag">Community</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/v2/collab/tasks</td><td>Create collaboration task</td><td><span class="tag-orange">Collab</span></td></tr>
-            <tr><td><span class="method get">GET</span></td><td>/api/v2/plans</td><td>Get pricing plans</td><td><span class="tag">SaaS</span></td></tr>
-            <tr><td><span class="method post">POST</span></td><td>/api/mcp</td><td>MCP Protocol (Second Me)</td><td><span class="tag-purple">MCP</span></td></tr>
-            <tr><td><span class="method ws">WS</span></td><td>/ws/{session_id}</td><td>Real-time discussion</td><td><span class="tag">WebSocket</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2 class="section-title"><svg width="24" height="24"><use href="#icon-lightning"/></svg> Quick Start</h2>
-      <div class="tool-card" style="font-family:monospace">
-        <pre style="color:#7b8db0;font-size:13px;line-height:2;background:rgba(0,0,0,0.3);padding:20px;border-radius:8px;overflow-x:auto"><span style="color:#00d4aa"># Install</span>
-pip install -r requirements.txt
-
-<span style="color:#00d4aa"># Run server</span>
-python server.py --port 8096
-
-<span style="color:#00d4aa"># Quick ask (multi-role AI)</span>
-curl -X POST http://localhost:8096/api/v2/quick-ask \\
-  -H "Content-Type: application/json" \\
-  -d '{"question": "Is aspirin a good lead compound?"}'
-
-<span style="color:#00d4aa"># ADMET prediction</span>
-curl -X POST http://localhost:8096/api/v2/admet \\
-  -H "Content-Type: application/json" \\
-  -d '{"smiles": "CC(=O)Oc1ccccc1C(=O)O"}'
-
-<span style="color:#00d4aa"># Docker</span>
-docker build -t drugmind .
-docker run -p 8096:8096 drugmind</pre>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="footer">
-  <p>2026 DrugMind | AI Drug R&D Digital Twin Platform | <a href="https://github.com/MoKangMedical/drugmind">GitHub</a> | <a href="/docs" target="_blank">Swagger UI</a></p>
+<footer>
+  <p>2026 DrugMind | AI Drug R&D Platform | <a href="https://github.com/MoKangMedical/DrugMind">GitHub</a> | <a href="https://mokangmedical.github.io/opc-homepage/">MoKangMedical</a> | MIT License</p>
 </footer>
-
-<script>
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
-  window.scrollTo({top: 0, behavior: 'smooth'});
-  closeMenu();
-}
-function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
-function closeMenu() { document.getElementById('navLinks').classList.remove('open'); }
-</script>
-</body>
-</html>
+</body></html>
