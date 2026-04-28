@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrugMind - AI Molecular Screening Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a1a;color:#e0e0e0;}
+        .header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:48px 24px;text-align:center;border-bottom:1px solid rgba(99,102,241,0.2);}
+        .header h1{font-size:2.2rem;background:linear-gradient(90deg,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .header p{color:#888;margin-top:8px;}
+        .back{display:inline-block;color:#6366f1;text-decoration:none;margin-bottom:16px;}
+        .container{max-width:1100px;margin:0 auto;padding:32px 24px;}
+        .input-section{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;}
+        @media(max-width:768px){.input-section{grid-template-columns:1fr;}}
+        .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:24px;}
+        .card h3{color:#fff;margin-bottom:16px;}
+        .card textarea{width:100%;height:120px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;padding:12px;font-family:monospace;font-size:.9rem;resize:vertical;}
+        .card select,.card input{width:100%;padding:10px 14px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;margin-bottom:12px;}
+        .run-btn{background:linear-gradient(90deg,#6366f1,#22d3ee);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;width:100%;margin-top:12px;transition:transform .2s;}
+        .run-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,0.3);}
+        .results{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px;}
+        @media(max-width:768px){.results{grid-template-columns:1fr;}}
+        .result-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:24px;}
+        .result-card h3{color:#fff;margin-bottom:16px;}
+        .compound-table{width:100%;border-collapse:collapse;margin-top:16px;}
+        .compound-table th{text-align:left;padding:10px 12px;color:#888;font-size:.8rem;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.1);}
+        .compound-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:.9rem;}
+        .score-high{color:#22c55e;font-weight:600;}
+        .score-mid{color:#f59e0b;font-weight:600;}
+        .score-low{color:#ef4444;font-weight:600;}
+        .progress{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;margin-top:16px;overflow:hidden;}
+        .progress-bar{height:100%;background:linear-gradient(90deg,#6366f1,#22d3ee);border-radius:3px;transition:width 2s ease;width:0%;}
+        .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px;}
+        @media(max-width:768px){.metrics-row{grid-template-columns:repeat(2,1fr);}}
+        .metric-box{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:10px;padding:16px;text-align:center;}
+        .metric-box .val{font-size:1.5rem;font-weight:800;color:#6366f1;}
+        .metric-box .lbl{font-size:.75rem;color:#888;margin-top:4px;}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back">← Back to DrugMind</a>
+        <h1>AI Molecular Screening Engine</h1>
+        <p>Screen compounds against protein targets using multi-agent AI pipeline</p>
+    </div>
+    <div class="container">
+        <div class="input-section">
+            <div class="card">
+                <h3>Target Protein</h3>
+                <select id="target">
+                    <option>EGFR (Epidermal Growth Factor Receptor)</option>
+                    <option>VEGFR2 (Vascular Endothelial Growth Factor)</option>
+                    <option>PD-L1 (Programmed Death-Ligand 1)</option>
+                    <option>BRAF V600E</option>
+                    <option>ALK Fusion Protein</option>
+                    <option>KRAS G12C</option>
+                </select>
+                <label style="color:#888;font-size:.85rem;margin-top:8px;display:block;">Disease Area</label>
+                <select id="disease">
+                    <option>Non-Small Cell Lung Cancer</option>
+                    <option>Breast Cancer</option>
+                    <option>Melanoma</option>
+                    <option>Colorectal Cancer</option>
+                    <option>Hepatocellular Carcinoma</option>
+                </select>
+            </div>
+            <div class="card">
+                <h3>Compound Library</h3>
+                <textarea id="compounds" placeholder="Enter SMILES (one per line):&#10;CC(=O)OC1=CC=CC=C1C(=O)O&#10;CC12CCC3C(CCC4CC(=O)CCC34C)C1CCC2O&#10;...">CC(=O)OC1=CC=CC=C1C(=O)O
+CC12CCC3C(CCC4CC(=O)CCC34C)C1CCC2O
+CN1C=NC2=C1C(=O)N(C(=O)N2C)C
+CC(C)CC1=CC=C(C=C1)C(C)C(=O)O
+OC(=O)C1=CC=CC=C1O
+CC(=O)NC1=CC=C(O)C=C1
+CN1C2=CC=CC=C2C(=N1)C3=CC=CC=C3</textarea>
+            </div>
+        </div>
+        <button class="run-btn" onclick="runScreening()">Run AI Screening Pipeline</button>
+        <div class="progress" id="progressWrap" style="display:none;"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="metrics-row" id="metricsRow" style="display:none;">
+            <div class="metric-box"><div class="val" id="compoundsScreened">-</div><div class="lbl">Compounds Screened</div></div>
+            <div class="metric-box"><div class="val" id="hitsFound">-</div><div class="lbl">Hits Found</div></div>
+            <div class="metric-box"><div class="val" id="admetPass">-</div><div class="lbl">ADMET Pass</div></div>
+            <div class="metric-box"><div class="val" id="leadCandidates">-</div><div class="lbl">Lead Candidates</div></div>
+        </div>
+        <div class="results" id="results" style="display:none;">
+            <div class="result-card">
+                <h3>Docking Scores & ADMET</h3>
+                <table class="compound-table">
+                    <thead><tr><th>Compound</th><th>Docking Score</th><th>ADMET</th><th>Toxicity</th></tr></thead>
+                    <tbody id="resultTable"></tbody>
+                </table>
+            </div>
+            <div class="result-card">
+                <h3>Score Distribution</h3>
+                <canvas id="scoreChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        function runScreening(){
+            const pw=document.getElementById('progressWrap');
+            const pb=document.getElementById('progressBar');
+            pw.style.display='block';
+            pb.style.width='0%';
+            
+            // Simulate progress
+            let p=0;
+            const iv=setInterval(()=>{
+                p+=Math.random()*15;
+                if(p>=100){p=100;clearInterval(iv);showResults();}
+                pb.style.width=p+'%';
+            },200);
+        }
+        
+        function showResults(){
+            document.getElementById('metricsRow').style.display='grid';
+            document.getElementById('results').style.display='grid';
+            
+            const compounds=['Aspirin','Testosterone','Caffeine','Ibuprofen','Salicylic Acid','Acetaminophen','Phenylbutazone'];
+            const tbody=document.getElementById('resultTable');
+            tbody.innerHTML='';
+            const scores=[];
+            
+            compounds.forEach(c=>{
+                const dock=(-12+Math.random()*6).toFixed(2);
+                const admet=Math.round(60+Math.random()*35);
+                const tox=['Low','Medium','High'][Math.floor(Math.random()*3)];
+                const cls=parseFloat(dock)<-9?'score-high':parseFloat(dock)<-7?'score-mid':'score-low';
+                scores.push(Math.abs(parseFloat(dock)));
+                tbody.innerHTML+=`<tr><td>${c}</td><td class="${cls}">${dock} kcal/mol</td><td>${admet}%</td><td>${tox}</td></tr>`;
+            });
+            
+            document.getElementById('compoundsScreened').textContent=compounds.length;
+            document.getElementById('hitsFound').textContent=scores.filter(s=>s>8).length;
+            document.getElementById('admetPass').textContent=Math.round(scores.filter(s=>s>7).length/compounds.length*100)+'%';
+            document.getElementById('leadCandidates').textContent=scores.filter(s=>s>9).length;
+            
+            // Chart
+            new Chart(document.getElementById('scoreChart'),{
+                type:'bar',
+                data:{labels:compounds,datasets:[{label:'Docking Score (|kcal/mol|)',data:scores,backgroundColor:scores.map(s=>s>9?'rgba(34,197,94,0.7)':s>7?'rgba(245,158,11,0.7)':'rgba(239,68,68,0.7)'),borderRadius:6}]},
+                options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#888'},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#ccc'},grid:{display:false}}}}
+            });
+        }
+    </script>
+</body>
+</html>
