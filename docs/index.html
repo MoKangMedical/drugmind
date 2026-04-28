@@ -132,10 +132,27 @@
     </style>
 </head>
 <body>
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,9,11,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(99,102,241,.15);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:20px">💊</span>
+    <span style="font-weight:800;font-size:18px">Drug<span style="color:#818cf8">Mind</span></span>
+  </div>
+  <div style="display:flex;gap:20px;font-size:12px;font-weight:500;color:#71717a">
+    <a href="#features" style="color:#71717a;text-decoration:none">功能</a>
+    <a href="#demo" style="color:#71717a;text-decoration:none">Demo</a>
+    <a href="#pricing" style="color:#71717a;text-decoration:none">定价</a>
+    <a href="https://github.com/MoKangMedical/DrugMind" target="_blank" style="color:#71717a;text-decoration:none">GitHub</a>
+  </div>
+  <a href="#pricing" style="background:#6366f1;color:#fff;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">开始使用</a>
+</nav>
+<div style="padding-top:60px"></div>
+
     <section class="hero">
         <div class="container">
             <h1>DrugMind</h1>
             <p>AI药物研发大脑，加速新药发现与开发</p>
+<a href="demo.html" style="display:inline-block;background:linear-gradient(90deg,#6366f1,#22d3ee);color:#fff;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:600;margin:8px;transition:transform .2s;box-shadow:0 4px 16px rgba(99,102,241,0.3);">Try Live Demo</a>
             <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
                 <a href="#features" class="btn btn-primary">了解功能</a>
                 <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-secondary">GitHub</a>
@@ -194,5 +211,79 @@
         .stat-label{font-size:1rem;color:rgba(255,255,255,0.85);font-weight:500;}
         @media(max-width:768px){.stat-value{font-size:1.8rem;}}
     </style>
+<script>
+// Scroll reveal animation
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .card, .pricing-card, .stat-card, [class*="feature"], [class*="card"]').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+    observer.observe(el);
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+
+// Navbar background on scroll
+const nav = document.querySelector('nav, .nav, .navbar, header');
+if (nav) {
+    window.addEventListener('scroll', () => {
+        nav.style.background = window.scrollY > 50 ? 'rgba(10,10,15,0.98)' : 'rgba(10,10,15,0.85)';
+    });
+}
+
+// Counter animation for stats
+document.querySelectorAll('[data-count], .stat-number, .counter').forEach(el => {
+    const target = parseInt(el.dataset.count || el.textContent);
+    if (isNaN(target)) return;
+    let current = 0;
+    const increment = target / 60;
+    const suffix = el.dataset.suffix || '';
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = Math.floor(current).toLocaleString() + suffix;
+    }, 25);
+});
+
+console.log('MoKangMedical interactive features loaded');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<div style="max-width:900px;margin:0 auto;padding:40px 32px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div style="background:#111113;border:1px solid #27272a;border-radius:12px;padding:24px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;color:#fafafa">ADMET预测准确率</h3>
+      <canvas id="admetRadar"></canvas>
+    </div>
+    <div style="background:#111113;border:1px solid #27272a;border-radius:12px;padding:24px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;color:#fafafa">月度分析量趋势</h3>
+      <canvas id="trendLine"></canvas>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof Chart==='undefined')return;
+  new Chart(document.getElementById('admetRadar').getContext('2d'),{type:'radar',data:{labels:['吸收','分布','代谢','排泄','毒性','溶解度','渗透性','血浆蛋白结合'],datasets:[{label:'DrugMind',data:[0.94,0.91,0.89,0.93,0.92,0.88,0.87,0.95],borderColor:'rgba(99,102,241,.8)',backgroundColor:'rgba(99,102,241,.15)',pointBackgroundColor:'#6366f1'}]},options:{responsive:true,scales:{r:{grid:{color:'rgba(255,255,255,.05)'},pointLabels:{color:'#a1a1aa',font:{size:10}},ticks:{display:false}}},plugins:{legend:{display:false}}}});
+  new Chart(document.getElementById('trendLine').getContext('2d'),{type:'line',data:{labels:['Q1','Q2','Q3','Q4','Q5','Q6'],datasets:[{label:'分子分析量',data:[1200,1800,2400,3200,4500,5800],borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.1)',fill:true,tension:.4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#71717a'}},x:{grid:{display:false},ticks:{color:'#a1a1aa'}}}}});
+});
+</script>
+
 </body>
 </html>
