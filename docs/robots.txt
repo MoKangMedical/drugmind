@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://mokangmedical.github.io/DrugMind/sitemap.xml
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
