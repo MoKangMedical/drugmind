@@ -9,7 +9,9 @@
 <meta property="og:description" content="Multi-agent AI for molecular docking, ADMET, virtual screening.">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://mokangmedical.github.io/DrugMind/">
+<meta name="robots" content="index, follow">
 <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="mknav.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script type="application/ld+json">
 {
@@ -56,17 +58,7 @@
 }
 </script>
 </head>
-<body style="padding-top:56px!important" style="padding-top:56px!important"><nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
-  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
-    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng1)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
-    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">MoKangMedical</span>
-  </a>
-  <div style="display:flex;gap:6px;align-items:center">
-    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">生态首页</a>
-    <a href="https://github.com/MoKangMedical" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
-    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
-  </div>
-</nav>
+<body style="padding-bottom:60px">
 
 <nav class="navbar">
   <div class="navbar-inner">
@@ -284,20 +276,17 @@
 
 <script>
 (function() {
-  /* ── colour palette ── */
-  const accent   = '#e94560';
-  const cyan     = '#06b6d4';
-  const green    = '#10b981';
-  const purple   = '#8b5cf6';
-  const amber    = '#f59e0b';
-  const blue     = '#3b82f6';
-  const pink     = '#ec4899';
+  var accent   = '#e94560';
+  var cyan     = '#06b6d4';
+  var green    = '#10b981';
+  var purple   = '#8b5cf6';
+  var amber    = '#f59e0b';
+  var blue     = '#3b82f6';
+  var pink     = '#ec4899';
 
-  /* ── dark-theme defaults ── */
-  Chart.defaults.color        = '#94a3b8';
-  Chart.defaults.borderColor  = 'rgba(148,163,184,0.12)';
+  Chart.defaults.color       = '#94a3b8';
+  Chart.defaults.borderColor = 'rgba(148,163,184,0.12)';
 
-  /* ── Horizontal Bar: Pipeline Stages ── */
   new Chart(document.getElementById('pipelineChart'), {
     type: 'bar',
     data: {
@@ -313,12 +302,8 @@
       datasets: [{
         label: 'Molecules',
         data: [4280, 2650, 1840, 920, 580, 310, 127],
-        backgroundColor: [
-          accent, cyan, green, purple, amber, blue, pink
-        ],
-        borderColor: [
-          accent, cyan, green, purple, amber, blue, pink
-        ],
+        backgroundColor: [accent, cyan, green, purple, amber, blue, pink],
+        borderColor: [accent, cyan, green, purple, amber, blue, pink],
         borderWidth: 1,
         borderRadius: 6,
         barPercentage: 0.7
@@ -359,7 +344,6 @@
     }
   });
 
-  /* ── Doughnut: ADMET Property Distribution ── */
   new Chart(document.getElementById('admetChart'), {
     type: 'doughnut',
     data: {
@@ -374,9 +358,7 @@
       ],
       datasets: [{
         data: [3120, 2480, 1950, 1640, 1380, 2210, 1870],
-        backgroundColor: [
-          accent, cyan, green, purple, amber, blue, pink
-        ],
+        backgroundColor: [accent, cyan, green, purple, amber, blue, pink],
         borderColor: '#0f172a',
         borderWidth: 3,
         hoverOffset: 8
@@ -574,53 +556,53 @@
 
 <script src="js/app.js"></script>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials-section" style="padding:80px 0;background:linear-gradient(135deg,#0a0a1a 0%,#1a1a2e 100%);">
-        <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
-            <h2 style="text-align:center;font-size:2rem;color:#fff;margin-bottom:12px;">Trusted by Leading Institutions</h2>
-            <p style="text-align:center;color:#888;margin-bottom:48px;font-size:1.1rem;">See what industry leaders say about DrugMind</p>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;">
-        <div class="testimonial-card">
-            <div class="testimonial-text">"DrugMind's AI-driven target identification reduced our lead optimization cycle by 40%. A game-changer for drug discovery."</div>
-            <div class="testimonial-author">
-                <div class="testimonial-avatar">SC</div>
-                <div>
-                    <div class="testimonial-name">Dr. Sarah Chen</div>
-                    <div class="testimonial-role">Principal Scientist, Pfizer</div>
-                </div>
-            </div>
+<!-- MoKangMedical Ecosystem Bar -->
+<div id="mokang-eco-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(10,15,26,0.95);backdrop-filter:blur(12px);border-top:1px solid rgba(99,102,241,0.2);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);flex-wrap:wrap">
+  <span style="font-weight:600;color:rgba(255,255,255,0.9);white-space:nowrap">🌐 Part of MoKangMedical Ecosystem</span>
+  <span style="color:rgba(255,255,255,0.2)">|</span>
+  <a href="https://mokangmedical.github.io/PharmaSim/" style="color:rgba(255,255,255,0.65);text-decoration:none;padding:3px 10px;border-radius:6px;transition:all .2s" onmouseover="this.style.color='#818cf8';this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.background='none'">PharmaSim</a>
+  <a href="https://mokangmedical.github.io/tianyan/" style="color:rgba(255,255,255,0.65);text-decoration:none;padding:3px 10px;border-radius:6px;transition:all .2s" onmouseover="this.style.color='#818cf8';this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.background='none'">Tianyan</a>
+  <a href="https://mokangmedical.github.io/chronicdiseasemanagement/" style="color:rgba(255,255,255,0.65);text-decoration:none;padding:3px 10px;border-radius:6px;transition:all .2s" onmouseover="this.style.color='#818cf8';this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.background='none'">ChroniCare</a>
+  <a href="https://mokangmedical.github.io/DrugMind/" style="color:#818cf8;text-decoration:none;padding:3px 10px;border-radius:6px;transition:all .2s;font-weight:500" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='none'">DrugMind</a>
+  <a href="https://mokangmedical.github.io/medichat-rd/" style="color:rgba(255,255,255,0.65);text-decoration:none;padding:3px 10px;border-radius:6px;transition:all .2s" onmouseover="this.style.color='#818cf8';this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.background='none'">MediChat-RD</a>
+  <button onclick="document.getElementById('mokang-eco-bar').style.display='none';document.body.style.paddingBottom='0'" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;padding:2px 8px;line-height:1;margin-left:8px;border-radius:4px" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.4)';this.style.background='none'">&times;</button>
+</div>
+  <script src="mknav.js"></script>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" style="padding:80px 0;background:#0d0d1a;">
+        <div style="max-width:800px;margin:0 auto;padding:0 24px;">
+            <h2 style="text-align:center;font-size:2rem;color:#fff;margin-bottom:12px;">Frequently Asked Questions</h2>
+            <p style="text-align:center;color:#888;margin-bottom:48px;">Everything you need to know</p>
+            <div class="faq-list">
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-question"><span>What AI models does DrugMind use?</span><span class="faq-icon">+</span></div>
+            <div class="faq-answer"><p>DrugMind employs a multi-agent architecture with specialized models for target identification, molecular docking, ADMET prediction, and toxicity assessment. Our ensemble approach achieves 94% accuracy in lead compound identification.</p></div>
         </div>
-        <div class="testimonial-card">
-            <div class="testimonial-text">"The molecular docking accuracy is remarkable. We've integrated DrugMind into our academic research pipeline."</div>
-            <div class="testimonial-author">
-                <div class="testimonial-avatar">JL</div>
-                <div>
-                    <div class="testimonial-name">Prof. James Liu</div>
-                    <div class="testimonial-role">Stanford School of Medicine</div>
-                </div>
-            </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-question"><span>How does DrugMind integrate with existing workflows?</span><span class="faq-icon">+</span></div>
+            <div class="faq-answer"><p>DrugMind provides REST APIs, Python SDK, and direct integration with Schrodinger, MOE, and AutoDock. Most teams are fully integrated within 1-2 weeks.</p></div>
         </div>
-        <div class="testimonial-card">
-            <div class="testimonial-text">"From target to lead compound in 3 weeks — DrugMind delivered results that would traditionally take 6 months."</div>
-            <div class="testimonial-author">
-                <div class="testimonial-avatar">MS</div>
-                <div>
-                    <div class="testimonial-name">Dr. Maria Santos</div>
-                    <div class="testimonial-role">CSO, BioNova Therapeutics</div>
-                </div>
-            </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-question"><span>What data privacy measures are in place?</span><span class="faq-icon">+</span></div>
+            <div class="faq-answer"><p>All molecular data is encrypted at rest and in transit. We support on-premise deployment for enterprise clients and are SOC 2 Type II compliant.</p></div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-question"><span>Can DrugMind handle proprietary compound libraries?</span><span class="faq-icon">+</span></div>
+            <div class="faq-answer"><p>Yes. DrugMind supports custom compound library uploads in SDF, MOL2, and SMILES formats. Your proprietary data never leaves your secure environment.</p></div>
         </div>
             </div>
         </div>
     </section>
     <style>
-        .testimonial-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;transition:transform .3s,border-color .3s;}
-        .testimonial-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,0.5);}
-        .testimonial-text{color:#ccc;font-size:1rem;line-height:1.7;margin-bottom:24px;font-style:italic;}
-        .testimonial-author{display:flex;align-items:center;gap:12px;}
-        .testimonial-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;}
-        .testimonial-name{color:#fff;font-weight:600;font-size:.95rem;}
-        .testimonial-role{color:#888;font-size:.85rem;}
+        .faq-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:12px;cursor:pointer;transition:border-color .3s;overflow:hidden;}
+        .faq-item:hover,.faq-item.open{border-color:rgba(99,102,241,0.4);}
+        .faq-question{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;color:#fff;font-weight:600;font-size:1.05rem;}
+        .faq-icon{color:#6366f1;font-size:1.5rem;transition:transform .3s;}
+        .faq-item.open .faq-icon{transform:rotate(45deg);}
+        .faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease;padding:0 24px;}
+        .faq-item.open .faq-answer{max-height:300px;padding:0 24px 20px;}
+        .faq-answer p{color:#aaa;line-height:1.7;font-size:.95rem;}
     </style>
 </body>
 </html>
