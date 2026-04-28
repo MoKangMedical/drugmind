@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Docs — DrugMind</title>
+<meta name="description" content="DrugMind REST API文档：分子对接、ADMET预测、虚拟筛选、知识图谱查询接口。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.api-hero{padding:10rem 2rem 4rem;text-align:center}
+.api-hero h1{font-size:2.8rem;font-weight:800;margin-bottom:1rem}
+.api-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.api-container{max-width:1000px;margin:0 auto;padding:0 2rem 4rem}
+.api-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.5rem;overflow:hidden}
+.api-header{padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:background .2s}
+.api-header:hover{background:var(--card-hover)}
+.method{padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:700;color:#fff;min-width:50px;text-align:center;font-family:var(--mono)}
+.method.get{background:var(--green)}
+.method.post{background:var(--accent)}
+.method.put{background:var(--orange)}
+.method.delete{background:var(--red)}
+.api-path{font-family:var(--mono);font-weight:600;font-size:.95rem}
+.api-desc{color:var(--dim);font-size:.85rem;margin-left:auto}
+.api-body{padding:0 1.5rem 1.5rem;display:none}
+.api-body.open{display:block}
+.api-body pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:.82rem;color:var(--dim);line-height:1.6}
+.api-body h4{color:var(--text);margin:1rem 0 .5rem;font-size:.9rem}
+.param-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+.param-table th,.param-table td{padding:.5rem;text-align:left;border-bottom:1px solid var(--border);font-size:.85rem}
+.param-table th{color:var(--dim);font-weight:600}
+.param-table td:first-child{font-family:var(--mono);color:var(--accent)}
+.base-url{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+.base-url code{font-family:var(--mono);color:var(--accent);font-size:1rem}
+.auth-info{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:1.2rem;margin-bottom:2rem;color:var(--dim);font-size:.9rem}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html"><div class="nav-logo-icon">💊</div><span class="nav-logo-text">DrugMind</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="agents.html">Agents</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="api-docs.html" class="active">API</a>
+  </div>
+  <a class="nav-cta" href="pricing.html">Get Started</a>
+</nav>
+
+<section class="api-hero">
+  <h1>API <span>Documentation</span></h1>
+  <p style="color:var(--dim)">RESTful API，支持JSON格式，覆盖药物发现全流程</p>
+</section>
+
+<div class="api-container">
+
+  <div class="base-url">
+    <span style="color:var(--dim)">Base URL:</span>
+    <code>https://api.drugmind.ai/v1</code>
+  </div>
+
+  <div class="auth-info">
+    <strong>认证方式：</strong>所有API请求需在Header中携带 <code style="color:var(--accent)">Authorization: Bearer YOUR_API_KEY</code>。API Key可在控制台获取。
+  </div>
+
+  <!-- Docking -->
+  <div class="api-section">
+    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span class="method post">POST</span>
+      <span class="api-path">/docking/submit</span>
+      <span class="api-desc">提交分子对接任务</span>
+    </div>
+    <div class="api-body">
+      <h4>请求参数</h4>
+      <table class="param-table">
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+        <tr><td>receptor</td><td>string</td><td>受体PDB文件URL或PDB ID</td></tr>
+        <tr><td>ligands</td><td>string[]</td><td>配体SMILES数组</td></tr>
+        <tr><td>engine</td><td>string</td><td>对接引擎: vina / diffdock / gnina</td></tr>
+        <tr><td>center</td><td>float[3]</td><td>对接盒子中心坐标 [x,y,z]</td></tr>
+        <tr><td>size</td><td>float[3]</td><td>对接盒子尺寸 [x,y,z]</td></tr>
+      </table>
+      <h4>示例请求</h4>
+      <pre>{
+  "receptor": "1ABC",
+  "ligands": ["CC(=O)OC1=CC=CC=C1C(=O)O", "CC1=CC=C(C=C1)S(=O)(=O)N"],
+  "engine": "vina",
+  "center": [12.5, 8.3, -4.2],
+  "size": [20, 20, 20]
+}</pre>
+      <h4>响应</h4>
+      <pre>{
+  "task_id": "dock_20260428_001",
+  "status": "submitted",
+  "estimated_time": "15min"
+}</pre>
+    </div>
+  </div>
+
+  <!-- ADMET -->
+  <div class="api-section">
+    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span class="method post">POST</span>
+      <span class="api-path">/admet/predict</span>
+      <span class="api-desc">ADMET性质预测</span>
+    </div>
+    <div class="api-body">
+      <h4>请求参数</h4>
+      <table class="param-table">
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+        <tr><td>smiles</td><td>string[]</td><td>化合物SMILES数组</td></tr>
+        <tr><td>endpoints</td><td>string[]</td><td>预测端点 (可选，默认全部28个)</td></tr>
+      </table>
+      <h4>响应</h4>
+      <pre>{
+  "results": [{
+    "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
+    "predictions": {
+      "herg_inhibition": {"value": 0.12, "risk": "low"},
+      "hepatotoxicity": {"value": 0.34, "risk": "medium"},
+      "solubility": {"value": -2.1, "unit": "logS"},
+      "bioavailability": {"value": 0.78}
+    }
+  }]
+}</pre>
+    </div>
+  </div>
+
+  <!-- Virtual Screening -->
+  <div class="api-section">
+    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span class="method post">POST</span>
+      <span class="api-path">/screening/start</span>
+      <span class="api-desc">启动虚拟筛选</span>
+    </div>
+    <div class="api-body">
+      <h4>请求参数</h4>
+      <table class="param-table">
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+        <tr><td>target</td><td>string</td><td>靶点PDB ID或UniProt ID</td></tr>
+        <tr><td>library</td><td>string</td><td>化合物库: zinc / chembl / custom</td></tr>
+        <tr><td>top_k</td><td>int</td><td>返回Top-K结果 (默认100)</td></tr>
+        <tr><td>filters</td><td>object</td><td>Lipinski/Veber过滤条件</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Knowledge Graph -->
+  <div class="api-section">
+    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span class="method get">GET</span>
+      <span class="api-path">/kg/query</span>
+      <span class="api-desc">知识图谱查询</span>
+    </div>
+    <div class="api-body">
+      <h4>请求参数</h4>
+      <table class="param-table">
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+        <tr><td>entity</td><td>string</td><td>实体名称或ID</td></tr>
+        <tr><td>type</td><td>string</td><td>实体类型: disease/drug/target/gene</td></tr>
+        <tr><td>depth</td><td>int</td><td>关系遍历深度 (1-3)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Task Status -->
+  <div class="api-section">
+    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span class="method get">GET</span>
+      <span class="api-path">/tasks/{task_id}</span>
+      <span class="api-desc">查询任务状态</span>
+    </div>
+    <div class="api-body">
+      <h4>响应</h4>
+      <pre>{
+  "task_id": "dock_20260428_001",
+  "status": "completed",
+  "results_url": "https://api.drugmind.ai/v1/results/dock_20260428_001"
+}</pre>
+    </div>
+  </div>
+
+</div>
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);text-align:center;padding:3rem 2rem;color:var(--dim)">
+  <p>DrugMind — AI Drug Discovery Platform | <a href="https://github.com/MoKangMedical/DrugMind" style="color:var(--accent)">GitHub</a></p>
+  <p style="margin-top:1rem;font-size:.8rem">
+    <a href="https://mokangmedical.github.io/medichat-rd/" style="color:var(--dim);margin:0 .3rem">MediChat-RD</a> |
+    <a href="https://mokangmedical.github.io/voicehealth/" style="color:var(--dim);margin:0 .3rem">VoiceHealth</a> |
+    <a href="https://www.digitalsage.cloud" style="color:var(--dim);margin:0 .3rem">Digital Sage</a> |
+    <a href="https://mokangmedical.github.io/tianyan/" style="color:var(--dim);margin:0 .3rem">天眼</a>
+  </p>
+</footer>
+
+<script>window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agents — DrugMind</title>
+<meta name="description" content="DrugMind 8大AI Agent画像：靶点、分子、ADMET、筛选、优化、文献、报告、合规。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.agents-hero{padding:10rem 2rem 4rem;text-align:center}
+.agents-hero h1{font-size:2.8rem;font-weight:800;margin-bottom:1rem}
+.agents-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.agents-hero p{color:var(--dim);font-size:1.1rem;max-width:600px;margin:0 auto}
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;padding:2rem}
+.agent-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;transition:all .3s}
+.agent-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--glow)}
+.agent-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+.agent-avatar{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.agent-name{font-size:1.2rem;font-weight:700}
+.agent-role{color:var(--accent);font-size:.85rem;font-weight:600}
+.agent-desc{color:var(--dim);font-size:.9rem;margin-bottom:1.2rem;line-height:1.7}
+.agent-skills{display:flex;flex-wrap:wrap;gap:.4rem}
+.skill{background:rgba(6,182,212,.1);color:var(--accent);padding:.2rem .6rem;border-radius:15px;font-size:.75rem;font-weight:600}
+.workflow{max-width:1100px;margin:4rem auto;padding:0 2rem}
+.workflow h2{text-align:center;font-size:2rem;margin-bottom:2rem}
+.workflow-steps{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.wf-step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;text-align:center;min-width:120px;flex:1}
+.wf-step .num{font-size:1.5rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.wf-step .name{font-size:.85rem;font-weight:600;margin-top:.3rem}
+.wf-step .time{font-size:.75rem;color:var(--dim)}
+.wf-arrow{display:flex;align-items:center;color:var(--accent);font-size:1.2rem}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html"><div class="nav-logo-icon">💊</div><span class="nav-logo-text">DrugMind</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="agents.html" class="active">Agents</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="api-docs.html">API</a>
+  </div>
+  <a class="nav-cta" href="pricing.html">Get Started</a>
+</nav>
+
+<section class="agents-hero">
+  <h1>AI <span>Agents</span></h1>
+  <p>8个专业AI Agent，各司其职，协同作战</p>
+</section>
+
+<div class="agents-grid">
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(6,182,212,.15)">🎯</div>
+      <div><div class="agent-name">Target Agent</div><div class="agent-role">靶点发现专家</div></div>
+    </div>
+    <div class="agent-desc">基于知识图谱和多组学数据，自动识别和验证潜在药物靶点。评估靶点可药性和成药概率。</div>
+    <div class="agent-skills"><span class="skill">知识图谱</span><span class="skill">网络药理学</span><span class="skill">靶点验证</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(139,92,246,.15)">🔬</div>
+      <div><div class="agent-name">Molecule Agent</div><div class="agent-role">分子设计专家</div></div>
+    </div>
+    <div class="agent-desc">执行分子对接和分子动力学模拟。设计和优化候选化合物的3D结构和结合模式。</div>
+    <div class="agent-skills"><span class="skill">分子对接</span><span class="skill">MD模拟</span><span class="skill">3D可视化</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(16,185,129,.15)">⚗️</div>
+      <div><div class="agent-name">ADMET Agent</div><div class="agent-role">药代动力学专家</div></div>
+    </div>
+    <div class="agent-desc">预测化合物的吸收、分布、代谢、排泄和毒性。28个ADMET端点全覆盖。</div>
+    <div class="agent-skills"><span class="skill">毒性预测</span><span class="skill">代谢分析</span><span class="skill">hERG</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(245,158,11,.15)">🧪</div>
+      <div><div class="agent-name">Screening Agent</div><div class="agent-role">虚拟筛选专家</div></div>
+    </div>
+    <div class="agent-desc">基于DrugCLIP深度学习模型，从亿级化合物库中快速发现先导化合物。</div>
+    <div class="agent-skills"><span class="skill">DrugCLIP</span><span class="skill">高通量筛选</span><span class="skill">ZINC</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(236,72,153,.15)">💎</div>
+      <div><div class="agent-name">Optimization Agent</div><div class="agent-role">先导化合物优化</div></div>
+    </div>
+    <div class="agent-desc">基于多目标优化算法，同时优化化合物的活性、选择性和ADMET性质。</div>
+    <div class="agent-skills"><span class="skill">多目标优化</span><span class="skill">构效关系</span><span class="skill">成药性</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(239,68,68,.15)">📚</div>
+      <div><div class="agent-name">Literature Agent</div><div class="agent-role">文献挖掘专家</div></div>
+    </div>
+    <div class="agent-desc">自动检索PubMed、专利数据库，提取关键信息，构建证据链和文献综述。</div>
+    <div class="agent-skills"><span class="skill">PubMed</span><span class="skill">专利分析</span><span class="skill">NLP</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(59,130,246,.15)">📊</div>
+      <div><div class="agent-name">Report Agent</div><div class="agent-role">报告生成专家</div></div>
+    </div>
+    <div class="agent-desc">整合各Agent输出，生成结构化的药物发现报告，包括候选化合物排名和推荐。</div>
+    <div class="agent-skills"><span class="skill">报告生成</span><span class="skill">数据可视化</span><span class="skill">排名</span></div>
+  </div>
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:rgba(34,197,94,.15)">🛡️</div>
+      <div><div class="agent-name">Compliance Agent</div><div class="agent-role">合规审计专家</div></div>
+    </div>
+    <div class="agent-desc">确保全流程符合FDA/NMPA法规要求，生成IND申报所需的合规文档。</div>
+    <div class="agent-skills"><span class="skill">FDA</span><span class="skill">NMPA</span><span class="skill">IND申报</span></div>
+  </div>
+</div>
+
+<div class="workflow">
+  <h2>Agent协作流程</h2>
+  <div class="workflow-steps">
+    <div class="wf-step"><div class="num">01</div><div class="name">靶点发现</div><div class="time">~2h</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step"><div class="num">02</div><div class="name">虚拟筛选</div><div class="time">~4h</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step"><div class="num">03</div><div class="name">分子对接</div><div class="time">~6h</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step"><div class="num">04</div><div class="name">ADMET</div><div class="time">~2h</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step"><div class="num">05</div><div class="name">优化</div><div class="time">~4h</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step"><div class="num">06</div><div class="name">报告</div><div class="time">~1h</div></div>
+  </div>
+</div>
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);text-align:center;padding:3rem 2rem;color:var(--dim)">
+  <p>DrugMind — AI Drug Discovery Platform | <a href="https://github.com/MoKangMedical/DrugMind" style="color:var(--accent)">GitHub</a></p>
+  <p style="margin-top:1rem;font-size:.8rem">
+    <a href="https://mokangmedical.github.io/medichat-rd/" style="color:var(--dim);margin:0 .3rem">MediChat-RD</a> |
+    <a href="https://mokangmedical.github.io/voicehealth/" style="color:var(--dim);margin:0 .3rem">VoiceHealth</a> |
+    <a href="https://www.digitalsage.cloud" style="color:var(--dim);margin:0 .3rem">Digital Sage</a> |
+    <a href="https://mokangmedical.github.io/tianyan/" style="color:var(--dim);margin:0 .3rem">天眼</a>
+  </p>
+</footer>
+
+<script>window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});</script>
+</body>
+</html>
