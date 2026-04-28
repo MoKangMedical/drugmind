@@ -3,209 +3,339 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>API Docs — DrugMind</title>
-<meta name="description" content="DrugMind REST API文档：分子对接、ADMET预测、虚拟筛选、知识图谱查询接口。">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<title>API Documentation - DrugMind</title>
+<meta name="description" content="Comprehensive API documentation for DrugMind AI drug discovery platform.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-.api-hero{padding:10rem 2rem 4rem;text-align:center}
-.api-hero h1{font-size:2.8rem;font-weight:800;margin-bottom:1rem}
-.api-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.api-container{max-width:1000px;margin:0 auto;padding:0 2rem 4rem}
-.api-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.5rem;overflow:hidden}
-.api-header{padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:background .2s}
-.api-header:hover{background:var(--card-hover)}
-.method{padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:700;color:#fff;min-width:50px;text-align:center;font-family:var(--mono)}
-.method.get{background:var(--green)}
-.method.post{background:var(--accent)}
-.method.put{background:var(--orange)}
-.method.delete{background:var(--red)}
-.api-path{font-family:var(--mono);font-weight:600;font-size:.95rem}
-.api-desc{color:var(--dim);font-size:.85rem;margin-left:auto}
-.api-body{padding:0 1.5rem 1.5rem;display:none}
-.api-body.open{display:block}
-.api-body pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:.82rem;color:var(--dim);line-height:1.6}
-.api-body h4{color:var(--text);margin:1rem 0 .5rem;font-size:.9rem}
-.param-table{width:100%;border-collapse:collapse;margin:.5rem 0}
-.param-table th,.param-table td{padding:.5rem;text-align:left;border-bottom:1px solid var(--border);font-size:.85rem}
-.param-table th{color:var(--dim);font-weight:600}
-.param-table td:first-child{font-family:var(--mono);color:var(--accent)}
-.base-url{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
-.base-url code{font-family:var(--mono);color:var(--accent);font-size:1rem}
-.auth-info{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:1.2rem;margin-bottom:2rem;color:var(--dim);font-size:.9rem}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c18;--bg2:#0c1124;--card:#111827;--text:#f1f5f9;--dim:#94a3b8;--border:#1e293b;--indigo:#6366f1;--cyan:#06b6d4;--green:#10b981;--amber:#f59e0b;--red:#ef4444}
+body{background:var(--bg);color:var(--dim);font-family:'Inter',-apple-system,sans-serif;line-height:1.6}
+a{color:var(--indigo);text-decoration:none}
+code{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:var(--bg2);padding:.2rem .4rem;border-radius:4px;color:var(--cyan)}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,12,24,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(30,41,59,.5);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-weight:800;font-size:1.2rem;color:var(--text)}
+.nav-links{display:flex;gap:.3rem}
+.nav-links a{padding:.4rem .9rem;border-radius:8px;font-size:.83rem;font-weight:500;color:var(--dim);transition:all .25s}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,.04)}
+
+.layout{display:grid;grid-template-columns:250px 1fr;gap:0;padding-top:60px;min-height:100vh}
+
+/* Sidebar */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.sidebar h3{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.05em}
+.sidebar-nav{display:flex;flex-direction:column;gap:.3rem}
+.sidebar-link{padding:.5rem .8rem;border-radius:8px;font-size:.85rem;color:var(--dim);transition:all .2s;cursor:pointer}
+.sidebar-link:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.sidebar-link.active{background:rgba(99,102,241,.1);color:var(--indigo)}
+.sidebar-section{margin-bottom:1.5rem}
+
+/* Main Content */
+.main{padding:2rem;max-width:900px}
+.main h1{font-size:2.2rem;font-weight:900;color:var(--text);margin-bottom:1rem}
+.main h2{font-size:1.5rem;font-weight:800;color:var(--text);margin:2rem 0 1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.main h3{font-size:1.2rem;font-weight:700;color:var(--text);margin:1.5rem 0 .8rem}
+.main p{margin-bottom:1rem}
+
+/* Code Block */
+.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:1.6;color:var(--text)}
+.code-block .comment{color:var(--dim)}
+.code-block .keyword{color:var(--indigo)}
+.code-block .string{color:var(--green)}
+.code-block .number{color:var(--amber)}
+
+/* Endpoint */
+.endpoint{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.5rem 0}
+.endpoint-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.method{padding:.3rem .8rem;border-radius:6px;font-size:.8rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.method-get{background:rgba(16,185,129,.1);color:var(--green)}
+.method-post{background:rgba(99,102,241,.1);color:var(--indigo)}
+.method-put{background:rgba(245,158,11,.1);color:var(--amber)}
+.method-delete{background:rgba(239,68,68,.1);color:var(--red)}
+.endpoint-path{font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text)}
+.endpoint-desc{color:var(--dim);font-size:.9rem;margin-bottom:1rem}
+
+/* Parameters */
+.params-table{width:100%;border-collapse:collapse;margin:1rem 0}
+.params-table th{text-align:left;padding:.6rem .8rem;font-size:.8rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border)}
+.params-table td{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.03);font-size:.85rem}
+.params-table .param-name{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-weight:600}
+.params-table .param-type{font-size:.8rem;color:var(--dim)}
+.params-table .param-required{font-size:.75rem;padding:.2rem .4rem;border-radius:4px;background:rgba(239,68,68,.1);color:var(--red)}
+.params-table .param-optional{font-size:.75rem;padding:.2rem .4rem;border-radius:4px;background:rgba(148,163,184,.1);color:var(--dim)}
+
+/* Response */
+.response-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+.response-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.status-code{font-family:'JetBrains Mono',monospace;font-weight:700}
+.status-200{color:var(--green)}
+.status-400{color:var(--amber)}
+.status-401{color:var(--red)}
+.status-404{color:var(--red)}
+
+/* Try It */
+.try-it{background:linear-gradient(135deg,rgba(99,102,241,.05),rgba(6,182,212,.05));border:1px solid var(--indigo);border-radius:14px;padding:1.5rem;margin:1.5rem 0}
+.try-it h4{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem}
+.try-form{display:flex;gap:1rem;align-items:end}
+.try-input{flex:1}
+.try-input label{display:block;font-size:.8rem;color:var(--dim);margin-bottom:.3rem}
+.try-input input,.try-input select{width:100%;padding:.6rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;font-size:.85rem}
+.try-btn{padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;background:var(--indigo);color:#fff;transition:all .2s}
+.try-btn:hover{background:var(--indigo)}
+.try-result{margin-top:1rem;background:var(--bg2);border-radius:8px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;max-height:200px;overflow-y:auto;color:var(--text)}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
 </style>
 </head>
-<body style="padding-top:56px!important" style="padding-top:56px!important"><nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
-  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
-    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng1)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
-    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">MoKangMedical</span>
-  </a>
-  <div style="display:flex;gap:6px;align-items:center">
-    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">生态首页</a>
-    <a href="https://github.com/MoKangMedical" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
-    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
-  </div>
-</nav>
-
-<nav class="nav" id="nav">
-  <a class="nav-logo" href="index.html"><div class="nav-logo-icon">💊</div><span class="nav-logo-text">DrugMind</span></a>
+<body>
+<nav>
+  <div class="nav-brand">DrugMind API</div>
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="features.html">Features</a>
-    <a href="pipeline.html">Pipeline</a>
-    <a href="agents.html">Agents</a>
+    <a href="explorer.html">Explorer</a>
     <a href="pricing.html">Pricing</a>
     <a href="api-docs.html" class="active">API</a>
   </div>
-  <a class="nav-cta" href="pricing.html">Get Started</a>
 </nav>
 
-<section class="api-hero">
-  <h1>API <span>Documentation</span></h1>
-  <p style="color:var(--dim)">RESTful API，支持JSON格式，覆盖药物发现全流程</p>
-</section>
-
-<div class="api-container">
-
-  <div class="base-url">
-    <span style="color:var(--dim)">Base URL:</span>
-    <code>https://api.drugmind.ai/v1</code>
-  </div>
-
-  <div class="auth-info">
-    <strong>认证方式：</strong>所有API请求需在Header中携带 <code style="color:var(--accent)">Authorization: Bearer YOUR_API_KEY</code>。API Key可在控制台获取。
-  </div>
-
-  <!-- Docking -->
-  <div class="api-section">
-    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span class="method post">POST</span>
-      <span class="api-path">/docking/submit</span>
-      <span class="api-desc">提交分子对接任务</span>
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Getting Started</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link active" href="#introduction">Introduction</a>
+        <a class="sidebar-link" href="#authentication">Authentication</a>
+        <a class="sidebar-link" href="#rate-limits">Rate Limits</a>
+      </div>
     </div>
-    <div class="api-body">
-      <h4>请求参数</h4>
-      <table class="param-table">
-        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
-        <tr><td>receptor</td><td>string</td><td>受体PDB文件URL或PDB ID</td></tr>
-        <tr><td>ligands</td><td>string[]</td><td>配体SMILES数组</td></tr>
-        <tr><td>engine</td><td>string</td><td>对接引擎: vina / diffdock / gnina</td></tr>
-        <tr><td>center</td><td>float[3]</td><td>对接盒子中心坐标 [x,y,z]</td></tr>
-        <tr><td>size</td><td>float[3]</td><td>对接盒子尺寸 [x,y,z]</td></tr>
+    <div class="sidebar-section">
+      <h3>Molecular</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link" href="#search">Search Molecules</a>
+        <a class="sidebar-link" href="#properties">Get Properties</a>
+        <a class="sidebar-link" href="#predict">Predict ADMET</a>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Screening</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link" href="#virtual-screen">Virtual Screen</a>
+        <a class="sidebar-link" href="#docking">Molecular Docking</a>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Agents</h3>
+      <div class="sidebar-nav">
+        <a class="sidebar-link" href="#agents-list">List Agents</a>
+        <a class="sidebar-link" href="#agent-run">Run Agent</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <h1>DrugMind API Documentation</h1>
+    <p>Welcome to the DrugMind API. This documentation covers all available endpoints for molecular analysis, virtual screening, and AI agent interactions.</p>
+
+    <div class="code-block">
+      <pre><span class="comment"># Base URL</span>
+https://api.drugmind.ai/v1
+
+<span class="comment"># Example: Search for molecules</span>
+curl -X GET <span class="string">"https://api.drugmind.ai/v1/molecules/search?q=aspirin"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></pre>
+    </div>
+
+    <h2 id="authentication">Authentication</h2>
+    <p>All API requests require an API key passed in the Authorization header:</p>
+    <div class="code-block">
+      <pre>Authorization: Bearer YOUR_API_KEY</pre>
+    </div>
+
+    <h2 id="rate-limits">Rate Limits</h2>
+    <p>API rate limits vary by plan:</p>
+    <table class="params-table">
+      <thead><tr><th>Plan</th><th>Requests/min</th><th>Requests/day</th></tr></thead>
+      <tbody>
+        <tr><td>Free</td><td>10</td><td>1,000</td></tr>
+        <tr><td>Pro</td><td>100</td><td>50,000</td></tr>
+        <tr><td>Enterprise</td><td>Unlimited</td><td>Unlimited</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="search">Search Molecules</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/molecules/search</span>
+      </div>
+      <div class="endpoint-desc">Search for molecules by name, SMILES, or structural similarity.</div>
+      <h4>Parameters</h4>
+      <table class="params-table">
+        <thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="param-name">q</td><td class="param-type">string</td><td><span class="param-required">Required</span></td><td>Search query (name, SMILES, or InChI)</td></tr>
+          <tr><td class="param-name">limit</td><td class="param-type">integer</td><td><span class="param-optional">Optional</span></td><td>Max results (default: 20, max: 100)</td></tr>
+          <tr><td class="param-name">similarity</td><td class="param-type">float</td><td><span class="param-optional">Optional</span></td><td>Similarity threshold (0.0-1.0)</td></tr>
+        </tbody>
       </table>
-      <h4>示例请求</h4>
-      <pre>{
-  "receptor": "1ABC",
-  "ligands": ["CC(=O)OC1=CC=CC=C1C(=O)O", "CC1=CC=C(C=C1)S(=O)(=O)N"],
-  "engine": "vina",
-  "center": [12.5, 8.3, -4.2],
-  "size": [20, 20, 20]
-}</pre>
-      <h4>响应</h4>
-      <pre>{
-  "task_id": "dock_20260428_001",
-  "status": "submitted",
-  "estimated_time": "15min"
-}</pre>
-    </div>
-  </div>
-
-  <!-- ADMET -->
-  <div class="api-section">
-    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span class="method post">POST</span>
-      <span class="api-path">/admet/predict</span>
-      <span class="api-desc">ADMET性质预测</span>
-    </div>
-    <div class="api-body">
-      <h4>请求参数</h4>
-      <table class="param-table">
-        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
-        <tr><td>smiles</td><td>string[]</td><td>化合物SMILES数组</td></tr>
-        <tr><td>endpoints</td><td>string[]</td><td>预测端点 (可选，默认全部28个)</td></tr>
-      </table>
-      <h4>响应</h4>
-      <pre>{
-  "results": [{
-    "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
-    "predictions": {
-      "herg_inhibition": {"value": 0.12, "risk": "low"},
-      "hepatotoxicity": {"value": 0.34, "risk": "medium"},
-      "solubility": {"value": -2.1, "unit": "logS"},
-      "bioavailability": {"value": 0.78}
+      <h4>Response</h4>
+      <div class="response-block">
+        <div class="response-header"><span class="status-code status-200">200</span> OK</div>
+        <div class="code-block"><pre>{
+  <span class="string">"results"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="string">"mol_001"</span>,
+      <span class="string">"name"</span>: <span class="string">"Aspirin"</span>,
+      <span class="string">"smiles"</span>: <span class="string">"CC(=O)OC1=CC=CC=C1C(=O)O"</span>,
+      <span class="string">"mw"</span>: <span class="number">180.16</span>,
+      <span class="string">"logp"</span>: <span class="number">1.2</span>
     }
-  }]
-}</pre>
+  ],
+  <span class="string">"total"</span>: <span class="number">1</span>
+}</pre></div>
+      </div>
+    </div>
+
+    <div class="try-it">
+      <h4>Try It Out</h4>
+      <div class="try-form">
+        <div class="try-input">
+          <label>Search Query</label>
+          <input type="text" id="searchQuery" value="aspirin" placeholder="Enter molecule name or SMILES">
+        </div>
+        <button class="try-btn" onclick="trySearch()">Send</button>
+      </div>
+      <div class="try-result" id="searchResult" style="display:none"></div>
+    </div>
+
+    <h2 id="properties">Get Molecular Properties</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/molecules/{id}/properties</span>
+      </div>
+      <div class="endpoint-desc">Get detailed molecular properties including ADMET predictions.</div>
+      <h4>Response</h4>
+      <div class="response-block">
+        <div class="response-header"><span class="status-code status-200">200</span> OK</div>
+        <div class="code-block"><pre>{
+  <span class="string">"molecular_weight"</span>: <span class="number">180.16</span>,
+  <span class="string">"logp"</span>: <span class="number">1.2</span>,
+  <span class="string">"hba"</span>: <span class="number">4</span>,
+  <span class="string">"hbd"</span>: <span class="number">1</span>,
+  <span class="string">"psa"</span>: <span class="number">63.6</span>,
+  <span class="string">"admet"</span>: {
+    <span class="string">"absorption"</span>: <span class="number">0.95</span>,
+    <span class="string">"distribution"</span>: <span class="number">0.85</span>,
+    <span class="string">"metabolism"</span>: <span class="number">0.70</span>,
+    <span class="string">"excretion"</span>: <span class="number">0.80</span>,
+    <span class="string">"toxicity_risk"</span>: <span class="number">0.15</span>
+  }
+}</pre></div>
+      </div>
+    </div>
+
+    <h2 id="predict">Predict ADMET</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/predict/admet</span>
+      </div>
+      <div class="endpoint-desc">Run ADMET prediction on a molecule using our AI models.</div>
+      <h4>Request Body</h4>
+      <div class="code-block"><pre>{
+  <span class="string">"smiles"</span>: <span class="string">"CC(=O)OC1=CC=CC=C1C(=O)O"</span>,
+  <span class="string">"model"</span>: <span class="string">"admet-v2"</span>
+}</pre></div>
+    </div>
+
+    <h2 id="virtual-screen">Virtual Screening</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/screen/virtual</span>
+      </div>
+      <div class="endpoint-desc">Run virtual screening against a target protein using DrugCLIP model.</div>
+      <h4>Request Body</h4>
+      <div class="code-block"><pre>{
+  <span class="string">"target_pdb"</span>: <span class="string">"1ABC"</span>,
+  <span class="string">"library"</span>: <span class="string">"chembl"</span>,
+  <span class="string">"num_results"</span>: <span class="number">100</span>,
+  <span class="string">"min_score"</span>: <span class="number">0.7</span>
+}</pre></div>
+    </div>
+
+    <h2 id="docking">Molecular Docking</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/dock/molecular</span>
+      </div>
+      <div class="endpoint-desc">Perform molecular docking simulation using AutoDock Vina.</div>
+    </div>
+
+    <h2 id="agents-list">List Agents</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/agents</span>
+      </div>
+      <div class="endpoint-desc">List all available AI agents and their capabilities.</div>
+      <h4>Response</h4>
+      <div class="response-block">
+        <div class="response-header"><span class="status-code status-200">200</span> OK</div>
+        <div class="code-block"><pre>{
+  <span class="string">"agents"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="string">"agent_001"</span>,
+      <span class="string">"name"</span>: <span class="string">"MolDesigner"</span>,
+      <span class="string">"role"</span>: <span class="string">"Molecular Design"</span>,
+      <span class="string">"status"</span>: <span class="string">"active"</span>
+    }
+  ]
+}</pre></div>
+      </div>
+    </div>
+
+    <h2 id="agent-run">Run Agent</h2>
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/agents/{id}/run</span>
+      </div>
+      <div class="endpoint-desc">Execute an AI agent task with specified parameters.</div>
+      <h4>Request Body</h4>
+      <div class="code-block"><pre>{
+  <span class="string">"task"</span>: <span class="string">"Analyze binding pocket for PDB 1ABC"</span>,
+  <span class="string">"parameters"</span>: {
+    <span class="string">"depth"</span>: <span class="string">"detailed"</span>,
+    <span class="string">"include_3d"</span>: <span class="keyword">true</span>
+  }
+}</pre></div>
     </div>
   </div>
-
-  <!-- Virtual Screening -->
-  <div class="api-section">
-    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span class="method post">POST</span>
-      <span class="api-path">/screening/start</span>
-      <span class="api-desc">启动虚拟筛选</span>
-    </div>
-    <div class="api-body">
-      <h4>请求参数</h4>
-      <table class="param-table">
-        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
-        <tr><td>target</td><td>string</td><td>靶点PDB ID或UniProt ID</td></tr>
-        <tr><td>library</td><td>string</td><td>化合物库: zinc / chembl / custom</td></tr>
-        <tr><td>top_k</td><td>int</td><td>返回Top-K结果 (默认100)</td></tr>
-        <tr><td>filters</td><td>object</td><td>Lipinski/Veber过滤条件</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- Knowledge Graph -->
-  <div class="api-section">
-    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span class="method get">GET</span>
-      <span class="api-path">/kg/query</span>
-      <span class="api-desc">知识图谱查询</span>
-    </div>
-    <div class="api-body">
-      <h4>请求参数</h4>
-      <table class="param-table">
-        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
-        <tr><td>entity</td><td>string</td><td>实体名称或ID</td></tr>
-        <tr><td>type</td><td>string</td><td>实体类型: disease/drug/target/gene</td></tr>
-        <tr><td>depth</td><td>int</td><td>关系遍历深度 (1-3)</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- Task Status -->
-  <div class="api-section">
-    <div class="api-header" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span class="method get">GET</span>
-      <span class="api-path">/tasks/{task_id}</span>
-      <span class="api-desc">查询任务状态</span>
-    </div>
-    <div class="api-body">
-      <h4>响应</h4>
-      <pre>{
-  "task_id": "dock_20260428_001",
-  "status": "completed",
-  "results_url": "https://api.drugmind.ai/v1/results/dock_20260428_001"
-}</pre>
-    </div>
-  </div>
-
 </div>
 
-<footer style="background:var(--bg2);border-top:1px solid var(--border);text-align:center;padding:3rem 2rem;color:var(--dim)">
-  <p>DrugMind — AI Drug Discovery Platform | <a href="https://github.com/MoKangMedical/DrugMind" style="color:var(--accent)">GitHub</a></p>
-  <p style="margin-top:1rem;font-size:.8rem">
-    <a href="https://mokangmedical.github.io/medichat-rd/" style="color:var(--dim);margin:0 .3rem">MediChat-RD</a> |
-    <a href="https://mokangmedical.github.io/voicehealth/" style="color:var(--dim);margin:0 .3rem">VoiceHealth</a> |
-    <a href="https://www.digitalsage.cloud" style="color:var(--dim);margin:0 .3rem">Digital Sage</a> |
-    <a href="https://mokangmedical.github.io/tianyan/" style="color:var(--dim);margin:0 .3rem">天眼</a>
-  </p>
-</footer>
-
-<script>window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});</script>
+<script>
+function trySearch() {
+  const query = document.getElementById('searchQuery').value;
+  const result = document.getElementById('searchResult');
+  result.style.display = 'block';
+  result.innerHTML = '<span style="color:var(--dim)">Loading...</span>';
+  
+  setTimeout(() => {
+    result.innerHTML = JSON.stringify({
+      results: [
+        { id: 'mol_001', name: 'Aspirin', smiles: 'CC(=O)OC1=CC=CC=C1C(=O)O', mw: 180.16, logp: 1.2 },
+        { id: 'mol_002', name: 'Ibuprofen', smiles: 'CC(C)CC1=CC=C(C=C1)C(C)C(=O)O', mw: 206.28, logp: 3.97 }
+      ],
+      total: 2,
+      query: query
+    }, null, 2);
+  }, 500);
+}
+</script>
 </body>
 </html>

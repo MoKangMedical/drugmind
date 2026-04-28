@@ -194,5 +194,57 @@
         .stat-label{font-size:1rem;color:rgba(255,255,255,0.85);font-weight:500;}
         @media(max-width:768px){.stat-value{font-size:1.8rem;}}
     </style>
+<script>
+// Scroll reveal animation
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .card, .pricing-card, .stat-card, [class*="feature"], [class*="card"]').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+    observer.observe(el);
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+
+// Navbar background on scroll
+const nav = document.querySelector('nav, .nav, .navbar, header');
+if (nav) {
+    window.addEventListener('scroll', () => {
+        nav.style.background = window.scrollY > 50 ? 'rgba(10,10,15,0.98)' : 'rgba(10,10,15,0.85)';
+    });
+}
+
+// Counter animation for stats
+document.querySelectorAll('[data-count], .stat-number, .counter').forEach(el => {
+    const target = parseInt(el.dataset.count || el.textContent);
+    if (isNaN(target)) return;
+    let current = 0;
+    const increment = target / 60;
+    const suffix = el.dataset.suffix || '';
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = Math.floor(current).toLocaleString() + suffix;
+    }, 25);
+});
+
+console.log('MoKangMedical interactive features loaded');
+</script>
 </body>
 </html>
