@@ -3,123 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>研发流程 — DrugMind</title>
-<meta name="description" content="DrugMind药物研发数字孪生：交互式5段Pipeline流程可视化。">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Drug Pipeline — DrugMind AI Drug Discovery</title>
+<meta name="description" content="DrugMind AI驱动的药物研发全流程Pipeline，从靶点发现到IND申报的智能化工作流。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <style>
-:root{--bg:#06080d;--card:#0f141c;--border:#1e2736;--text:#e8edf5;--text2:#8896b0;--accent:#3b82f6;--green:#10b981;--purple:#8b5cf6;--gold:#f59e0b;--radius:14px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
-.nav{background:rgba(6,8,13,0.95);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-brand{display:flex;align-items:center;gap:10px;font-weight:700}
-.nav-links{display:flex;gap:24px}
-.nav-links a{color:var(--text2);font-size:13px;text-decoration:none;transition:color 0.2s}
-.nav-links a:hover{color:var(--accent)}
-.hero{padding:100px 0 40px;text-align:center}
-.hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:900;margin-bottom:8px}
-.hero p{color:var(--text2);font-size:1.1rem;max-width:600px;margin:0 auto}
-.pipeline{display:flex;gap:0;margin:40px 0;overflow-x:auto;padding:20px 0}
-.pipe-step{flex:1;min-width:180px;position:relative;cursor:pointer;transition:all 0.3s}
-.pipe-step:hover .pipe-card{border-color:var(--accent);transform:translateY(-4px)}
-.pipe-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center;transition:all 0.3s}
-.pipe-num{width:36px;height:36px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin:0 auto 12px}
-.pipe-card h3{font-size:14px;font-weight:700;margin-bottom:6px}
-.pipe-card p{font-size:12px;color:var(--text2)}
-.pipe-connector{width:40px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:20px;flex-shrink:0}
-.detail-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:20px 0;display:none}
-.detail-panel.active{display:block;animation:fadeIn 0.3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.detail-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
-.detail-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
-.detail-header h2{font-size:1.3rem;font-weight:800}
-.detail-header p{color:var(--text2);font-size:14px}
-.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:20px 0}
-.detail-item{background:var(--bg);border-radius:10px;padding:16px}
-.detail-item h4{font-size:13px;font-weight:700;margin-bottom:8px}
-.detail-item p{font-size:13px;color:var(--text2)}
-.agents{margin:20px 0}
-.agent-card{display:flex;gap:16px;padding:16px;background:var(--bg);border-radius:10px;margin-bottom:12px;align-items:center}
-.agent-avatar{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.agent-info h4{font-size:14px;font-weight:700}
-.agent-info p{font-size:12px;color:var(--text2)}
-.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
-.metric{background:var(--bg);border-radius:10px;padding:14px;text-align:center}
-.metric .val{font-size:1.3rem;font-weight:900}
-.metric .label{font-size:11px;color:var(--text2)}
-@media(max-width:768px){.pipeline{flex-direction:column;align-items:center}.pipe-connector{transform:rotate(90deg)}.metrics-row{grid-template-columns:repeat(2,1fr)}}
+.pipeline-hero{padding:140px 2rem 60px;text-align:center;background:linear-gradient(180deg,rgba(6,182,212,0.05),transparent)}
+.pipeline-hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin-bottom:1rem}
+.pipeline-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pipeline-hero p{color:var(--dim);font-size:1.15rem;max-width:600px;margin:0 auto}
+.phase-section{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+.phase-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gradient)}
+.phase-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.phase-num{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff}
+.phase-num.cyan{background:rgba(6,182,212,0.2);color:var(--accent)}
+.phase-num.purple{background:rgba(139,92,246,0.2);color:var(--purple)}
+.phase-num.green{background:rgba(16,185,129,0.2);color:var(--green)}
+.phase-num.orange{background:rgba(245,158,11,0.2);color:var(--orange)}
+.phase-title h2{font-size:1.5rem;font-weight:700;color:var(--text)}
+.phase-title p{color:var(--dim);font-size:0.9rem}
+.phase-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.step-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:all 0.3s}
+.step-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--glow)}
+.step-icon{font-size:2rem;margin-bottom:0.8rem}
+.step-card h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text)}
+.step-card p{color:var(--dim);font-size:0.85rem;line-height:1.6}
+.step-tools{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.8rem}
+.tool-tag{background:rgba(6,182,212,0.1);color:var(--accent);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.75rem;font-weight:500}
+.timeline-bar{max-width:1200px;margin:0 auto;padding:0 2rem 3rem}
+.timeline-visual{display:flex;align-items:center;gap:0;justify-content:center;flex-wrap:wrap}
+.timeline-node{display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1rem}
+.timeline-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:2px solid var(--accent);background:var(--card)}
+.timeline-label{font-size:0.75rem;color:var(--dim);text-align:center}
+.timeline-line{width:40px;height:2px;background:var(--border)}
+.cta-section{text-align:center;padding:4rem 2rem;background:var(--bg2)}
+.cta-section h2{font-size:2rem;font-weight:700;margin-bottom:1rem}
+.cta-section p{color:var(--dim);margin-bottom:2rem}
+.nav-links a[href="pipeline.html"]{color:var(--accent)!important}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner">
-<a href="index.html" class="nav-brand">💊 DrugMind</a>
-<div class="nav-links"><a href="index.html">首页</a><a href="pricing.html">定价</a><a href="https://github.com/MoKangMedical/drugmind">GitHub</a></div>
-</div></nav>
 
-<div class="container">
-<div class="hero">
-<h1>药物研发数字孪生</h1>
-<p>点击每个阶段查看详细流程、AI Agent和关键指标</p>
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">💊</div>
+    <span class="nav-logo-text">DrugMind</span>
+    <span class="nav-logo-badge">AI Platform</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#features">Features</a>
+    <a href="pipeline.html" class="active">Pipeline</a>
+    <a href="api-docs.html">API</a>
+    <a href="index.html#pricing">Pricing</a>
+  </div>
+  <a class="nav-cta" href="index.html#pricing">Get Started</a>
+</nav>
+
+<section class="pipeline-hero">
+  <h1>AI-Driven <span>Drug Pipeline</span></h1>
+  <p>从靶点发现到IND申报，8个AI Agent覆盖药物研发全生命周期。每个阶段都有专业Agent协作，将传统4-6年周期缩短至18-24个月。</p>
+</section>
+
+<!-- Timeline -->
+<div class="timeline-bar">
+  <div class="timeline-visual">
+    <div class="timeline-node"><div class="timeline-dot">🎯</div><div class="timeline-label">Target<br>Discovery</div></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-node"><div class="timeline-dot">🔬</div><div class="timeline-label">Hit<br>Identification</div></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-node"><div class="timeline-dot">⚗️</div><div class="timeline-label">Lead<br>Optimization</div></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-node"><div class="timeline-dot">🧪</div><div class="timeline-label">Preclinical</div></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-node"><div class="timeline-dot">📋</div><div class="timeline-label">IND<br>Filing</div></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-node"><div class="timeline-dot">🏥</div><div class="timeline-label">Clinical<br>Trials</div></div>
+  </div>
 </div>
 
-<div class="pipeline">
-<div class="pipe-step" onclick="showDetail(0)"><div class="pipe-card"><div class="pipe-num">1</div><h3>靶点发现</h3><p>基因组学+文献挖掘</p></div></div>
-<div class="pipe-connector">→</div>
-<div class="pipe-step" onclick="showDetail(1)"><div class="pipe-card"><div class="pipe-num">2</div><h3>先导化合物</h3><p>虚拟筛选+分子生成</p></div></div>
-<div class="pipe-connector">→</div>
-<div class="pipe-step" onclick="showDetail(2)"><div class="pipe-card"><div class="pipe-num">3</div><h3>ADMET优化</h3><p>性质预测+多目标优化</p></div></div>
-<div class="pipe-connector">→</div>
-<div class="pipe-step" onclick="showDetail(3)"><div class="pipe-card"><div class="pipe-num">4</div><h3>临床前研究</h3><p>毒性预测+PK/PD建模</p></div></div>
-<div class="pipe-connector">→</div>
-<div class="pipe-step" onclick="showDetail(4)"><div class="pipe-card"><div class="pipe-num">5</div><h3>临床设计</h3><p>试验方案+患者分层</p></div></div>
+<!-- Phase 1 -->
+<div class="phase-section">
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-num cyan">1</div>
+      <div class="phase-title">
+        <h2>靶点发现与验证 Target Discovery</h2>
+        <p>AI驱动的靶点挖掘，从海量文献和多组学数据中识别高价值靶点</p>
+      </div>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="step-icon">📚</div>
+        <h3>文献挖掘 Literature Mining</h3>
+        <p>NLP引擎每日扫描PubMed、ClinicalTrials.gov等20+数据库，自动提取基因-疾病-药物三元组关系，构建实时更新的知识图谱。</p>
+        <div class="step-tools"><span class="tool-tag">BioBERT</span><span class="tool-tag">PubMed API</span><span class="tool-tag">NER</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🧬</div>
+        <h3>多组学整合 Multi-Omics</h3>
+        <p>整合基因组、转录组、蛋白质组、代谢组数据，通过图神经网络识别疾病核心通路和潜在干预靶点。</p>
+        <div class="step-tools"><span class="tool-tag">GNN</span><span class="tool-tag">TCGA</span><span class="tool-tag">GTEx</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">✅</div>
+        <h3>可药性评估 Druggability</h3>
+        <p>基于AlphaFold2结构预测和Pocket检测算法，评估靶点蛋白的可药性，预测小分子/抗体/PROTAC等不同modality的可行性。</p>
+        <div class="step-tools"><span class="tool-tag">AlphaFold2</span><span class="tool-tag">fpocket</span><span class="tool-tag">PDB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-num purple">2</div>
+      <div class="phase-title">
+        <h2>先导化合物发现 Hit Identification</h2>
+        <p>从百万级化合物库中快速筛选苗头化合物</p>
+      </div>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="step-icon">🔍</div>
+        <h3>虚拟筛选 Virtual Screening</h3>
+        <p>结合基于结构(SBVS)和基于配体(LBVS)的双重筛选策略。DrugCLIP深度学习模型实现百万级化合物的快速初筛，日处理量100万+。</p>
+        <div class="step-tools"><span class="tool-tag">DrugCLIP</span><span class="tool-tag">AutoDock Vina</span><span class="tool-tag">RDKit</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🤖</div>
+        <h3>AI分子生成 De Novo Design</h3>
+        <p>基于Transformer和扩散模型的分子生成引擎，在满足多目标约束(活性、成药性、合成可行性)的前提下设计全新分子结构。</p>
+        <div class="step-tools"><span class="tool-tag">REINVENT</span><span class="tool-tag">Diffusion</span><span class="tool-tag">SMILES</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🎯</div>
+        <h3>分子对接 Molecular Docking</h3>
+        <p>自研Glide-Style对接引擎+深度学习评分函数，精确预测蛋白-配体结合模式和结合自由能。支持柔性对接和共价对接。</p>
+        <div class="step-tools"><span class="tool-tag">Vina-GPU</span><span class="tool-tag">GNINA</span><span class="tool-tag">PyMOL</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-num green">3</div>
+      <div class="phase-title">
+        <h2>先导化合物优化 Lead Optimization</h2>
+        <p>AI指导的多轮迭代优化，平衡活性、选择性和成药性</p>
+      </div>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="step-icon">📊</div>
+        <h3>ADMET预测</h3>
+        <p>吸收、分布、代谢、排泄、毒性五维预测。整合200+ADMET数据集训练的集成模型，准确率超过基准模型15%。覆盖hERG、CYP450、Ames等关键终点。</p>
+        <div class="step-tools"><span class="tool-tag">ADMETlab</span><span class="tool-tag">pkCSM</span><span class="tool-tag">SwissADME</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🔄</div>
+        <h3>SAR分析 Structure-Activity</h3>
+        <p>自动化的构效关系分析，识别关键药效团和毒性基团。AI推荐下一步修饰方向，减少试错成本。</p>
+        <div class="step-tools"><span class="tool-tag">Scaffold Analysis</span><span class="tool-tag">Matched Molecular Pairs</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🧪</div>
+        <h3>合成路线规划 Retrosynthesis</h3>
+        <p>AI逆合成分析，自动规划最优合成路线。评估合成可行性(SA Score)和成本，推荐商业化试剂供应商。</p>
+        <div class="step-tools"><span class="tool-tag">ASKCOS</span><span class="tool-tag">Retro*</span><span class="tool-tag">Reaxys</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-num orange">4</div>
+      <div class="phase-title">
+        <h2>临床前研究与IND申报 Preclinical & IND</h2>
+        <p>从体外到体内，从动物到人体的桥接</p>
+      </div>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="step-icon">🐭</div>
+        <h3>毒理预测 Toxicology</h3>
+        <p>AI预测急性毒性、慢性毒性、生殖毒性、遗传毒性等多维毒理终点。整合Tox21/ToxCast数据，降低动物实验风险。</p>
+        <div class="step-tools"><span class="tool-tag">Tox21</span><span class="tool-tag">ProTox</span><span class="tool-tag">DEREK</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">📋</div>
+        <h3>IND文档生成</h3>
+        <p>自动生成IND申报所需的CMC、药理毒理、临床方案等文档。ReguBot Agent确保符合FDA/NMPA法规要求。</p>
+        <div class="step-tools"><span class="tool-tag">eCTD</span><span class="tool-tag">FDA IND</span><span class="tool-tag">NMPA</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🏗️</div>
+        <h3>CMC工艺开发</h3>
+        <p>AI辅助的制剂处方优化、工艺参数设计、稳定性预测。数字孪生模拟放大生产过程，减少工艺开发时间。</p>
+        <div class="step-tools"><span class="tool-tag">QbD</span><span class="tool-tag">PAT</span><span class="tool-tag">Digital Twin</span></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="detail-panel" id="detailPanel"></div>
-</div>
+<!-- CTA -->
+<section class="cta-section">
+  <h2>启动您的AI药物研发之旅</h2>
+  <p>DrugMind已帮助多家药企将研发周期缩短40%，成本降低60%</p>
+  <a class="btn btn-primary" href="index.html#pricing" style="margin-right:1rem">🚀 Start Free Trial</a>
+  <a class="btn btn-secondary" href="api-docs.html">📖 API Documentation</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html"><div class="nav-logo-icon">💊</div><span class="nav-logo-text">DrugMind</span></a>
+      <p>AI驱动的药物研发平台。多Agent协作，加速药物发现。</p>
+    </div>
+    <div><h4>Product</h4><ul class="footer-links"><li><a href="index.html#features">Features</a></li><li><a href="pipeline.html">Pipeline</a></li><li><a href="index.html#pricing">Pricing</a></li></ul></div>
+    <div><h4>Resources</h4><ul class="footer-links"><li><a href="api-docs.html">API Docs</a></li><li><a href="index.html#cases">Case Studies</a></li><li><a href="https://github.com/MoKangMedical/DrugMind">GitHub</a></li></ul></div>
+    <div><h4>Company</h4><ul class="footer-links"><li><a href="https://mokangmedical.github.io/opc-homepage/">OPC Alliance</a></li><li><a href="https://github.com/MoKangMedical">GitHub Org</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 MoKangMedical. DrugMind — AI Drug Discovery Platform.</div>
+</footer>
 
 <script>
-const stages=[
-{title:"靶点发现",icon:"🎯",color:"#3b82f6",desc:"从基因组学数据和海量文献中发现潜在药物靶点",
-tools:[{name:"基因组分析",desc:"GWAS/eQTL数据挖掘，识别疾病相关基因变异"},{name:"文献知识图谱",desc:"PubMed/PMC全文挖掘，构建靶点-疾病关系网络"},{name:"蛋白质交互网络",desc:"STRING/BioGRID数据，识别关键Hub蛋白"},{name:"单细胞表达分析",desc:"scRNA-seq数据，识别细胞类型特异性靶点"}],
-agents:[{name:"GeneMiner",icon:"🧬",role:"基因组数据挖掘Agent"},{name:"LitReader",icon:"📚",role:"文献智能阅读Agent"},{name:"NetAnalyzer",icon:"🕸️",role:"蛋白网络分析Agent"}],
-metrics:[{val:"2,847",label:"候选靶点"},{val:"156",label:"高置信靶点"},{val:"89%",label:"覆盖率"},{val:"3.2s",label:"处理速度"}]},
-{title:"先导化合物发现",icon:"💊",color:"#10b981",desc:"通过虚拟筛选和AI分子生成找到候选药物分子",
-tools:[{name:"DrugCLIP虚拟筛选",desc:"CLIP架构，12数据集基准，95.3% AUC-ROC"},{name:"分子生成模型",desc:"基于Transformer的SMILES生成，约束优化"},{name:"分子对接",desc:"AutoDock Vina/Glide对接打分"},{name:"3D药效团模型",desc:"Pharmacophore-based筛选"}],
-agents:[{name:"ScreenBot",icon:"🔍",role:"高通量筛选Agent"},{name:"MolGenerator",icon:"⚗️",role:"分子设计Agent"},{name:"DockMaster",icon:"🏗️",role:"分子对接Agent"}],
-metrics:[{val:"10M+",label:"化合物库"},{val:"1,247",label:"命中化合物"},{val:"0.847",label:"Spearman ρ"},{val:"12min",label:"筛选时间"}]},
-{title:"ADMET优化",icon:"⚡",color:"#f59e0b",desc:"优化药物分子的吸收、分布、代谢、排泄和毒性性质",
-tools:[{name:"ADMET预测器",desc:"13个ADMET端点，图神经网络架构"},{name:"多目标优化",desc:"Pareto前沿搜索，活性-选择性-ADMET联合优化"},{name:"代谢位点预测",desc:"CYP450代谢位点预测，指导结构修饰"},{name:"溶解度优化",desc:"LogP/LogS预测，指导盐型选择"}],
-agents:[{name:"ADMETPredictor",icon:"📊",role:"性质预测Agent"},{name:"OptiMol",icon:"🔧",role:"分子优化Agent"},{name:"ToxScreen",icon:"🛡️",role:"毒性筛查Agent"}],
-metrics:[{val:"13",label:"ADMET端点"},{val:"0.891",label:"平均AUC"},{val:"85%",label:"优化成功率"},{val:"3轮",label:"平均迭代"}]},
-{title:"临床前研究",icon:"🔬",color:"#8b5cf6",desc:"毒性预测、PK/PD建模、制剂开发",
-tools:[{name:"毒性预测",desc:"hERG/肝毒性/基因毒性多终点预测"},{name:"PK/PD建模",desc:"群体药代动力学建模，剂量-效应关系"},{name:"制剂设计",desc:"纳米制剂/缓释制剂AI辅助设计"},{name:"生物标志物发现",desc:"伴随诊断标志物筛选"}],
-agents:[{name:"ToxPredictor",icon:"☠️",role:"毒性预测Agent"},{name:"PKModeler",icon:"📈",role:"PK/PD建模Agent"},{name:"FormulaBot",icon:"💉",role:"制剂设计Agent"}],
-metrics:[{val:"6",label:"毒性终点"},{val:"92%",label:"预测准确率"},{val:"0.85",label:"R² (PK)"},{val:"4周",label:"传统→1周"}]},
-{title:"临床试验设计",icon:"📋",color:"#ec4899",desc:"临床试验方案设计、患者分层、终点选择",
-tools:[{name:"试验方案设计",desc:"适应性设计/平台试验AI辅助设计"},{name:"患者分层",desc:"基于基因组和临床特征的精准入组"},{name:"终点选择",desc:"替代终点验证，加速审批路径"},{name:"样本量计算",desc:"贝叶斯自适应样本量估计"}],
-agents:[{name:"TrialDesigner",icon:"📋",role:"试验设计Agent"},{name:"PatientStratifier",icon:"👥",role:"患者分层Agent"},{name:"RegulatoryBot",icon:"📜",role:"法规策略Agent"}],
-metrics:[{val:"40%",label:"入组效率提升"},{val:"30%",label:"样本量节省"},{val:"2.5x",label:"成功率提升"},{val:"18月",label:"时间节省"}]}
-];
-
-function showDetail(idx){
-const s=stages[idx];
-const panel=document.getElementById('detailPanel');
-panel.className='detail-panel active';
-panel.innerHTML=`
-<div class="detail-header">
-<div class="detail-icon" style="background:${s.color}22;color:${s.color}">${s.icon}</div>
-<div><h2>Stage ${idx+1}: ${s.title}</h2><p>${s.desc}</p></div>
-</div>
-<div class="metrics-row">${s.metrics.map(m=>`<div class="metric"><div class="val" style="color:${s.color}">${m.val}</div><div class="label">${m.label}</div></div>`).join('')}</div>
-<h3 style="font-size:14px;font-weight:700;margin:20px 0 12px">🛠️ 核心工具</h3>
-<div class="detail-grid">${s.tools.map(t=>`<div class="detail-item"><h4>${t.name}</h4><p>${t.desc}</p></div>`).join('')}</div>
-<h3 style="font-size:14px;font-weight:700;margin:20px 0 12px">🤖 AI Agent</h3>
-<div class="agents">${s.agents.map(a=>`<div class="agent-card"><div class="agent-avatar" style="background:${s.color}22">${a.icon}</div><div class="agent-info"><h4>${a.name}</h4><p>${a.role}</p></div></div>`).join('')}</div>
-`;
-panel.scrollIntoView({behavior:'smooth'});
-}
-showDetail(0);
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
 </script>
 </body>
 </html>

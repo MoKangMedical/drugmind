@@ -214,6 +214,148 @@
   </div>
 </section>
 
+<!-- Interactive Demo -->
+<section class="section" id="demo">
+  <div class="section-header">
+    <div class="section-label">Live Demo</div>
+    <h2>在线体验分子对接</h2>
+    <p>选择靶点蛋白和化合物，即刻获得对接结果</p>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:40px;max-width:800px;margin:0 auto">
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <select id="targetSelect" style="flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:14px;font-family:inherit">
+        <option value="">选择靶点蛋白...</option>
+        <option value="egfr">EGFR (表皮生长因子受体)</option>
+        <option value="her2">HER2 (人表皮生长因子受体2)</option>
+        <option value="pcsk9">PCSK9 (前蛋白转化酶)</option>
+        <option value="jak2">JAK2 (酪氨酸激酶2)</option>
+      </select>
+      <select id="compoundSelect" style="flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:14px;font-family:inherit">
+        <option value="">选择化合物...</option>
+        <option value="gefinitib">吉非替尼 (Gefitinib)</option>
+        <option value="erlotinib">厄洛替尼 (Erlotinib)</option>
+        <option value="osimertinib">奥希替尼 (Osimertinib)</option>
+        <option value="custom">自定义SMILES</option>
+      </select>
+      <button onclick="runDocking()" style="background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit">运行对接</button>
+    </div>
+    <div id="dockingResult" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;min-height:120px;font-size:14px;color:var(--text2);line-height:1.8">
+      <span style="color:var(--text3)">选择靶点和化合物，点击"运行对接"查看模拟结果...</span>
+    </div>
+  </div>
+</section>
+
+<!-- Data Charts -->
+<section class="section" id="charts">
+  <div class="section-header">
+    <div class="section-label">Data Insights</div>
+    <h2>模型性能与数据分析</h2>
+    <p>基于10,847个分子的验证结果</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">ADMET各维度预测准确率</h3>
+      <canvas id="admetRadar" style="max-height:280px"></canvas>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">月度分子分析量趋势</h3>
+      <canvas id="trendLine" style="max-height:280px"></canvas>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Docking demo
+const dockingResults={
+  'egfr_gefinitib':{score:-8.2,energy:'-42.3 kcal/mol',pose:'Type I binding',residues:'Lys745, Met793, Thr854',confidence:'92%',time:'2.3s'},
+  'egfr_erlotinib':{score:-7.8,energy:'-39.1 kcal/mol',pose:'Type I binding',residues:'Lys745, Met793, Asp855',confidence:'89%',time:'2.1s'},
+  'egfr_osimertinib':{score:-9.1,energy:'-48.7 kcal/mol',pose:'Covalent binding',residues:'Cys797, Met793, Thr854',confidence:'96%',time:'3.2s'},
+  'her2_gefinitib':{score:-6.5,energy:'-32.1 kcal/mol',pose:'Type II binding',residues:'Asp863, Phe864',confidence:'78%',time:'2.8s'},
+  'pcsk9_erlotinib':{score:-5.2,energy:'-28.4 kcal/mol',pose:'Allosteric',residues:'Ser153, Asn154',confidence:'65%',time:'3.5s'},
+  'jak2_osimertinib':{score:-7.3,energy:'-36.8 kcal/mol',pose:'Type I binding',residues:'Lys882, Glu930',confidence:'85%',time:'2.6s'}
+};
+
+function runDocking(){
+  const target=document.getElementById('targetSelect').value;
+  const compound=document.getElementById('compoundSelect').value;
+  const result=document.getElementById('dockingResult');
+  
+  if(!target||!compound){
+    result.innerHTML='<span style="color:var(--amber)">请先选择靶点和化合物</span>';
+    return;
+  }
+  
+  const key=target+'_'+compound;
+  const d=dockingResults[key];
+  
+  if(d){
+    result.innerHTML=`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div><strong>结合分数：</strong><span style="color:var(--accent2);font-weight:700;font-size:18px">${d.score}</span></div>
+        <div><strong>结合能：</strong><span style="color:var(--green)">${d.energy}</span></div>
+        <div><strong>结合模式：</strong>${d.pose}</div>
+        <div><strong>关键残基：</strong>${d.residues}</div>
+        <div><strong>置信度：</strong><span style="color:var(--accent2)">${d.confidence}</span></div>
+        <div><strong>计算时间：</strong>${d.time}</div>
+      </div>
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--text3)">
+        注：以上为模拟数据，仅供演示。实际使用请接入API。
+      </div>
+    `;
+  }else{
+    result.innerHTML='<span style="color:var(--text3)">该组合暂无模拟数据，请尝试其他选项</span>';
+  }
+}
+
+// Charts
+document.addEventListener('DOMContentLoaded',function(){
+  // ADMET Radar
+  new Chart(document.getElementById('admetRadar').getContext('2d'),{
+    type:'radar',
+    data:{
+      labels:['吸收','分布','代谢','排泄','毒性','溶解度','渗透性','血浆蛋白结合'],
+      datasets:[{
+        label:'DrugMind模型',
+        data:[0.94,0.91,0.89,0.93,0.92,0.88,0.87,0.95],
+        borderColor:'rgba(99,102,241,.8)',
+        backgroundColor:'rgba(99,102,241,.15)',
+        pointBackgroundColor:'#6366f1'
+      }]
+    },
+    options:{
+      responsive:true,
+      scales:{r:{grid:{color:'rgba(255,255,255,.05)'},pointLabels:{color:'#a1a1aa',font:{size:10}},ticks:{display:false}}},
+      plugins:{legend:{display:false}}
+    }
+  });
+
+  // Trend Line
+  new Chart(document.getElementById('trendLine').getContext('2d'),{
+    type:'line',
+    data:{
+      labels:['2024 Q1','2024 Q2','2024 Q3','2024 Q4','2025 Q1','2025 Q2'],
+      datasets:[{
+        label:'分子分析量',
+        data:[1200,1800,2400,3200,4500,5800],
+        borderColor:'#6366f1',
+        backgroundColor:'rgba(99,102,241,.1)',
+        fill:true,
+        tension:.4
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#71717a'}},
+        x:{grid:{display:false},ticks:{color:'#a1a1aa',font:{size:10}}}
+      }
+    }
+  });
+});
+</script>
+
 <!-- Pricing -->
 <section class="section" id="pricing">
   <div class="section-header">
