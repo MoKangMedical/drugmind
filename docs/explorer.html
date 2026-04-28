@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Molecular Explorer - DrugMind</title>
+<meta name="description" content="Interactive 3D molecular visualization and drug discovery simulation.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c18;--bg2:#0c1124;--card:#111827;--text:#f1f5f9;--dim:#94a3b8;--border:#1e293b;--indigo:#6366f1;--cyan:#06b6d4;--green:#10b981;--amber:#f59e0b;--purple:#a855f7}
+body{background:var(--bg);color:var(--dim);font-family:'Inter',-apple-system,sans-serif;line-height:1.6}
+a{color:var(--indigo);text-decoration:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,12,24,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(30,41,59,.5);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.2rem;color:var(--text)}
+.nav-links{display:flex;gap:.3rem}
+.nav-links a{padding:.4rem .9rem;border-radius:8px;font-size:.83rem;font-weight:500;color:var(--dim);transition:all .25s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav-links a.active{color:var(--indigo);background:rgba(99,102,241,.1)}
+
+.container{padding:80px 2rem 3rem;max-width:1400px;margin:0 auto}
+.hero{text-align:center;padding:2rem 0}
+.hero h1{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--dim);font-size:1.1rem;margin-top:.5rem}
+
+.main-grid{display:grid;grid-template-columns:1fr 350px;gap:1.5rem;margin:2rem 0}
+
+/* Viewer */
+.viewer-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.viewer-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.viewer-header h3{font-size:1rem;font-weight:700;color:var(--text)}
+.viewer-controls{display:flex;gap:.5rem}
+.viewer-btn{padding:.4rem .8rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg2);color:var(--dim);transition:all .2s}
+.viewer-btn:hover{border-color:var(--indigo);color:var(--text)}
+.viewer-btn.active{background:var(--indigo);border-color:var(--indigo);color:#fff}
+#molViewer{width:100%;height:500px;position:relative;background:var(--bg2)}
+
+/* Side Panel */
+.side-panel{display:flex;flex-direction:column;gap:1rem}
+.panel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
+.panel-card h3{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+
+/* Molecule List */
+.mol-list{display:flex;flex-direction:column;gap:.6rem}
+.mol-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.8rem;cursor:pointer;transition:all .2s}
+.mol-item:hover{border-color:var(--indigo)}
+.mol-item.selected{border-color:var(--indigo);background:rgba(99,102,241,.1)}
+.mol-item .name{font-weight:700;color:var(--text);font-size:.9rem}
+.mol-item .formula{font-size:.75rem;color:var(--dim);font-family:monospace}
+.mol-item .props{display:flex;gap:1rem;margin-top:.4rem;font-size:.75rem;color:var(--dim)}
+
+/* Properties */
+.prop-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.prop-item{background:var(--bg2);border-radius:10px;padding:.8rem;text-align:center}
+.prop-value{font-size:1.2rem;font-weight:800;color:var(--text)}
+.prop-label{font-size:.7rem;color:var(--dim);margin-top:.2rem}
+
+/* ADMET */
+.admet-grid{display:flex;flex-direction:column;gap:.6rem}
+.admet-item{display:flex;align-items:center;justify-content:space-between;padding:.6rem;background:var(--bg2);border-radius:8px}
+.admet-name{font-size:.85rem;color:var(--text)}
+.admet-bar{width:80px;height:6px;border-radius:3px;background:var(--border);overflow:hidden}
+.admet-fill{height:100%;border-radius:3px}
+.admet-val{font-size:.8rem;font-weight:600;min-width:40px;text-align:right}
+
+/* Agent Activity */
+.agent-list{display:flex;flex-direction:column;gap:.5rem}
+.agent-item{display:flex;align-items:center;gap:.8rem;padding:.6rem;background:var(--bg2);border-radius:8px}
+.agent-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.agent-info .name{font-size:.85rem;font-weight:600;color:var(--text)}
+.agent-info .task{font-size:.7rem;color:var(--dim)}
+.agent-status{width:8px;height:8px;border-radius:50%;margin-left:auto}
+.agent-status.running{background:var(--green);box-shadow:0 0 8px var(--green)}
+
+/* CTA */
+.cta{text-align:center;padding:2rem 0}
+.cta-btn{padding:14px 36px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,var(--indigo),var(--cyan));color:#fff;box-shadow:0 4px 20px rgba(99,102,241,.3)}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,.5)}
+
+@media(max-width:900px){.main-grid{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body style="padding-top:56px!important"><nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng1)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
+    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">MoKangMedical</span>
+  </a>
+  <div style="display:flex;gap:6px;align-items:center">
+    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">生态首页</a>
+    <a href="https://github.com/MoKangMedical" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
+    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
+  </div>
+</nav>
+<nav>
+  <div class="nav-brand">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#g1)" stroke-width="2.5"/><path d="M10 16l4 4 8-8" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs></svg>
+    DrugMind
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="features.html">Features</a>
+    <a href="agents.html">Agents</a>
+    <a href="explorer.html" class="active">Explorer</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="api-docs.html">API</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <h1>Molecular Explorer</h1>
+    <p>Interactive 3D visualization and AI-powered drug discovery simulation</p>
+  </div>
+
+  <div class="main-grid">
+    <div class="viewer-card">
+      <div class="viewer-header">
+        <h3>3D Molecular Viewer</h3>
+        <div class="viewer-controls">
+          <button class="viewer-btn active" onclick="setStyle('stick')">Stick</button>
+          <button class="viewer-btn" onclick="setStyle('sphere')">Sphere</button>
+          <button class="viewer-btn" onclick="setStyle('cartoon')">Cartoon</button>
+          <button class="viewer-btn" onclick="setStyle('surface')">Surface</button>
+        </div>
+      </div>
+      <div id="molViewer"></div>
+    </div>
+
+    <div class="side-panel">
+      <div class="panel-card">
+        <h3>🧬 Select Molecule</h3>
+        <div class="mol-list" id="molList"></div>
+      </div>
+
+      <div class="panel-card">
+        <h3>📊 Properties</h3>
+        <div class="prop-grid" id="propGrid"></div>
+      </div>
+
+      <div class="panel-card">
+        <h3>🎯 ADMET Profile</h3>
+        <div class="admet-grid" id="admetGrid"></div>
+      </div>
+
+      <div class="panel-card">
+        <h3>🤖 Active Agents</h3>
+        <div class="agent-list" id="agentList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h2 style="font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:1rem">Accelerate Your Drug Discovery</h2>
+    <p style="color:var(--dim);margin-bottom:2rem">Access our full molecular database and AI prediction models</p>
+    <a href="pricing.html" class="cta-btn">Start Free Trial</a>
+  </div>
+</div>
+
+<script>
+const molecules = [
+  { name: 'Aspirin', formula: 'C₉H₈O₄', pdb: 'ASP', mw: 180.16, logp: 1.2, hba: 4, hbd: 1, psa: 63.6, rotb: 3, admet: { absorption: 95, distribution: 85, metabolism: 70, excretion: 80, toxicity: 15 } },
+  { name: 'Ibuprofen', formula: 'C₁₃H₁₈O₂', pdb: 'IBP', mw: 206.28, logp: 3.97, hba: 2, hbd: 1, psa: 37.3, rotb: 4, admet: { absorption: 90, distribution: 92, metabolism: 75, excretion: 85, toxicity: 10 } },
+  { name: 'Metformin', formula: 'C₄H₁₁N₅', pdb: 'MET', mw: 129.16, logp: -1.43, hba: 5, hbd: 4, psa: 90.6, rotb: 2, admet: { absorption: 85, distribution: 60, metabolism: 90, excretion: 95, toxicity: 5 } },
+  { name: 'Omeprazole', formula: 'C₁₇H₁₉N₃O₃S', pdb: 'OMP', mw: 345.42, logp: 2.23, hba: 6, hbd: 1, psa: 98.8, rotb: 6, admet: { absorption: 80, distribution: 88, metabolism: 65, excretion: 70, toxicity: 20 } },
+  { name: 'Atorvastatin', formula: 'C₃₃H₃₅FN₂O₅', pdb: 'ATV', mw: 558.64, logp: 4.06, hba: 5, hbd: 3, psa: 112.9, rotb: 10, admet: { absorption: 70, distribution: 95, metabolism: 60, excretion: 65, toxicity: 25 } }
+];
+
+let selectedMol = 0;
+let viewer = null;
+
+function renderMolList() {
+  document.getElementById('molList').innerHTML = molecules.map((m, i) => `
+    <div class="mol-item ${i === selectedMol ? 'selected' : ''}" onclick="selectMol(${i})">
+      <div class="name">${m.name}</div>
+      <div class="formula">${m.formula}</div>
+      <div class="props"><span>MW: ${m.mw}</span><span>LogP: ${m.logp}</span></div>
+    </div>
+  `).join('');
+}
+
+function renderProps() {
+  const m = molecules[selectedMol];
+  document.getElementById('propGrid').innerHTML = `
+    <div class="prop-item"><div class="prop-value">${m.mw}</div><div class="prop-label">Mol Weight</div></div>
+    <div class="prop-item"><div class="prop-value">${m.logp}</div><div class="prop-label">LogP</div></div>
+    <div class="prop-item"><div class="prop-value">${m.hba}</div><div class="prop-label">H-Bond Acceptors</div></div>
+    <div class="prop-item"><div class="prop-value">${m.hbd}</div><div class="prop-label">H-Bond Donors</div></div>
+    <div class="prop-item"><div class="prop-value">${m.psa}</div><div class="prop-label">PSA (A²)</div></div>
+    <div class="prop-item"><div class="prop-value">${m.rotb}</div><div class="prop-label">Rotatable Bonds</div></div>
+  `;
+}
+
+function renderAdmet() {
+  const admet = molecules[selectedMol].admet;
+  const labels = { absorption: 'Absorption', distribution: 'Distribution', metabolism: 'Metabolism', excretion: 'Excretion', toxicity: 'Toxicity Risk' };
+  document.getElementById('admetGrid').innerHTML = Object.entries(admet).map(([k, v]) => {
+    const color = k === 'toxicity' ? (v < 20 ? '#10b981' : v < 50 ? '#f59e0b' : '#ef4444') : (v > 70 ? '#10b981' : v > 40 ? '#f59e0b' : '#ef4444');
+    const displayVal = k === 'toxicity' ? `${v}%` : `${v}%`;
+    return `
+      <div class="admet-item">
+        <span class="admet-name">${labels[k]}</span>
+        <div class="admet-bar"><div class="admet-fill" style="width:${v}%;background:${color}"></div></div>
+        <span class="admet-val" style="color:${color}">${displayVal}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAgents() {
+  const agents = [
+    { name: 'MolDesigner', task: 'Analyzing binding pockets', icon: '⚛️', color: '#6366f1' },
+    { name: 'ToxPredict', task: 'Running toxicity models', icon: '🛡️', color: '#ef4444' },
+    { name: 'ADMETBot', task: 'Calculating properties', icon: '📊', color: '#06b6d4' },
+    { name: 'TargetBot', task: 'Searching protein DB', icon: '🎯', color: '#10b981' }
+  ];
+  document.getElementById('agentList').innerHTML = agents.map(a => `
+    <div class="agent-item">
+      <div class="agent-icon" style="background:${a.color}22;color:${a.color}">${a.icon}</div>
+      <div class="agent-info"><div class="name">${a.name}</div><div class="task">${a.task}</div></div>
+      <div class="agent-status running"></div>
+    </div>
+  `).join('');
+}
+
+function selectMol(index) {
+  selectedMol = index;
+  renderMolList();
+  renderProps();
+  renderAdmet();
+  loadMol3D();
+}
+
+function loadMol3D() {
+  if (!viewer) {
+    viewer = $3Dmol.createViewer('molViewer', { backgroundColor: '#0c1124' });
+  }
+  viewer.clear();
+  
+  // Generate a simple 3D structure (in real app, would load PDB/SDF)
+  const m = molecules[selectedMol];
+  const atomCount = Math.floor(m.mw / 14);
+  const colors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+  
+  // Create a simple molecule model
+  let model = viewer.addModel('', 'xyz');
+  let xyz = `${atomCount}\nGenerated molecule\n`;
+  
+  for (let i = 0; i < atomCount; i++) {
+    const angle = (i / atomCount) * Math.PI * 2;
+    const radius = 2 + Math.sin(i * 0.5) * 1;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    const z = Math.sin(i * 0.3) * 1.5;
+    const elem = ['C', 'N', 'O', 'S', 'F'][i % 5];
+    xyz += `${elem} ${x.toFixed(3)} ${y.toFixed(3)} ${z.toFixed(3)}\n`;
+  }
+  
+  viewer.addModel(xyz, 'xyz');
+  setStyle('stick');
+  viewer.zoomTo();
+  viewer.render();
+}
+
+function setStyle(type) {
+  document.querySelectorAll('.viewer-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if (!viewer) return;
+  viewer.setStyle({}, {});
+  
+  switch(type) {
+    case 'stick': viewer.setStyle({}, { stick: { radius: 0.15 } }); break;
+    case 'sphere': viewer.setStyle({}, { sphere: { scale: 0.3 } }); break;
+    case 'cartoon': viewer.setStyle({}, { cartoon: { color: 'spectrum' } }); break;
+    case 'surface': viewer.setStyle({}, { stick: {} }); viewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.7, color: 'white' }); break;
+  }
+  viewer.render();
+}
+
+// Init
+renderMolList();
+renderProps();
+renderAdmet();
+renderAgents();
+setTimeout(loadMol3D, 500);
+</script>
+</body>
+</html>
