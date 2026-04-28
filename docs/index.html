@@ -12,6 +12,23 @@
 .result-label{color:var(--text-muted);font-size:0.85rem;margin-top:0.25rem}
 .bar{height:8px;border-radius:4px;background:var(--border);margin-top:0.5rem;overflow:hidden}
 .bar-fill{height:100%;border-radius:4px;background:var(--gradient);transition:width 1s ease}
+/* Responsive improvements */
+@media(max-width:768px){
+.hero{padding:4rem 1.5rem 2rem}
+.hero h1{font-size:2rem}
+.features,.grid{grid-template-columns:1fr}
+.price-cards{grid-template-columns:1fr}
+.stats{gap:1.5rem}
+.nav{padding:0.8rem 1rem}
+.nav div{gap:0.3rem}
+.nav a{margin:0 0.4rem;font-size:0.8rem}
+.container{padding:1rem}
+}
+@media(max-width:480px){
+.hero h1{font-size:1.5rem}
+.card{padding:1.2rem}
+.metric .value{font-size:2rem}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -85,6 +102,46 @@
 <div class="card fade-up"><div class="card-icon">📊</div><h3>Lead Optimization</h3><p>Iterative optimization of ADMET properties while maintaining binding affinity</p></div>
 </div>
 </section>
+
+
+<!-- Cross-Project Recommendations -->
+<section style="padding:60px 0;background:linear-gradient(180deg,#0a0a0f,#0d1117)">
+    <div style="max-width:1000px;margin:0 auto;padding:0 20px">
+        <h2 style="color:#fff;font-size:1.8rem;text-align:center;margin-bottom:8px">
+            Explore the <span style="color:#00d4ff">MoKangMedical</span> Ecosystem
+        </h2>
+        <p style="color:#888;text-align:center;margin-bottom:40px;font-size:0.95rem">
+            Discover related platforms that complement DrugMind
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+        <a href="https://mokangmedical.github.io/PharmaSim/" class="rec-card" target="_blank">
+            <div class="rec-name">PharmaSim</div>
+            <div class="rec-desc">Market Simulation</div>
+        </a>
+        <a href="https://mokangmedical.github.io/virtual-cell/" class="rec-card" target="_blank">
+            <div class="rec-name">virtual-cell</div>
+            <div class="rec-desc">Cell Analysis</div>
+        </a>
+        <a href="https://mokangmedical.github.io/tianyan/" class="rec-card" target="_blank">
+            <div class="rec-name">tianyan</div>
+            <div class="rec-desc">Business Intelligence</div>
+        </a>
+        </div>
+    </div>
+</section>
+<style>
+.rec-card {
+    display:block;padding:24px;background:rgba(255,255,255,0.03);
+    border:1px solid rgba(0,212,255,0.15);border-radius:12px;
+    text-decoration:none;transition:all 0.3s;
+}
+.rec-card:hover {
+    border-color:#00d4ff;transform:translateY(-4px);
+    box-shadow:0 8px 30px rgba(0,212,255,0.15);
+}
+.rec-name {color:#00d4ff;font-size:1.1rem;font-weight:600;margin-bottom:6px}
+.rec-desc {color:#888;font-size:0.85rem}
+</style>
 
 <footer class="footer"><div class="footer-links"><a href="https://mokangmedical.github.io/opc-homepage/">Ecosystem</a><a href="https://github.com/MoKangMedical/DrugMind"><a href="pricing.html">定价</a>
 <a href="https://github.com/MoKangMedical">GitHub</a></div><p>&copy; 2025 MoKangMedical</p></footer>
