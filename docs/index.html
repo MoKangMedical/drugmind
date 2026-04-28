@@ -1,457 +1,362 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DrugMind — AI Drug Discovery Platform | MoKangMedical</title>
-<meta name="description" content="AI驱动的药物研发平台。多Agent协作、分子对接、ADMET预测、虚拟筛选，将药物发现周期缩短40%。">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>DrugMind — AI-Powered Drug Discovery Platform | MoKangMedical</title>
+<meta name="description" content="Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins. 10,847+ molecules analyzed.">
+<meta property="og:title" content="DrugMind — AI-Powered Drug Discovery">
+<meta property="og:description" content="Multi-agent AI for molecular docking, ADMET, virtual screening.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://mokangmedical.github.io/DrugMind/">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- Navigation -->
-<nav class="nav" id="nav">
-  <a class="nav-logo" href="#top">
-    <div class="nav-logo-icon">💊</div>
-    <span class="nav-logo-text">DrugMind</span>
-    <span class="nav-logo-badge">AI Platform</span>
-  </a>
-  <div class="nav-links">
-    <a href="#features" class="active">Features</a>
-    <a href="#agents">AI Agents</a>
-    <a href="pipeline.html">Pipeline</a>
-    <a href="#cases">Cases</a>
-    <a href="#pricing">Pricing</a>
-    <a href="api-docs.html">API</a>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      DrugMind
+    </a>
+    <button class="nav-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#agents">AI Agents</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="api.html">API</a></li>
+      <li><a href="#demo" class="nav-cta">Try Demo</a></li>
+    </ul>
   </div>
-  <a class="nav-cta" href="#pricing">Get Started</a>
 </nav>
 
-<!-- Hero -->
 <section class="hero" id="top">
-  <div class="hero-content">
-    <div class="hero-badge">🧬 Multi-Agent Drug Discovery Engine</div>
-    <h1>AI驱动的<br><span class="gradient">药物研发平台</span></h1>
-    <p class="hero-sub">8个专业AI Agent协作，覆盖从靶点发现到IND申报全流程。分子对接、ADMET预测、虚拟筛选一体化，将药物发现周期缩短40%。</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#pricing">🚀 Start Free Trial</a>
-      <a class="btn btn-secondary" href="#cases">📊 View Case Studies</a>
-      <a class="btn btn-secondary" href="#api">📖 API Docs</a>
+  <div class="container">
+    <div class="hero-content reveal">
+      <h1>AI-Powered <span class="accent">Drug Discovery</span></h1>
+      <p>Multi-agent AI platform combining molecular docking, ADMET prediction, virtual screening, and digital twins to accelerate drug development from years to months.</p>
+      <div class="btn-group">
+        <a href="#demo" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Try Molecular Docking
+        </a>
+        <a href="#features" class="btn btn-secondary">Explore Features</a>
+        <a href="api.html" class="btn btn-secondary">API Docs</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Stats -->
-<div class="stats">
-  <div class="stat-card"><div class="stat-num">10,847</div><div class="stat-label">Molecules Analyzed</div></div>
-  <div class="stat-card"><div class="stat-num">94.7%</div><div class="stat-label">Prediction Accuracy</div></div>
-  <div class="stat-card"><div class="stat-num">40%</div><div class="stat-label">Cycle Reduction</div></div>
-  <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">AI Agents</div></div>
-</div>
+<section class="section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-number" data-count="10847" data-suffix="+">0</div>
+        <div class="stat-label">Molecules Analyzed</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-number" data-count="94.7" data-suffix="%">0</div>
+        <div class="stat-label">Prediction Accuracy</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-number" data-count="40" data-suffix="%">0</div>
+        <div class="stat-label">Faster Discovery</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-number" data-count="8" data-suffix=" Agents">0</div>
+        <div class="stat-label">Specialized AI Agents</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- Features -->
 <section class="section" id="features">
-  <div class="section-header">
-    <div class="section-label">Core Capabilities</div>
-    <h2>六大核心能力</h2>
-    <p>覆盖药物研发全链路的AI技术栈</p>
-  </div>
-  <div class="cards-grid">
-    <div class="card">
-      <div class="card-icon cyan">🔬</div>
-      <h3>分子对接 Molecular Docking</h3>
-      <p>基于深度学习的分子对接引擎，支持AutoDock Vina和自研评分函数，精确预测蛋白-配体结合模式。</p>
-    </div>
-    <div class="card">
-      <div class="card-icon purple">🧪</div>
-      <h3>ADMET预测</h3>
-      <p>吸收、分布、代谢、排泄、毒性五维预测。整合200+ADMET数据集，准确率超过基准模型15%。</p>
-    </div>
-    <div class="card">
-      <div class="card-icon green">🎯</div>
-      <h3>虚拟筛选 Virtual Screening</h3>
-      <p>从百万级化合物库中快速筛选先导化合物。支持基于配体和基于结构两种策略，日处理量100万+。</p>
-    </div>
-    <div class="card">
-      <div class="card-icon cyan">🤖</div>
-      <h3>数字孪生 Digital Twin</h3>
-      <p>为每个药物项目创建AI数字孪生，模拟药物在虚拟患者体内的行为，预测临床试验成功率。</p>
-    </div>
-    <div class="card">
-      <div class="card-icon purple">🕸️</div>
-      <h3>知识图谱 Knowledge Graph</h3>
-      <p>整合DrugBank、ChEMBL、PubChem等20+数据源，构建包含500万+实体的药物知识图谱。</p>
-    </div>
-    <div class="card">
-      <div class="card-icon green">👥</div>
-      <h3>多Agent协作 Multi-Agent</h3>
-      <p>8个专业AI Agent组成虚拟研发团队，涵盖药理、化学、临床、法规等领域，协同决策。</p>
-    </div>
-  </div>
-</section>
-
-<!-- Agents -->
-<section class="section" id="agents" style="background: var(--bg2); max-width: 100%; padding-left: calc((100% - 1200px)/2 + 2rem); padding-right: calc((100% - 1200px)/2 + 2rem);">
-  <div class="section-header">
-    <div class="section-label">AI Team</div>
-    <h2>8位AI专家团队</h2>
-    <p>每位Agent都有独立的专业知识和决策能力</p>
-  </div>
-  <div class="agents-grid">
-    <div class="agent-card">
-      <div class="agent-avatar" style="background:rgba(6,182,212,0.15)">👨‍⚕️</div>
-      <h3>Dr. Pharm</h3>
-      <div class="role">首席药理学家</div>
-      <p>药物作用机制分析、剂量-效应关系建模、药物相互作用预测</p>
-    </div>
-    <div class="agent-card">
-      <div class="agent-avatar" style="background:rgba(139,92,246,0.15)">🧪</div>
-      <h3>ChemBot</h3>
-      <div class="role">计算化学家</div>
-      <p>分子设计、先导化合物优化、构效关系分析、合成路线规划</p>
-    </div>
-    <div class="agent-card">
-      <div class="agent-avatar" style="background:rgba(16,185,129,0.15)">📋</div>
-      <h3>ClinAdvisor</h3>
-      <div class="role">临床试验专家</div>
-      <p>临床试验设计、终点选择、样本量计算、监管策略咨询</p>
-    </div>
-    <div class="agent-card">
-      <div class="agent-avatar" style="background:rgba(245,158,11,0.15)">📊</div>
-      <h3>DataMiner</h3>
-      <div class="role">数据科学家</div>
-      <p>多组学数据整合、生物标志物发现、机器学习模型训练</p>
-    </div>
-    <div class="agent-card">
-      <div class="agent-avatar" style="background:rgba(236,72,153,0.15)">⚖️</div>
-      <h3>ReguBot</h3>
-      <div class="role">法规事务顾问</div>
-      <p>FDA/NMPA法规解读、IND申报文档、GMP合规审查</p>
-    </div>
-    <div class="agent-card">
-      <div class="agent-avatar" style="background:rgba(99,102,241,0.15)">🎯</div>
-      <h3>TargetScout</h3>
-      <div class="role">靶点发现专家</div>
-      <p>靶点验证、可药性评估、OpenTargets数据挖掘、文献挖掘</p>
+  <div class="container">
+    <div class="section-label reveal">Core Capabilities</div>
+    <h2 class="reveal">Complete Drug Discovery Pipeline</h2>
+    <div class="grid grid-3 mt-3">
+      <div class="card reveal">
+        <div class="card-icon red">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        </div>
+        <h3>Molecular Docking</h3>
+        <p>Predict binding affinity between drug candidates and target proteins with AutoDock Vina and custom scoring functions.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>ADMET Prediction</h3>
+        <p>AI-powered prediction of Absorption, Distribution, Metabolism, Excretion, and Toxicity for drug candidates.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>Virtual Screening</h3>
+        <p>Screen millions of compounds against disease targets using DrugCLIP deep learning and pharmacophore models.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <h3>Digital Twins</h3>
+        <p>Create virtual patient models for in-silico clinical trials, predicting drug response across diverse populations.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/><path d="M2 12h20"/></svg>
+        </div>
+        <h3>Knowledge Graph</h3>
+        <p>Drug-target-disease relationship network with pathway analysis, side effect prediction, and drug interaction mapping.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon red">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Multi-Agent System</h3>
+        <p>8 specialized AI agents (medicinal chemist, pharmacologist, toxicologist, etc.) collaborating on drug design.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Pipeline -->
+<section class="section" id="agents">
+  <div class="container">
+    <div class="section-label reveal">AI Team</div>
+    <h2 class="reveal">8 Specialized Drug Discovery Agents</h2>
+    <div class="grid grid-4 mt-3">
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🧬</div>
+        <h3>Medicinal Chemist</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">Lead optimization, SAR analysis, scaffold hopping</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🔬</div>
+        <h3>Pharmacologist</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">PK/PD modeling, dose optimization, drug interactions</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">⚠️</div>
+        <h3>Toxicologist</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">Safety profiling, off-target effects, mutagenicity</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🎯</div>
+        <h3>Target Analyst</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">Target validation, druggability, binding site analysis</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📊</div>
+        <h3>Data Scientist</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">ML models, QSAR, feature engineering, validation</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🏥</div>
+        <h3>Clinical Advisor</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">Trial design, endpoint selection, regulatory strategy</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">💊</div>
+        <h3>Formulation Expert</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">Drug delivery, bioavailability, stability optimization</p>
+      </div>
+      <div class="card reveal text-center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📋</div>
+        <h3>Regulatory Strategist</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim)">FDA/EMA pathways, IND/NDA preparation, compliance</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="pipeline">
-  <div class="section-header">
-    <div class="section-label">Workflow</div>
-    <h2>AI驱动的研发流程</h2>
-    <p>从靶点到IND的全链路智能化</p>
-  </div>
-  <div class="pipeline">
-    <div class="pipeline-step">
-      <div class="pipeline-dot">🎯</div>
-      <h4>靶点发现</h4>
-      <p>AI文献挖掘<br>可药性评估</p>
-    </div>
-    <div class="pipeline-arrow">→</div>
-    <div class="pipeline-step">
-      <div class="pipeline-dot">🔬</div>
-      <h4>先导化合物</h4>
-      <p>虚拟筛选<br>分子设计</p>
-    </div>
-    <div class="pipeline-arrow">→</div>
-    <div class="pipeline-step">
-      <div class="pipeline-dot">🧪</div>
-      <h4>临床前研究</h4>
-      <p>ADMET优化<br>毒理预测</p>
-    </div>
-    <div class="pipeline-arrow">→</div>
-    <div class="pipeline-step">
-      <div class="pipeline-dot">📋</div>
-      <h4>IND申报</h4>
-      <p>法规文档<br>CMC数据</p>
-    </div>
-  </div>
-</section>
-
-<!-- Cases -->
-<section class="section" id="cases" style="background: var(--bg2); max-width: 100%; padding-left: calc((100% - 1200px)/2 + 2rem); padding-right: calc((100% - 1200px)/2 + 2rem);">
-  <div class="section-header">
-    <div class="section-label">Success Stories</div>
-    <h2>成功案例</h2>
-    <p>DrugMind已帮助多家药企加速研发进程</p>
-  </div>
-  <div class="cases-grid">
-    <div class="case-card">
-      <div class="case-tag">Oncology</div>
-      <h3>新型EGFR-TKI抑制剂</h3>
-      <p>针对非小细胞肺癌T790M突变，DrugMind在2周内从50万化合物中筛选出3个先导化合物，其中1个已进入临床前研究。</p>
-      <div class="metrics">
-        <div class="metric"><div class="metric-val">2周</div><div class="metric-label">筛选周期</div></div>
-        <div class="metric"><div class="metric-val">50万</div><div class="metric-label">化合物库</div></div>
-        <div class="metric"><div class="metric-val">85%</div><div class="metric-label">成本节省</div></div>
+  <div class="container">
+    <div class="section-label reveal">Workflow</div>
+    <h2 class="reveal">From Target to Clinical Candidate</h2>
+    <div class="grid grid-4 mt-3">
+      <div class="card reveal text-center">
+        <div class="stat-number" style="font-size:3rem;margin-bottom:0.5rem">01</div>
+        <h3>Target Discovery</h3>
+        <p style="font-size:0.85rem;color:var(--text-dim)">Identify druggable targets from genomic, proteomic, and literature data using OpenTargets and ChEMBL.</p>
       </div>
-    </div>
-    <div class="case-card">
-      <div class="case-tag">Rare Disease</div>
-      <h3>罕见病药物重定位</h3>
-      <p>为法布里病发现已上市药物的新适应症，知识图谱推理+分子对接验证，从候选到体外实验仅3周。</p>
-      <div class="metrics">
-        <div class="metric"><div class="metric-val">3周</div><div class="metric-label">发现周期</div></div>
-        <div class="metric"><div class="metric-val">12</div><div class="metric-label">候选药物</div></div>
-        <div class="metric"><div class="metric-val">3个</div><div class="metric-label">进入验证</div></div>
+      <div class="card reveal text-center">
+        <div class="stat-number" style="font-size:3rem;margin-bottom:0.5rem">02</div>
+        <h3>Hit Identification</h3>
+        <p style="font-size:0.85rem;color:var(--text-dim)">Virtual screening of 10M+ compounds using DrugCLIP, pharmacophore filtering, and molecular docking.</p>
       </div>
-    </div>
-    <div class="case-card">
-      <div class="case-tag">Cardiovascular</div>
-      <h3>PCSK9抑制剂优化</h3>
-      <p>对已有PCSK9先导化合物进行ADMET优化，AI预测指导合成路线，3轮迭代将口服生物利用度从2%提升至18%。</p>
-      <div class="metrics">
-        <div class="metric"><div class="metric-val">9x</div><div class="metric-label">生物利用度提升</div></div>
-        <div class="metric"><div class="metric-val">3轮</div><div class="metric-label">AI迭代</div></div>
-        <div class="metric"><div class="metric-val">60%</div><div class="metric-label">时间节省</div></div>
+      <div class="card reveal text-center">
+        <div class="stat-number" style="font-size:3rem;margin-bottom:0.5rem">03</div>
+        <h3>Lead Optimization</h3>
+        <p style="font-size:0.85rem;color:var(--text-dim)">Multi-agent collaboration for SAR analysis, ADMET optimization, and selectivity improvement.</p>
+      </div>
+      <div class="card reveal text-center">
+        <div class="stat-number" style="font-size:3rem;margin-bottom:0.5rem">04</div>
+        <h3>Clinical Candidate</h3>
+        <p style="font-size:0.85rem;color:var(--text-dim)">Final selection with digital twin validation, safety profiling, and regulatory pathway planning.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Interactive Demo -->
 <section class="section" id="demo">
-  <div class="section-header">
-    <div class="section-label">Live Demo</div>
-    <h2>在线体验分子对接</h2>
-    <p>选择靶点蛋白和化合物，即刻获得对接结果</p>
-  </div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:40px;max-width:800px;margin:0 auto">
-    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
-      <select id="targetSelect" style="flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:14px;font-family:inherit">
-        <option value="">选择靶点蛋白...</option>
-        <option value="egfr">EGFR (表皮生长因子受体)</option>
-        <option value="her2">HER2 (人表皮生长因子受体2)</option>
-        <option value="pcsk9">PCSK9 (前蛋白转化酶)</option>
-        <option value="jak2">JAK2 (酪氨酸激酶2)</option>
-      </select>
-      <select id="compoundSelect" style="flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:14px;font-family:inherit">
-        <option value="">选择化合物...</option>
-        <option value="gefinitib">吉非替尼 (Gefitinib)</option>
-        <option value="erlotinib">厄洛替尼 (Erlotinib)</option>
-        <option value="osimertinib">奥希替尼 (Osimertinib)</option>
-        <option value="custom">自定义SMILES</option>
-      </select>
-      <button onclick="runDocking()" style="background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit">运行对接</button>
-    </div>
-    <div id="dockingResult" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;min-height:120px;font-size:14px;color:var(--text2);line-height:1.8">
-      <span style="color:var(--text3)">选择靶点和化合物，点击"运行对接"查看模拟结果...</span>
+  <div class="container">
+    <div class="section-label reveal">Interactive Demo</div>
+    <h2 class="reveal">Molecular Docking Simulator</h2>
+    <p class="text-dim reveal mb-3">Enter a molecule name and select a target protein to simulate binding affinity and ADMET properties.</p>
+    <div class="grid grid-2">
+      <div class="reveal">
+        <form id="docking-form">
+          <div class="form-group">
+            <label for="molecule-input">Molecule / Drug Name</label>
+            <input id="molecule-input" class="form-input" type="text" placeholder="e.g., Imatinib, Aspirin, Metformin...">
+          </div>
+          <div class="form-group">
+            <label for="target-select">Target Protein</label>
+            <select id="target-select" class="form-select">
+              <option value="EGFR">EGFR (Epidermal Growth Factor Receptor)</option>
+              <option value="VEGFR2">VEGFR2 (Vascular Endothelial Growth Factor)</option>
+              <option value="PD-L1">PD-L1 (Programmed Death-Ligand 1)</option>
+              <option value="JAK2">JAK2 (Janus Kinase 2)</option>
+              <option value="BCL-2">BCL-2 (B-Cell Lymphoma 2)</option>
+              <option value="KRAS G12C">KRAS G12C</option>
+              <option value="HER2">HER2 (Human Epidermal Growth Factor)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            Run Docking Simulation
+          </button>
+        </form>
+        <div id="docking-result" class="diagnosis-result" style="display:none"></div>
+      </div>
+      <div class="reveal">
+        <div class="card" style="padding:2rem">
+          <h3 style="margin-bottom:1rem">How It Works</h3>
+          <div style="display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem">
+            <div style="background:rgba(233,69,96,0.15);color:var(--accent);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;flex-shrink:0;font-weight:700;font-size:0.8rem">1</div>
+            <div><strong>Molecule Input</strong><p style="font-size:0.8rem;color:var(--text-dim);margin:0.2rem 0 0">Enter drug name or SMILES. System retrieves 3D structure from PubChem.</p></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem">
+            <div style="background:rgba(6,182,212,0.15);color:var(--cyan);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;flex-shrink:0;font-weight:700;font-size:0.8rem">2</div>
+            <div><strong>Target Preparation</strong><p style="font-size:0.8rem;color:var(--text-dim);margin:0.2rem 0 0">Protein structure loaded from PDB, binding site identified via fpocket.</p></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem">
+            <div style="background:rgba(16,185,129,0.15);color:var(--green);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;flex-shrink:0;font-weight:700;font-size:0.8rem">3</div>
+            <div><strong>Docking Simulation</strong><p style="font-size:0.8rem;color:var(--text-dim);margin:0.2rem 0 0">AutoDock Vina computes binding poses and affinity scores.</p></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="background:rgba(139,92,246,0.15);color:var(--purple);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;flex-shrink:0;font-weight:700;font-size:0.8rem">4</div>
+            <div><strong>ADMET Analysis</strong><p style="font-size:0.8rem;color:var(--text-dim);margin:0.2rem 0 0">Predict drug-likeness, toxicity, solubility, and pharmacokinetics.</p></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Data Charts -->
-<section class="section" id="charts">
-  <div class="section-header">
-    <div class="section-label">Data Insights</div>
-    <h2>模型性能与数据分析</h2>
-    <p>基于10,847个分子的验证结果</p>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto">
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px">
-      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">ADMET各维度预测准确率</h3>
-      <canvas id="admetRadar" style="max-height:280px"></canvas>
-    </div>
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px">
-      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">月度分子分析量趋势</h3>
-      <canvas id="trendLine" style="max-height:280px"></canvas>
-    </div>
-  </div>
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-// Docking demo
-const dockingResults={
-  'egfr_gefinitib':{score:-8.2,energy:'-42.3 kcal/mol',pose:'Type I binding',residues:'Lys745, Met793, Thr854',confidence:'92%',time:'2.3s'},
-  'egfr_erlotinib':{score:-7.8,energy:'-39.1 kcal/mol',pose:'Type I binding',residues:'Lys745, Met793, Asp855',confidence:'89%',time:'2.1s'},
-  'egfr_osimertinib':{score:-9.1,energy:'-48.7 kcal/mol',pose:'Covalent binding',residues:'Cys797, Met793, Thr854',confidence:'96%',time:'3.2s'},
-  'her2_gefinitib':{score:-6.5,energy:'-32.1 kcal/mol',pose:'Type II binding',residues:'Asp863, Phe864',confidence:'78%',time:'2.8s'},
-  'pcsk9_erlotinib':{score:-5.2,energy:'-28.4 kcal/mol',pose:'Allosteric',residues:'Ser153, Asn154',confidence:'65%',time:'3.5s'},
-  'jak2_osimertinib':{score:-7.3,energy:'-36.8 kcal/mol',pose:'Type I binding',residues:'Lys882, Glu930',confidence:'85%',time:'2.6s'}
-};
-
-function runDocking(){
-  const target=document.getElementById('targetSelect').value;
-  const compound=document.getElementById('compoundSelect').value;
-  const result=document.getElementById('dockingResult');
-  
-  if(!target||!compound){
-    result.innerHTML='<span style="color:var(--amber)">请先选择靶点和化合物</span>';
-    return;
-  }
-  
-  const key=target+'_'+compound;
-  const d=dockingResults[key];
-  
-  if(d){
-    result.innerHTML=`
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div><strong>结合分数：</strong><span style="color:var(--accent2);font-weight:700;font-size:18px">${d.score}</span></div>
-        <div><strong>结合能：</strong><span style="color:var(--green)">${d.energy}</span></div>
-        <div><strong>结合模式：</strong>${d.pose}</div>
-        <div><strong>关键残基：</strong>${d.residues}</div>
-        <div><strong>置信度：</strong><span style="color:var(--accent2)">${d.confidence}</span></div>
-        <div><strong>计算时间：</strong>${d.time}</div>
-      </div>
-      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--text3)">
-        注：以上为模拟数据，仅供演示。实际使用请接入API。
-      </div>
-    `;
-  }else{
-    result.innerHTML='<span style="color:var(--text3)">该组合暂无模拟数据，请尝试其他选项</span>';
-  }
-}
-
-// Charts
-document.addEventListener('DOMContentLoaded',function(){
-  // ADMET Radar
-  new Chart(document.getElementById('admetRadar').getContext('2d'),{
-    type:'radar',
-    data:{
-      labels:['吸收','分布','代谢','排泄','毒性','溶解度','渗透性','血浆蛋白结合'],
-      datasets:[{
-        label:'DrugMind模型',
-        data:[0.94,0.91,0.89,0.93,0.92,0.88,0.87,0.95],
-        borderColor:'rgba(99,102,241,.8)',
-        backgroundColor:'rgba(99,102,241,.15)',
-        pointBackgroundColor:'#6366f1'
-      }]
-    },
-    options:{
-      responsive:true,
-      scales:{r:{grid:{color:'rgba(255,255,255,.05)'},pointLabels:{color:'#a1a1aa',font:{size:10}},ticks:{display:false}}},
-      plugins:{legend:{display:false}}
-    }
-  });
-
-  // Trend Line
-  new Chart(document.getElementById('trendLine').getContext('2d'),{
-    type:'line',
-    data:{
-      labels:['2024 Q1','2024 Q2','2024 Q3','2024 Q4','2025 Q1','2025 Q2'],
-      datasets:[{
-        label:'分子分析量',
-        data:[1200,1800,2400,3200,4500,5800],
-        borderColor:'#6366f1',
-        backgroundColor:'rgba(99,102,241,.1)',
-        fill:true,
-        tension:.4
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#71717a'}},
-        x:{grid:{display:false},ticks:{color:'#a1a1aa',font:{size:10}}}
-      }
-    }
-  });
-});
-</script>
-
-<!-- Pricing -->
 <section class="section" id="pricing">
-  <div class="section-header">
-    <div class="section-label">Pricing</div>
-    <h2>灵活定价方案</h2>
-    <p>从初创团队到大型药企，按需选择</p>
-  </div>
-  <div class="pricing-grid">
-    <div class="price-card">
-      <div class="price-name">Starter</div>
-      <div class="price-desc">学术研究和小型团队</div>
-      <div class="price-amount"><span class="currency">$</span>0<span class="period">/月</span></div>
-      <ul class="price-features">
-        <li>5次分子对接/月</li>
-        <li>基础ADMET预测</li>
-        <li>3个AI Agent</li>
-        <li>社区支持</li>
-        <li>API访问(100次/月)</li>
-      </ul>
-      <a class="btn btn-secondary price-btn" href="#">Free Start</a>
-    </div>
-    <div class="price-card featured">
-      <div class="price-name">Professional</div>
-      <div class="price-desc">生物技术公司和CRO</div>
-      <div class="price-amount"><span class="currency">$</span>499<span class="period">/月</span></div>
-      <ul class="price-features">
-        <li>无限分子对接</li>
-        <li>完整ADMET套件</li>
-        <li>8个AI Agent全功能</li>
-        <li>优先技术支持</li>
-        <li>API无限访问</li>
-        <li>数字孪生(10个项目)</li>
-      </ul>
-      <a class="btn btn-primary price-btn" href="#">Start Trial</a>
-    </div>
-    <div class="price-card">
-      <div class="price-name">Enterprise</div>
-      <div class="price-desc">大型药企和研究机构</div>
-      <div class="price-amount">Custom</div>
-      <ul class="price-features">
-        <li>所有Professional功能</li>
-        <li>私有化部署</li>
-        <li>定制Agent训练</li>
-        <li>专属客户经理</li>
-        <li>SLA保障</li>
-        <li>数据安全合规</li>
-      </ul>
-      <a class="btn btn-secondary price-btn" href="#">Contact Sales</a>
+  <div class="container">
+    <div class="section-label reveal text-center">Pricing</div>
+    <h2 class="reveal text-center">Scale Your Drug Discovery</h2>
+    <div class="pricing-grid mt-3">
+      <div class="price-card reveal">
+        <h3>Free</h3>
+        <div class="price-amount">$0</div>
+        <div class="price-period">For exploration</div>
+        <ul class="price-features">
+          <li>10 docking simulations/month</li>
+          <li>Basic ADMET prediction</li>
+          <li>3 target proteins</li>
+          <li>Community support</li>
+        </ul>
+        <a href="https://github.com/MoKangMedical/DrugMind" class="btn btn-secondary" style="width:100%">Get Started</a>
+      </div>
+      <div class="price-card featured reveal">
+        <h3>Professional</h3>
+        <div class="price-amount">$499<span>/mo</span></div>
+        <div class="price-period">For research teams</div>
+        <ul class="price-features">
+          <li>Unlimited docking</li>
+          <li>Full ADMET suite</li>
+          <li>All target proteins</li>
+          <li>Multi-agent collaboration</li>
+          <li>API access</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="mailto:contact@mokangmedical.cn" class="btn btn-primary" style="width:100%">Start Free Trial</a>
+      </div>
+      <div class="price-card reveal">
+        <h3>Enterprise</h3>
+        <div class="price-amount">Custom</div>
+        <div class="price-period">For pharma companies</div>
+        <ul class="price-features">
+          <li>Everything in Professional</li>
+          <li>On-premise deployment</li>
+          <li>Custom model training</li>
+          <li>Digital twin platform</li>
+          <li>Dedicated support</li>
+          <li>SLA guarantee</li>
+        </ul>
+        <a href="mailto:contact@mokangmedical.cn" class="btn btn-secondary" style="width:100%">Contact Sales</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- API -->
-<section class="section" id="api" style="background: var(--bg2); max-width: 100%; padding-left: calc((100% - 1200px)/2 + 2rem); padding-right: calc((100% - 1200px)/2 + 2rem);">
-  <div class="section-header">
-    <div class="section-label">Developer API</div>
-    <h2>RESTful API</h2>
-    <p>60+ API端点，覆盖药物研发全流程</p>
-  </div>
-  <div class="api-grid">
-    <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/api/docking/run</span><span class="api-desc">Run molecular docking</span></div>
-    <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/api/admet/predict</span><span class="api-desc">ADMET prediction</span></div>
-    <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/api/screening/virtual</span><span class="api-desc">Virtual screening</span></div>
-    <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/api/agents</span><span class="api-desc">List AI agents</span></div>
-    <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/api/twin/create</span><span class="api-desc">Create digital twin</span></div>
-    <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/api/kg/search</span><span class="api-desc">Knowledge graph query</span></div>
+<section class="section" id="faq">
+  <div class="container" style="max-width:800px">
+    <h2 class="reveal text-center">Frequently Asked Questions</h2>
+    <div class="mt-3">
+      <div class="card reveal mb-2" style="padding:1.2rem">
+        <div class="faq-q" style="cursor:pointer"><h3 style="font-size:1rem;display:flex;justify-content:space-between;align-items:center">What molecules can I screen?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></h3></div>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height 0.3s"><p style="color:var(--text-dim);padding-top:0.8rem;font-size:0.9rem">DrugMind supports any small molecule with a known structure. Our database includes 10,847+ pre-analyzed compounds from PubChem, ChEMBL, and DrugBank. You can also input custom SMILES strings.</p></div>
+      </div>
+      <div class="card reveal mb-2" style="padding:1.2rem">
+        <div class="faq-q" style="cursor:pointer"><h3 style="font-size:1rem;display:flex;justify-content:space-between;align-items:center">How accurate is the ADMET prediction?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></h3></div>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height 0.3s"><p style="color:var(--text-dim);padding-top:0.8rem;font-size:0.9rem">Our ADMET models achieve 94.7% accuracy on benchmark datasets, validated against experimental data from 50,000+ compounds. Predictions include confidence intervals and applicability domain assessment.</p></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Footer -->
+<section class="section" style="text-align:center">
+  <div class="container reveal">
+    <h2>Accelerate Your Drug Discovery</h2>
+    <p class="text-dim" style="max-width:600px;margin:1rem auto 2rem">Join research teams using DrugMind to reduce drug discovery timelines from 5 years to 12 months.</p>
+    <div class="btn-group" style="justify-content:center">
+      <a href="#demo" class="btn btn-primary">Try Free Demo</a>
+      <a href="api.html" class="btn btn-secondary">API Documentation</a>
+    </div>
+  </div>
+</section>
+
 <footer class="footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a class="nav-logo" href="#top"><div class="nav-logo-icon">💊</div><span class="nav-logo-text">DrugMind</span></a>
-      <p>AI驱动的药物研发平台。多Agent协作，加速药物发现。</p>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <strong>DrugMind</strong>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim)">AI-powered drug discovery platform by MoKangMedical.</p>
+      </div>
+      <div><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#demo">Demo</a></li><li><a href="#pricing">Pricing</a></li><li><a href="api.html">API</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="https://github.com/MoKangMedical/DrugMind">GitHub</a></li><li><a href="api.html">Documentation</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="https://mokangmedical.github.io/">MoKangMedical</a></li><li><a href="mailto:contact@mokangmedical.com">Contact</a></li></ul></div>
     </div>
-    <div><h4>Product</h4><ul class="footer-links"><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="api-docs.html">API</a></li></ul></div>
-    <div><h4>Resources</h4><ul class="footer-links"><li><a href="#cases">Case Studies</a></li><li><a href="api-docs.html">Documentation</a></li><li><a href="#">Blog</a></li></ul></div>
-    <div><h4>Company</h4><ul class="footer-links"><li><a href="#">About</a></li><li><a href="#">Contact</a></li><li><a href="#">Careers</a></li></ul></div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 MoKangMedical. All rights reserved.</span>
+      <span>DrugMind is a research tool. Not intended for clinical decision-making.</span>
+    </div>
   </div>
-  <div class="footer-bottom">&copy; 2026 MoKangMedical. DrugMind — AI Drug Discovery Platform.</div>
 </footer>
 
-<script>
-// Nav scroll effect
-window.addEventListener('scroll', function() {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
-});
-// Smooth scroll for nav links
-document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-  a.addEventListener('click', function(e) {
-    e.preventDefault();
-    var t = document.querySelector(this.getAttribute('href'));
-    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
-</script>
+<script src="js/app.js"></script>
 </body>
 </html>
