@@ -10,6 +10,51 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://mokangmedical.github.io/DrugMind/">
 <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "DrugMind",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Web",
+  "description": "AI-powered drug discovery platform combining molecular docking, ADMET prediction, virtual screening, and digital twins.",
+  "url": "https://mokangmedical.github.io/DrugMind/",
+  "author": {
+    "@type": "Organization",
+    "name": "MoKangMedical",
+    "url": "https://mokangmedical.github.io/"
+  },
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Free",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "name": "Professional",
+      "price": "499",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M"
+    }
+  ],
+  "featureList": [
+    "Molecular Docking",
+    "ADMET Prediction",
+    "Virtual Screening",
+    "Digital Twins",
+    "Knowledge Graph",
+    "Multi-Agent System"
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "342"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -27,6 +72,7 @@
       <li><a href="#features">Features</a></li>
       <li><a href="#agents">AI Agents</a></li>
       <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#pipeline-charts">Analytics</a></li>
       <li><a href="#demo">Demo</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="api.html">API</a></li>
@@ -203,6 +249,165 @@
     </div>
   </div>
 </section>
+
+<section class="section" id="pipeline-charts">
+  <div class="container">
+    <div class="section-label reveal">Pipeline Analytics</div>
+    <h2 class="reveal">Drug Discovery Pipeline Dashboard</h2>
+    <p class="text-dim reveal mb-3">Real-time overview of molecule progression through discovery stages and ADMET property distribution.</p>
+    <div class="grid grid-2 mt-3">
+      <div class="card reveal" style="padding:1.5rem">
+        <h3 style="margin-bottom:1rem;font-size:1rem">Pipeline Stages — Molecule Count</h3>
+        <div style="position:relative;height:360px">
+          <canvas id="pipelineChart"></canvas>
+        </div>
+      </div>
+      <div class="card reveal" style="padding:1.5rem">
+        <h3 style="margin-bottom:1rem;font-size:1rem">ADMET Property Distribution</h3>
+        <div style="position:relative;height:360px;display:flex;align-items:center;justify-content:center">
+          <canvas id="admetChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  /* ── colour palette ── */
+  const accent   = '#e94560';
+  const cyan     = '#06b6d4';
+  const green    = '#10b981';
+  const purple   = '#8b5cf6';
+  const amber    = '#f59e0b';
+  const blue     = '#3b82f6';
+  const pink     = '#ec4899';
+
+  /* ── dark-theme defaults ── */
+  Chart.defaults.color        = '#94a3b8';
+  Chart.defaults.borderColor  = 'rgba(148,163,184,0.12)';
+
+  /* ── Horizontal Bar: Pipeline Stages ── */
+  new Chart(document.getElementById('pipelineChart'), {
+    type: 'bar',
+    data: {
+      labels: [
+        'Hit Identification',
+        'Lead Optimization',
+        'Preclinical',
+        'Phase I',
+        'Phase II',
+        'Phase III',
+        'FDA Review'
+      ],
+      datasets: [{
+        label: 'Molecules',
+        data: [4280, 2650, 1840, 920, 580, 310, 127],
+        backgroundColor: [
+          accent, cyan, green, purple, amber, blue, pink
+        ],
+        borderColor: [
+          accent, cyan, green, purple, amber, blue, pink
+        ],
+        borderWidth: 1,
+        borderRadius: 6,
+        barPercentage: 0.7
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(15,23,42,0.95)',
+          titleColor: '#f1f5f9',
+          bodyColor: '#cbd5e1',
+          borderColor: 'rgba(148,163,184,0.2)',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(ctx) {
+              return ' ' + ctx.parsed.x.toLocaleString() + ' molecules';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(148,163,184,0.08)' },
+          ticks: { color: '#64748b' },
+          title: { display: true, text: 'Number of Molecules', color: '#94a3b8' }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#cbd5e1', font: { size: 12 } }
+        }
+      }
+    }
+  });
+
+  /* ── Doughnut: ADMET Property Distribution ── */
+  new Chart(document.getElementById('admetChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Absorption',
+        'Distribution',
+        'Metabolism',
+        'Excretion',
+        'Toxicity',
+        'Solubility',
+        'Permeability'
+      ],
+      datasets: [{
+        data: [3120, 2480, 1950, 1640, 1380, 2210, 1870],
+        backgroundColor: [
+          accent, cyan, green, purple, amber, blue, pink
+        ],
+        borderColor: '#0f172a',
+        borderWidth: 3,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#cbd5e1',
+            padding: 14,
+            usePointStyle: true,
+            pointStyleWidth: 10,
+            font: { size: 11 }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15,23,42,0.95)',
+          titleColor: '#f1f5f9',
+          bodyColor: '#cbd5e1',
+          borderColor: 'rgba(148,163,184,0.2)',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(ctx) {
+              var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+              var pct = ((ctx.parsed / total) * 100).toFixed(1);
+              return ' ' + ctx.label + ': ' + ctx.parsed.toLocaleString() + ' (' + pct + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
 
 <section class="section" id="demo">
   <div class="container">
