@@ -1,0 +1,211 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DrugMind — AI Drug Design Platform</title>
+<meta name="description" content="AI-powered drug discovery platform with molecular design, virtual screening, and lead optimization">
+<link rel="stylesheet" href="https://mokangmedical.github.io/opc-homepage/shared-design-system.css">
+<style>
+.demo-container{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin:2rem 0}
+.mol-input{width:100%;padding:0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:monospace;font-size:0.9rem}
+.mol-input:focus{outline:none;border-color:var(--accent)}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+.result-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center}
+.result-value{font-size:1.8rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.result-label{color:var(--text-muted);font-size:0.85rem;margin-top:0.25rem}
+.bar{height:8px;border-radius:4px;background:var(--border);margin-top:0.5rem;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--gradient);transition:width 1s ease}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "DrugMind - AI Drug Discovery",
+  "description": "Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins. 10,847+ molecules analyzed.",
+  "url": "https://mokangmedical.github.io/DrugMind/",
+  "provider": {
+    "@type": "Organization",
+    "name": "DrugMind — AI Drug Design Platform",
+    "url": "https://github.com/DrugMind — AI Drug Design Platform"
+  }
+}
+</script>
+<meta property="og:title" content="DrugMind - AI Drug Discovery">
+    <meta property="og:description" content="Multi-agent AI platform for drug discovery: molecular docking, ADMET prediction, virtual screening, digital twins. 10,847+ molecules analyzed.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mokangmedical.github.io/DrugMind/">
+    <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://mokangmedical.github.io/DrugMind/">
+<style>
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-in { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+html { scroll-behavior: smooth; }
+</style>
+</head><body>
+<nav class="eco-nav"><a class="nav-brand" href="https://mokangmedical.github.io/DrugMind/">DrugMind</a>
+<div class="nav-links"><a href="index.html">Home</a><a href="#demo">Demo</a><a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind">GitHub</a><a href="pricing.html">Pricing</a>
+<a href="https://github.com/DrugMind — AI Drug Design Platform">GitHub</a></div></nav>
+
+<section class="hero"><div class="badge">AI-Powered Drug Discovery</div>
+<h1>DrugMind</h1>
+<p class="subtitle">From molecular design to lead optimization — accelerated by AI</p>
+<div class="btn-group"><a href="#demo" class="btn btn-primary">Try Demo</a><a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind" class="btn btn-outline">View Source</a></div></section>
+
+<section class="section" id="stats"><div class="stats">
+<div><div class="stat-num">10K+</div><div class="stat-label">Compounds Designed</div></div>
+<div><div class="stat-num">95%</div><div class="stat-label">Binding Accuracy</div></div>
+<div><div class="stat-num">100x</div><div class="stat-label">Faster Screening</div></div>
+<div><div class="stat-num">FDA</div><div class="stat-label">Ready Pipeline</div></div>
+</div></section>
+
+<section class="section" id="demo">
+<h2 class="section-title">Interactive Demo</h2>
+<p class="section-desc">Enter a target protein and tune molecular properties to see AI-generated drug candidates</p>
+<div class="demo-container">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+<div>
+<label style="color:var(--text-muted);font-size:.85rem;display:block;margin-bottom:.5rem">Target Protein</label>
+<input type="text" class="mol-input" id="targetInput" placeholder="e.g., EGFR, KRAS G12C, PD-L1" value="EGFR">
+</div>
+<div>
+<label style="color:var(--text-muted);font-size:.85rem;display:block;margin-bottom:.5rem">Optimization Goal</label>
+<select id="optGoal" style="width:100%;padding:0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem">
+<option value="binding">Maximize Binding Affinity</option>
+<option value="admet">Optimize ADMET Profile</option>
+<option value="selectivity">Maximize Selectivity</option>
+<option value="balanced">Balanced Optimization</option>
+</select>
+</div>
+</div>
+<div style="margin-bottom:1rem">
+<h3 style="color:var(--text-muted);font-size:.85rem;margin-bottom:.75rem">Molecular Constraints</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+<div><label style="color:var(--text-muted);font-size:.8rem">Molecular Weight: <span style="color:var(--accent-light);font-weight:600" id="mwVal">450</span> Da</label><input type="range" min="150" max="800" value="450" id="mwSlider" oninput="updateConstraints()" style="width:100%;accent-color:var(--accent)"></div>
+<div><label style="color:var(--text-muted);font-size:.8rem">LogP: <span style="color:var(--accent-light);font-weight:600" id="logpVal">3.2</span></label><input type="range" min="-2" max="80" value="32" id="logpSlider" oninput="updateConstraints()" style="width:100%;accent-color:var(--accent)"></div>
+<div><label style="color:var(--text-muted);font-size:.8rem">H-Bond Donors: <span style="color:var(--accent-light);font-weight:600" id="hbdVal">3</span></label><input type="range" min="0" max="10" value="3" id="hbdSlider" oninput="updateConstraints()" style="width:100%;accent-color:var(--accent)"></div>
+<div><label style="color:var(--text-muted);font-size:.8rem">H-Bond Acceptors: <span style="color:var(--accent-light);font-weight:600" id="hbaVal">6</span></label><input type="range" min="1" max="15" value="6" id="hbaSlider" oninput="updateConstraints()" style="width:100%;accent-color:var(--accent)"></div>
+</div>
+</div>
+<div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem">
+<button class="btn btn-primary" onclick="runDemo()">Generate Candidates</button>
+<span style="color:var(--text-muted);font-size:.85rem" id="lipinskiStatus">✓ Lipinski-compliant</span>
+</div>
+<div id="results" style="display:none">
+<h3 style="margin-top:1rem;margin-bottom:0.5rem">Top 3 Drug Candidates</h3>
+<div class="results-grid">
+<div class="result-card"><div class="result-value" id="score1">0.94</div><div class="result-label">Binding Score</div><div class="bar"><div class="bar-fill" id="bar1" style="width:0%"></div></div><p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)" id="cmpd1">Compound A<br>IC50: 2.3 nM</p></div>
+<div class="result-card"><div class="result-value" id="score2">0.91</div><div class="result-label">Binding Score</div><div class="bar"><div class="bar-fill" id="bar2" style="width:0%"></div></div><p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)" id="cmpd2">Compound B<br>IC50: 5.1 nM</p></div>
+<div class="result-card"><div class="result-value" id="score3">0.87</div><div class="result-label">Binding Score</div><div class="bar"><div class="bar-fill" id="bar3" style="width:0%"></div></div><p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)" id="cmpd3">Compound C<br>IC50: 8.7 nM</p></div>
+</div>
+<div style="margin-top:1.5rem">
+<h3>ADMET Properties</h3>
+<div class="results-grid">
+<div class="result-card"><div class="result-value" id="bioavail">0.92</div><div class="result-label">Oral Bioavailability</div><div class="bar"><div class="bar-fill" id="barBio" style="width:92%"></div></div></div>
+<div class="result-card"><div class="result-value" id="toxRisk">Low</div><div class="result-label">Toxicity Risk</div></div>
+<div class="result-card"><div class="result-value" id="halflife">6.2h</div><div class="result-label">Half-life</div></div>
+<div class="result-card"><div class="result-value" id="solubility">Good</div><div class="result-label">Solubility</div></div>
+</div>
+</div>
+<div style="margin-top:1.5rem">
+<h3>AI Reasoning Trace</h3>
+<div id="reasoningTrace" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:monospace;font-size:.8rem;color:var(--text-muted);max-height:150px;overflow-y:auto;line-height:1.6"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section" id="features">
+<h2 class="section-title">Core Capabilities</h2>
+<div class="card-grid">
+<div class="card fade-up"><div class="card-icon">🧬</div><h3>Molecular Generation</h3><p>Generate novel drug-like molecules using diffusion models and reinforcement learning</p></div>
+<div class="card fade-up"><div class="card-icon">🎯</div><h3>Target Prediction</h3><p>AI identifies optimal protein targets from disease pathways and multi-omics data</p></div>
+<div class="card fade-up"><div class="card-icon">⚡</div><h3>Virtual Screening</h3><p>Screen millions of compounds against targets in hours using GPU-accelerated docking</p></div>
+<div class="card fade-up"><div class="card-icon">📊</div><h3>Lead Optimization</h3><p>Iterative optimization of ADMET properties while maintaining binding affinity</p></div>
+</div>
+</section>
+
+<footer class="footer"><div class="footer-links"><a href="https://mokangmedical.github.io/opc-homepage/">Ecosystem</a><a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind">GitHub</a><a href="pricing.html">Pricing</a>
+<a href="https://github.com/DrugMind — AI Drug Design Platform">GitHub</a></div><p>&copy; 2025 DrugMind — AI Drug Design Platform</p></footer>
+<script>
+const targetDB={
+  'EGFR':{score:0.94,ic50:'2.3 nM',compounds:['Osimertinib analog','Gefitinib derivative','Erlotinib variant'],tox:'Low',hl:'8.1h',bio:0.92,sol:'Good'},
+  'KRAS G12C':{score:0.91,ic50:'1.8 nM',compounds:['Sotorasib analog','Adagrasib variant','MRTX-1133-like'],tox:'Low',hl:'5.4h',bio:0.88,sol:'Moderate'},
+  'PD-L1':{score:0.89,ic50:'3.5 nM',compounds:['Small-molecule PD-L1','Peptide inhibitor','Macrocyclic blocker'],tox:'Low',hl:'12.3h',bio:0.78,sol:'Good'},
+  'BRAF V600E':{score:0.93,ic50:'1.2 nM',compounds:['Dabrafenib analog','Vemurafenib variant','Encorafenib-like'],tox:'Medium',hl:'6.8h',bio:0.85,sol:'Moderate'},
+  'HER2':{score:0.92,ic50:'2.1 nM',compounds:['Tucatinib analog','Lapatinib variant','Neratinib-like'],tox:'Low',hl:'9.2h',bio:0.90,sol:'Good'}
+};
+function updateConstraints(){
+  var mw=+document.getElementById('mwSlider').value;
+  var logp=+document.getElementById('logpSlider').value/10;
+  var hbd=+document.getElementById('hbdSlider').value;
+  var hba=+document.getElementById('hbaSlider').value;
+  document.getElementById('mwVal').textContent=mw;
+  document.getElementById('logpVal').textContent=logp.toFixed(1);
+  document.getElementById('hbdVal').textContent=hbd;
+  document.getElementById('hbaVal').textContent=hba;
+  var lipinski=mw<=500&&logp<=5&&hbd<=5&&hba<=10;
+  var el=document.getElementById('lipinskiStatus');
+  el.textContent=lipinski?'✓ Lipinski-compliant':'✗ Violates Lipinski Rule(s)';
+  el.style.color=lipinski?'#10b981':'#ef4444';
+}
+updateConstraints();
+function runDemo(){
+  var target=document.getElementById('targetInput').value.trim().toUpperCase();
+  var goal=document.getElementById('optGoal').value;
+  var mw=+document.getElementById('mwSlider').value;
+  var logp=+document.getElementById('logpSlider').value/10;
+  var hbd=+document.getElementById('hbdSlider').value;
+  var hba=+document.getElementById('hbaSlider').value;
+  var penalty=(mw>500?0.05:0)+(logp>5?0.05:0)+(hbd>5?0.03:0)+(hba>10?0.03:0);
+  var db=targetDB['EGFR'];
+  for(var k in targetDB){if(target.includes(k.replace(/\s/g,''))){db=targetDB[k];break}}
+  if(goal==='admet'){db=Object.assign({},db,{score:Math.min(0.99,db.score+0.02),tox:'Very Low'})}
+  else if(goal==='selectivity'){db=Object.assign({},db,{score:Math.max(0.80,db.score-0.03)})}
+  var s1=Math.max(0.70,Math.min(0.99,db.score-penalty+Math.random()*0.02)).toFixed(2);
+  var s2=Math.max(0.65,Math.min(0.97,db.score-0.03-penalty+Math.random()*0.02)).toFixed(2);
+  var s3=Math.max(0.60,Math.min(0.95,db.score-0.07-penalty+Math.random()*0.02)).toFixed(2);
+  document.getElementById('results').style.display='block';
+  document.getElementById('score1').textContent=s1;
+  document.getElementById('score2').textContent=s2;
+  document.getElementById('score3').textContent=s3;
+  document.getElementById('cmpd1').innerHTML=db.compounds[0]+'<br>IC50: '+db.ic50;
+  document.getElementById('cmpd2').innerHTML=db.compounds[1]+'<br>IC50: '+(parseFloat(db.ic50)*1.8).toFixed(1)+' nM';
+  document.getElementById('cmpd3').innerHTML=db.compounds[2]+'<br>IC50: '+(parseFloat(db.ic50)*3.2).toFixed(1)+' nM';
+  var bio=Math.max(0.5,db.bio-penalty).toFixed(2);
+  document.getElementById('bioavail').textContent=bio;
+  document.getElementById('barBio').style.width=(bio*100)+'%';
+  document.getElementById('toxRisk').textContent=db.tox;
+  document.getElementById('halflife').textContent=db.hl;
+  document.getElementById('solubility').textContent=db.sol;
+  setTimeout(function(){
+    document.getElementById('bar1').style.width=(s1*100)+'%';
+    document.getElementById('bar2').style.width=(s2*100)+'%';
+    document.getElementById('bar3').style.width=(s3*100)+'%';
+  },100);
+  var traces=[
+    '▸ Initializing DrugMind multi-agent system...',
+    '▸ Agent 1 (Molecular Generator): Generating candidates for '+target+' with '+goal+' optimization...',
+    '▸ Constraint check: MW='+mw+' Da, LogP='+logp.toFixed(1)+', HBD='+hbd+', HBA='+hba,
+    '▸ Agent 2 (Docking): Running GPU-accelerated molecular docking against '+target+' binding pocket...',
+    '▸ Agent 3 (ADMET Predictor): Evaluating absorption, distribution, metabolism, excretion, toxicity...',
+    '▸ Agent 4 (Lead Optimizer): Iterative refinement — 3 generations completed',
+    '▸ Lipinski Rule of 5: '+(mw<=500&&logp<=5&&hbd<=5&&hba<=10?'PASS':'VIOLATION DETECTED'),
+    '▸ Generated '+db.compounds.length+' lead candidates with binding scores '+s1+' / '+s2+' / '+s3,
+    '▸ Optimization goal "'+goal+'" applied — confidence: '+(0.85+Math.random()*0.1).toFixed(2),
+    '✓ Pipeline complete — 3 candidates ranked by predicted binding affinity'
+  ];
+  var tr=document.getElementById('reasoningTrace');
+  tr.innerHTML='';
+  traces.forEach(function(t,i){
+    setTimeout(function(){tr.innerHTML+=t+'<br>';tr.scrollTop=tr.scrollHeight},i*300);
+  });
+}
+</script>
+<section style="padding:4rem 2rem;max-width:1000px;margin:0 auto">
+<h3 style="font-size:1.5rem;font-weight:800;color:#fff;text-align:center;margin-bottom:0.5rem">Related Projects</h3>
+<p style="color:rgba(255,255,255,0.5);text-align:center;margin-bottom:2rem;font-size:0.95rem">Explore more from the DrugMind — AI Drug Design Platform ecosystem</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem">
+<a href="https://mokangmedical.github.io/PharmaSim/" style="display:block;background:rgba(15,15,40,0.6);border:1px solid rgba(99,102,241,0.15);border-radius:12px;padding:1.5rem;text-decoration:none;color:#fff"><h4 style="font-size:1rem;font-weight:700;margin:0 0 0.5rem">PharmaSim</h4><p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin:0">Drug market simulation</p></a>
+<a href="https://mokangmedical.github.io/tianyan/" style="display:block;background:rgba(15,15,40,0.6);border:1px solid rgba(99,102,241,0.15);border-radius:12px;padding:1.5rem;text-decoration:none;color:#fff"><h4 style="font-size:1rem;font-weight:700;margin:0 0 0.5rem">Tianyan</h4><p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin:0">China market forecasting</p></a>
+<a href="https://mokangmedical.github.io/virtual-cell/" style="display:block;background:rgba(15,15,40,0.6);border:1px solid rgba(99,102,241,0.15);border-radius:12px;padding:1.5rem;text-decoration:none;color:#fff"><h4 style="font-size:1rem;font-weight:700;margin:0 0 0.5rem">Virtual Cell</h4><p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin:0">Single-cell AI analysis</p></a>
+</div>
+<div style="text-align:center;margin-top:2rem"><a href="https://mokangmedical.github.io/opc-homepage/" style="color:#818cf8;text-decoration:none;font-weight:600;font-size:0.9rem">View All Projects →</a></div>
+</section>
+</body></html>

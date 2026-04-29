@@ -1,0 +1,116 @@
+{
+  "version": "1.0.0",
+  "description": "药物靶点结合位点数据库",
+  "site_types": [
+    {
+      "id": "active_site",
+      "name": "活性位点",
+      "description": "酶催化反应发生的位点",
+      "features": ["催化残基", "底物结合口袋", "辅因子结合区"]
+    },
+    {
+      "id": "allosteric_site",
+      "name": "别构位点",
+      "description": "远离活性位点的调节位点",
+      "features": ["别构效应物结合", "构象变化传递", "远程调控"]
+    },
+    {
+      "id": "protein_protein_interface",
+      "name": "蛋白-蛋白界面",
+      "description": "蛋白质相互作用界面",
+      "features": ["热点残基", "界面面积", "结合亲和力"]
+    },
+    {
+      "id": "cofactor_binding",
+      "name": "辅因子结合位点",
+      "description": "辅酶或金属离子结合位点",
+      "features": ["金属配位", "辅酶结合", "氧化还原中心"]
+    }
+  ],
+  "databases": [
+    {
+      "id": "pdb",
+      "name": "Protein Data Bank",
+      "url": "https://www.rcsb.org/",
+      "description": "大分子三维结构数据库",
+      "structure_count": 220000,
+      "formats": ["pdb", "mmcif", "pdbml"]
+    },
+    {
+      "id": "uniprot",
+      "name": "UniProt",
+      "url": "https://www.uniprot.org/",
+      "description": "蛋白质序列和功能信息数据库",
+      "formats": ["fasta", "xml", "txt"]
+    },
+    {
+      "id": "bindingdb",
+      "name": "BindingDB",
+      "url": "https://www.bindingdb.org/",
+      "description": "结合亲和力数据库",
+      "formats": ["csv", "sdf", "json"]
+    },
+    {
+      "id": "chembl",
+      "name": "ChEMBL",
+      "url": "https://www.ebi.ac.uk/chembl/",
+      "description": "药物样生物活性分子数据库",
+      "formats": ["csv", "sdf", "json"]
+    },
+    {
+      "id": "drugbank",
+      "name": "DrugBank",
+      "url": "https://go.drugbank.com/",
+      "description": "药物和药物靶点数据库",
+      "formats": ["xml", "csv", "json"]
+    }
+  ],
+  "binding_analysis_methods": [
+    {
+      "id": "molecular_docking",
+      "name": "分子对接",
+      "tools": ["AutoDock Vina", "Glide", "GOLD", "DOCK"],
+      "output": ["结合能", "结合构象", "相互作用类型"]
+    },
+    {
+      "id": "md_simulation",
+      "name": "分子动力学模拟",
+      "tools": ["GROMACS", "AMBER", "NAMD", "OpenMM"],
+      "output": ["RMSD", "RMSF", "结合自由能", "相互作用网络"]
+    },
+    {
+      "id": "pharmacophore",
+      "name": "药效团分析",
+      "tools": ["Phase", "LigandScout", "Pharmer"],
+      "output": ["药效团模型", "特征匹配", "叠合分数"]
+    },
+    {
+      "id": "binding_site_prediction",
+      "name": "结合位点预测",
+      "tools": ["SiteMap", "fpocket", "CASTp", "DoGSiteScorer"],
+      "output": ["位点体积", "疏水性", "可及性", "Druggability评分"]
+    }
+  ],
+  "interaction_types": [
+    {"id": "hydrogen_bond", "name": "氢键", "strength": "中等", "distance_range": [2.5, 3.5]},
+    {"id": "ionic", "name": "离子键", "strength": "强", "distance_range": [2.5, 4.0]},
+    {"id": "hydrophobic", "name": "疏水作用", "strength": "弱", "distance_range": [3.4, 4.5]},
+    {"id": "pi_stacking", "name": "π-π堆积", "strength": "中等", "distance_range": [3.3, 4.0]},
+    {"id": "pi_cation", "name": "π-阳离子", "strength": "中等", "distance_range": [3.5, 6.0]},
+    {"id": "halogen_bond", "name": "卤键", "strength": "中等", "distance_range": [3.0, 3.5]},
+    {"id": "metal_coordination", "name": "金属配位", "strength": "强", "distance_range": [1.8, 2.5]},
+    {"id": "van_der_waals", "name": "范德华力", "strength": "弱", "distance_range": [3.0, 5.0]}
+  ],
+  "hotspot_residues": {
+    "criteria": [
+      "ΔΔG_binding > 2 kcal/mol",
+      "保守性 > 90%",
+      "溶剂可及表面积变化"
+    ],
+    "alanine_scanning": {
+      "method": "丙氨酸扫描突变",
+      "threshold": 2.0,
+      "unit": "kcal/mol"
+    }
+  }
+}

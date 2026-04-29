@@ -1,0 +1,41 @@
+<!-- AI提问页 -->
+<view class="page">
+  <view class="section">
+    <text class="section-title">🤖 选择AI角色</text>
+    <view class="role-list">
+      <view class="role-item {{item.selected?'selected':''}}" 
+            wx:for="{{roles}}" wx:key="role_id"
+            bindtap="toggleRole" data-index="{{index}}">
+        <text class="role-emoji">{{item.emoji}}</text>
+        <view class="role-info">
+          <text class="role-name">{{item.display_name}}</text>
+          <text class="role-expertise">{{item.expertise[0]}} / {{item.expertise[1]}}</text>
+        </view>
+        <checkbox checked="{{item.selected}}" class="role-check" />
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="section-title">💬 提问</text>
+    <textarea class="input-area" placeholder="输入你的药物研发问题..." value="{{question}}" bindinput="onInput" />
+    <view class="input-label">背景信息（可选）</view>
+    <textarea class="input-area small" placeholder="化合物数据、实验结果等..." value="{{context}}" bindinput="onContextInput" />
+    <button class="btn-primary full" bindtap="submitAsk" disabled="{{loading}}">
+      <text wx:if="{{!loading}}">提交问题</text>
+      <text wx:else>AI思考中...</text>
+    </button>
+  </view>
+
+  <view class="section" wx:if="{{responses.length > 0}}">
+    <text class="section-title">📝 AI回答</text>
+    <view class="response-card" wx:for="{{responses}}" wx:key="role">
+      <view class="response-header">
+        <text class="response-emoji">{{item.emoji}}</text>
+        <text class="response-name">{{item.name}}</text>
+        <text class="response-role">{{item.role}}</text>
+      </view>
+      <text class="response-content">{{item.message}}</text>
+    </view>
+  </view>
+</view>

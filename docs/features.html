@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features — DrugMind AI Drug Discovery</title>
+<meta name="description" content="DrugMind核心功能详解：分子对接、ADMET预测、虚拟筛选、知识图谱、多Agent协作。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.features-hero{padding:10rem 2rem 4rem;text-align:center}
+.features-hero h1{font-size:2.8rem;font-weight:800;margin-bottom:1rem}
+.features-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.features-hero p{color:var(--dim);font-size:1.1rem;max-width:600px;margin:0 auto}
+.feature-detail{max-width:1100px;margin:0 auto;padding:3rem 2rem}
+.feature-row{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin:4rem 0}
+.feature-row.reverse{direction:rtl}
+.feature-row.reverse>*{direction:ltr}
+.feature-visual{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;min-height:300px;display:flex;align-items:center;justify-content:center}
+.feature-visual .mockup{font-size:4rem}
+.feature-info h2{font-size:1.8rem;font-weight:700;margin-bottom:1rem}
+.feature-info h2 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.feature-info p{color:var(--dim);margin-bottom:1.5rem;line-height:1.8}
+.feature-tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.feature-tag{background:rgba(6,182,212,.1);color:var(--accent);padding:.3rem .8rem;border-radius:20px;font-size:.8rem;font-weight:600}
+.feature-list{list-style:none;margin-top:1rem}
+.feature-list li{padding:.5rem 0;color:var(--dim);font-size:.95rem;border-bottom:1px solid rgba(30,45,74,.3)}
+.feature-list li::before{content:'';margin-right:.5rem}
+@media(max-width:768px){.feature-row{grid-template-columns:1fr;gap:2rem}.feature-row.reverse{direction:ltr}.features-hero h1{font-size:2rem}}
+</style>
+</head>
+<body style="padding-top:56px!important" style="padding-top:56px!important"><nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng1)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
+    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">DrugMind — AI Drug Design Platform</span>
+  </a>
+  <div style="display:flex;gap:6px;align-items:center">
+    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">生态首页</a>
+    <a href="https://github.com/DrugMind — AI Drug Design Platform" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
+    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
+  </div>
+</nav>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">💊</div>
+    <span class="nav-logo-text">DrugMind</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="features.html" class="active">Features</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="agents.html">Agents</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="api-docs.html">API</a>
+  </div>
+  <a class="nav-cta" href="pricing.html">Get Started</a>
+</nav>
+
+<section class="features-hero">
+  <h1>Core <span>Features</span></h1>
+  <p>8大核心功能模块，覆盖药物发现全流程</p>
+</section>
+
+<div class="feature-detail">
+
+  <div class="feature-row">
+    <div class="feature-visual"><div class="mockup">🎯</div></div>
+    <div class="feature-info">
+      <h2><span>Target Discovery</span> 靶点发现</h2>
+      <p>基于知识图谱和多组学数据，AI自动识别潜在药物靶点。整合UniProt、PDB、OpenTargets等权威数据库，通过网络药理学分析靶点-疾病关联强度。</p>
+      <ul class="feature-list">
+        <li>知识图谱包含 50,000+ 靶点-疾病关联</li>
+        <li>支持基因组、转录组、蛋白质组多组学整合</li>
+        <li>靶点可药性评分 (Druggability Score)</li>
+        <li>自动关联临床试验和文献证据</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="feature-row reverse">
+    <div class="feature-visual"><div class="mockup">🔬</div></div>
+    <div class="feature-info">
+      <h2><span>Molecular Docking</span> 分子对接</h2>
+      <p>集成AutoDock Vina和DiffDock，支持大规模虚拟分子筛选。GPU加速的分子动力学模拟，精确预测配体-受体结合模式。</p>
+      <ul class="feature-list">
+        <li>支持 AutoDock Vina / DiffDock / GNINA 三引擎</li>
+        <li>批量对接: 10,000+ 分子/小时</li>
+        <li>结合自由能计算 (MM-PBSA/GBSA)</li>
+        <li>3D可视化结合位点分析</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="feature-visual"><div class="mockup">⚗️</div></div>
+    <div class="feature-info">
+      <h2><span>ADMET Prediction</span> ADMET预测</h2>
+      <p>深度学习模型预测化合物的吸收、分布、代谢、排泄和毒性。基于120万+实验数据训练，覆盖28个ADMET端点。</p>
+      <ul class="feature-list">
+        <li>28个ADMET端点预测</li>
+        <li>AUC > 0.85 的预测准确率</li>
+        <li>覆盖 hERG毒性、肝毒性、致突变性</li>
+        <li>支持SMILES和SDF格式输入</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="feature-row reverse">
+    <div class="feature-visual"><div class="mockup">🧪</div></div>
+    <div class="feature-info">
+      <h2><span>Virtual Screening</span> 虚拟筛选</h2>
+      <p>基于DrugCLIP深度学习模型的高通量虚拟筛选。支持从ZINC、ChEMBL等数据库中快速发现先导化合物。</p>
+      <ul class="feature-list">
+        <li>DrugCLIP深度学习筛选引擎</li>
+        <li>ZINC (2.3亿+) / ChEMBL (200万+) 化合物库</li>
+        <li>基于相似性的先导化合物优化</li>
+        <li>多目标优化 (活性+选择性+ADMET)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="feature-visual"><div class="mockup">🤖</div></div>
+    <div class="feature-info">
+      <h2><span>Multi-Agent</span> 多Agent协作</h2>
+      <p>8个专业AI Agent分工协作，覆盖从靶点发现到IND申报的全流程。每个Agent独立决策，协同优化。</p>
+      <div class="feature-tags">
+        <span class="feature-tag">靶点Agent</span>
+        <span class="feature-tag">分子Agent</span>
+        <span class="feature-tag">ADMET Agent</span>
+        <span class="feature-tag">筛选Agent</span>
+        <span class="feature-tag">优化Agent</span>
+        <span class="feature-tag">文献Agent</span>
+        <span class="feature-tag">报告Agent</span>
+        <span class="feature-tag">合规Agent</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-row reverse">
+    <div class="feature-visual"><div class="mockup">📊</div></div>
+    <div class="feature-info">
+      <h2><span>Knowledge Graph</span> 知识图谱</h2>
+      <p>整合OMIM、PubMed、DrugBank、UniProt等20+权威数据源，构建药物研发知识图谱，支持路径推理和关联发现。</p>
+      <ul class="feature-list">
+        <li>50万+实体、200万+关系</li>
+        <li>疾病-靶点-药物-通路多维关联</li>
+        <li>自动文献挖掘和证据链构建</li>
+        <li>支持SPARQL和REST API查询</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);text-align:center;padding:3rem 2rem;color:var(--dim)">
+  <p>DrugMind — AI Drug Discovery Platform | <a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind" style="color:var(--accent)">GitHub</a></p>
+  <p style="margin-top:1rem;font-size:.8rem">
+    <a href="https://mokangmedical.github.io/medichat-rd/" style="color:var(--dim);margin:0 .3rem">MediChat-RD</a> |
+    <a href="https://mokangmedical.github.io/voicehealth/" style="color:var(--dim);margin:0 .3rem">VoiceHealth</a> |
+    <a href="https://www.digitalsage.cloud" style="color:var(--dim);margin:0 .3rem">Digital Sage</a> |
+    <a href="https://mokangmedical.github.io/tianyan/" style="color:var(--dim);margin:0 .3rem">天眼</a>
+  </p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
+</script>
+</body>
+</html>

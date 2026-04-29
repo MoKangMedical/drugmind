@@ -1,0 +1,30 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/discuss/discuss",
+    "pages/ask/ask",
+    "pages/molecule/molecule",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1a1a2e",
+    "navigationBarTitleText": "DrugMind",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0a0a1a",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#8892b0",
+    "selectedColor": "#64ffda",
+    "backgroundColor": "#1a1a2e",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "img/home.png", "selectedIconPath": "img/home-active.png" },
+      { "pagePath": "pages/discuss/discuss", "text": "讨论", "iconPath": "img/discuss.png", "selectedIconPath": "img/discuss-active.png" },
+      { "pagePath": "pages/ask/ask", "text": "AI提问", "iconPath": "img/ask.png", "selectedIconPath": "img/ask-active.png" },
+      { "pagePath": "pages/molecule/molecule", "text": "工具", "iconPath": "img/tool.png", "selectedIconPath": "img/tool-active.png" },
+      { "pagePath": "pages/profile/profile", "text": "我的", "iconPath": "img/profile.png", "selectedIconPath": "img/profile-active.png" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,158 @@
+{
+  "version": "1.0.0",
+  "description": "药物法规审批路径",
+  "regions": [
+    {
+      "id": "fda",
+      "name": "美国FDA",
+      "full_name": "U.S. Food and Drug Administration",
+      "country": "美国",
+      "url": "https://www.fda.gov/",
+      "pathways": [
+        {
+          "id": "nda",
+          "name": "新药申请(NDA)",
+          "description": "新分子实体的上市申请",
+          "review_type": ["标准审评", "优先审评"],
+          "timeline_months": {"standard": 12, "priority": 8},
+          "requirements": ["临床前数据", "CMC数据", "临床数据", "标签草案"]
+        },
+        {
+          "id": "bla",
+          "name": "生物制品许可申请(BLA)",
+          "description": "生物制品的上市申请",
+          "review_type": ["标准审评", "优先审评"],
+          "timeline_months": {"standard": 12, "priority": 8}
+        },
+        {
+          "id": "anda",
+          "name": "简略新药申请(ANDA)",
+          "description": "仿制药申请",
+          "requirements": ["生物等效性", "CMC数据", "标签"]
+        },
+        {
+          "id": "ind",
+          "name": "新药临床试验申请(IND)",
+          "description": "人体临床试验申请",
+          "types": ["商业IND", "研究IND", "紧急IND"],
+          "timeline_days": 30,
+          "requirements": ["临床前数据", "CMC数据", "临床方案"]
+        }
+      ],
+      "special_designations": [
+        {"id": "fast_track", "name": "快速通道", "benefit": "更频繁的FDA互动"},
+        {"id": "breakthrough", "name": "突破性疗法", "benefit": "强化指导和滚动审评"},
+        {"id": "accelerated", "name": "加速审批", "benefit": "基于替代终点批准"},
+        {"id": "priority_review", "name": "优先审评", "benefit": "缩短审评时间"},
+        {"id": "orphan", "name": "孤儿药", "benefit": "税收优惠和市场独占"},
+        {"id": "rmat", "name": "再生医学先进疗法", "benefit": "加速开发和审批"}
+      ]
+    },
+    {
+      "id": "ema",
+      "name": "欧洲EMA",
+      "full_name": "European Medicines Agency",
+      "country": "欧盟",
+      "url": "https://www.ema.europa.eu/",
+      "pathways": [
+        {
+          "id": "centralized",
+          "name": "集中审批",
+          "description": "统一授权在所有成员国上市",
+          "timeline_months": 210,
+          "mandatory_for": ["先进治疗药物", "孤儿药", "抗肿瘤药"]
+        },
+        {
+          "id": "decentralized",
+          "name": "分散审批",
+          "description": "同时在多个成员国申请",
+          "reference_member_state": "选定参考国"
+        },
+        {
+          "id": "mutual_recognition",
+          "name": "互认程序",
+          "description": "基于已授权国认可",
+          "requirement": "至少一个成员国已批准"
+        }
+      ]
+    },
+    {
+      "id": "nmpa",
+      "name": "中国NMPA",
+      "full_name": "国家药品监督管理局",
+      "country": "中国",
+      "url": "https://www.nmpa.gov.cn/",
+      "pathways": [
+        {
+          "id": "new_drug",
+          "name": "新药申请",
+          "classification": ["1类:创新药", "2类:改良型新药", "3类:仿制药"],
+          "timeline_months": {"standard": 200, "priority": 130},
+          "requirements": ["药学研究", "药理毒理", "临床试验"]
+        },
+        {
+          "id": "ind_cn",
+          "name": "临床试验申请",
+          "description": "中国IND申请",
+          "timeline_days": 60,
+          "reform": "默示许可制度"
+        },
+        {
+          "id": "import_drug",
+          "name": "进口药品注册",
+          "description": "境外药品在中国注册",
+          "requirements": ["原产国上市证明", "中国临床数据"]
+        }
+      ],
+      "special_programs": [
+        {"id": "breakthrough_cn", "name": "突破性治疗药物", "benefit": "优先审评审批"},
+        {"id": "conditional_approval", "name": "附条件批准", "benefit": "基于替代终点批准"},
+        {"id": "priority_review_cn", "name": "优先审评审批", "benefit": "缩短审评时限"},
+        {"id": "special_approval", "name": "特别审批", "benefit": "应急审批程序"}
+      ]
+    },
+    {
+      "id": "pmda",
+      "name": "日本PMDA",
+      "full_name": "独立行政法人医药品医疗器械综合机构",
+      "country": "日本",
+      "url": "https://www.pmda.go.jp/",
+      "pathways": [
+        {
+          "id": "jnda",
+          "name": "新药申请",
+          "timeline_months": 12,
+          "requirements": ["非临床数据", "临床数据", "CMC数据"]
+        },
+        {
+          "id": "sakigake",
+          "name": "先驱审查指定制度",
+          "description": "日本突破性疗法制度",
+          "benefit": "优先审评和开发支持"
+        }
+      ]
+    }
+  ],
+  "ich_guidelines": [
+    {"id": "ICH-E6", "name": "GCP指南", "description": "临床试验质量管理规范"},
+    {"id": "ICH-E8", "name": "临床试验一般考虑", "description": "临床试验设计原则"},
+    {"id": "ICH-Q1", "name": "稳定性研究", "description": "药品稳定性试验"},
+    {"id": "ICH-S", "name": "安全性指南", "description": "非临床安全性研究"},
+    {"id": "ICH-M4", "name": "CTD格式", "description": "通用技术文件格式"},
+    {"id": "ICH-E9", "name": "统计学指南", "description": "临床试验统计学原则"},
+    {"id": "ICH-E10", "name": "对照组选择", "description": "临床试验对照组选择"}
+  ],
+  "ctd_sections": [
+    {"id": "M1", "name": "行政信息和法规信息", "content": "申请表、标签、专利信息"},
+    {"id": "M2", "name": "CTD概要", "content": "质量概要、非临床概要、临床概要"},
+    {"id": "M3", "name": "质量", "content": "CMC数据、生产工艺、质量控制"},
+    {"id": "M4", "name": "非临床研究报告", "content": "药理学、药代动力学、毒理学"},
+    {"id": "M5", "content": "临床研究报告", "content": "临床试验数据、安全性报告"}
+  ],
+  "post_approval": [
+    {"id": "pharmacovigilance", "name": "药物警戒", "description": "上市后安全性监测"},
+    {"id": "rems", "name": "风险评估和缓解策略", "description": "FDA上市后风险管理"},
+    {"id": "post_market_study", "name": "上市后研究", "description": "IV期临床试验承诺"},
+    {"id": "label_update", "name": "标签更新", "description": "说明书修订"}
+  ]
+}

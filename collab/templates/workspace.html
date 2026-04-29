@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DrugMind — 团队工作区</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,sans-serif;background:#f0f4f3;color:#333;max-width:800px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,#00695c,#004d40);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.hdr h1{font-size:18px}.hdr nav{display:flex;gap:8px}
+.hdr nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:12px;padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.15)}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #e0e0e0}
+.tabs button{flex:1;padding:12px;border:none;background:none;font-size:13px;font-weight:600;color:#888;cursor:pointer;border-bottom:3px solid transparent}
+.tabs button.active{color:#00695c;border-bottom-color:#00695c}
+.wrap{padding:16px}
+.card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card h3{font-size:14px;color:#00695c;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px}
+.tag.green{background:#e0f2f1;color:#00695c}.tag.orange{background:#fff3e0;color:#e65100}.tag.blue{background:#e3f2fd;color:#1565c0}.tag.red{background:#fce4ec;color:#c62828}
+.progress-bar{height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin:8px 0}
+.progress-bar .fill{height:100%;border-radius:4px;transition:width .3s}
+.pipeline-row{display:flex;gap:6px;overflow-x:auto;padding:8px 0}
+.stage-card{min-width:130px;border-radius:10px;padding:10px;text-align:center;font-size:12px;cursor:pointer;border:2px solid transparent}
+.stage-card.current{border-color:#00695c}
+.stage-card.done{background:#e0f2f1}.stage-card.active{background:#fff3e0}.stage-card.pending{background:#f5f5f5}
+.stage-card .icon{font-size:20px}.stage-card .name{font-weight:700;margin:4px 0}
+.stage-card .status{font-size:11px;color:#888}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px;font-size:12px;border-bottom:1px solid #f0f0f0}
+th{background:#fafafa;font-weight:600}
+.lit-item{padding:10px;border-left:3px solid #e0e0e0;margin-bottom:8px;font-size:12px}
+.lit-item .title{font-weight:700;color:#00695c;margin-bottom:2px}
+.lit-item .meta{color:#888;font-size:11px}
+.lit-item .relevance{float:right}
+.chat-area{max-height:300px;overflow-y:auto;min-height:150px}
+.msg{padding:10px 14px;border-radius:12px;margin-bottom:8px;font-size:13px;line-height:1.6;max-width:90%}
+.msg.user{background:#e0f2f1;margin-left:auto;text-align:right}
+.msg.ai{background:#f5f5f5}
+.msg .label{font-size:11px;color:#888;margin-bottom:3px}
+input,select,textarea{width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;margin:4px 0 8px;font-size:13px}
+.btn{padding:8px 16px;border:none;border-radius:8px;cursor:pointer;font-size:13px}
+.btn.teal{background:#00695c;color:#fff}
+.btn.outline{background:#fff;color:#00695c;border:1px solid #00695c}
+.collab-log{font-size:12px;line-height:2;color:#555}
+.collab-log .time{color:#aaa}
+.tab-content{display:none}.tab-content.active{display:block}
+.metric{display:inline-block;padding:8px 14px;background:#e0f2f1;border-radius:8px;margin:4px;text-align:center}
+.metric .num{font-size:22px;font-weight:800;color:#00695c}.metric .label{font-size:11px;color:#888}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>🔬 DrugMind · 辉瑞罕见病团队</h1>
+  <nav><a href="/">📊 定价</a><a href="/workspace">🔬 工作区</a></nav>
+</div>
+
+<div class="tabs">
+  <button class="active" onclick="showTab('pipeline')">🎯 管线追踪</button>
+  <button onclick="showTab('literature')">📚 文献聚合</button>
+  <button onclick="showTab('ai')">🤖 AI决策</button>
+  <button onclick="showTab('team')">👥 团队协作</button>
+  <button onclick="showTab('twin')">🧬 数字孪生</button>
+  <button onclick="showTab('competitor')">⚔️ 竞品</button>
+</div>
+
+<!-- 管线追踪 -->
+<div id="tab-pipeline" class="tab-content active wrap">
+  <div class="card">
+    <h3>🎯 庞贝病基因治疗管线 — 进度</h3>
+    <div class="pipeline-row">
+      <div class="stage-card done" onclick="selectStage(0)"><div class="icon">🎯</div><div class="name">靶点发现</div><div class="status">✅ 已完成</div></div>
+      <div class="stage-card current active" onclick="selectStage(1)"><div class="icon">💊</div><div class="name">先导发现</div><div class="status">🔄 进行中</div></div>
+      <div class="stage-card pending" onclick="selectStage(2)"><div class="icon">🔬</div><div class="name">临床前</div><div class="status">⏳ 待启动</div></div>
+      <div class="stage-card pending" onclick="selectStage(3)"><div class="icon">🏥</div><div class="name">临床试验</div><div class="status">⏳ 待启动</div></div>
+      <div class="stage-card pending" onclick="selectStage(4)"><div class="icon">📊</div><div class="name">上市后</div><div class="status">⏳ 待启动</div></div>
+    </div>
+    <div class="progress-bar"><div class="fill" style="width:35%;background:#00695c"></div></div>
+    <div style="font-size:12px;color:#888;text-align:center">整体进度 35% · 预计2026年Q4进入临床前</div>
+  </div>
+
+  <div class="card">
+    <h3>📋 当前阶段：先导发现 — 任务清单</h3>
+    <table>
+      <tr><th>任务</th><th>负责人</th><th>状态</th><th>截止</th></tr>
+      <tr><td>AAV9载体优化方案</td><td>王博</td><td><span class="tag green">已完成</span></td><td>4/20</td></tr>
+      <tr><td>AAV8载体对比分析</td><td>李研</td><td><span class="tag orange">进行中</span></td><td>4/28</td></tr>
+      <tr><td>表达量预测模型</td><td>AI</td><td><span class="tag orange">进行中</span></td><td>4/25</td></tr>
+      <tr><td>毒理初筛</td><td>张博</td><td><span class="tag blue">待分配</span></td><td>5/5</td></tr>
+      <tr><td>动物模型选择报告</td><td>王博</td><td><span class="tag blue">待分配</span></td><td>5/10</td></tr>
+    </table>
+    <button class="btn teal" style="margin-top:10px" onclick="addTask()">+ 添加任务</button>
+  </div>
+
+  <div class="card">
+    <h3>📊 关键指标</h3>
+    <div style="text-align:center">
+      <div class="metric"><div class="num">5</div><div class="label">在研管线</div></div>
+      <div class="metric"><div class="num">23</div><div class="label">活跃任务</div></div>
+      <div class="metric"><div class="num">147</div><div class="label">文献追踪</div></div>
+      <div class="metric"><div class="num">8</div><div class="label">AI建议</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 文献聚合 -->
+<div id="tab-literature" class="tab-content wrap">
+  <div class="card">
+    <h3>📚 文献自动聚合 · 庞贝病 GAA靶点</h3>
+    <div style="display:flex;gap:6px;margin-bottom:10px">
+      <input id="litQuery" placeholder="搜索关键词..." style="flex:1">
+      <button class="btn teal" onclick="searchLit()">搜索</button>
+    </div>
+    <div id="litResults">
+      <div class="lit-item">
+        <span class="tag green">高相关</span>
+        <div class="title">AAV-mediated gene therapy for Pompe disease: long-term efficacy in mouse model</div>
+        <div class="meta">Nature Gene Therapy · 2026-03-15 · 被引28次</div>
+        <div style="font-size:12px;color:#555;margin-top:4px">证明AAV9载体在庞贝病小鼠模型中实现长期GAA表达，12个月随访酶活性维持>60%...</div>
+      </div>
+      <div class="lit-item">
+        <span class="tag orange">中相关</span>
+        <div class="title">CRISPR-Cas9 correction of GAA mutations in patient-derived iPSCs</div>
+        <div class="meta">Cell Stem Cell · 2026-02-28 · 被引15次</div>
+        <div style="font-size:12px;color:#555;margin-top:4px">利用CRISPR精准修正患者iPSC中GAA基因突变，分化后成纤维细胞酶活性恢复至正常水平80%...</div>
+      </div>
+      <div class="lit-item">
+        <span class="tag blue">方法学</span>
+        <div class="title">Machine learning-guided optimization of AAV capsid for muscle targeting</div>
+        <div class="meta">Science Translational Medicine · 2026-04-01 · 被引42次</div>
+        <div style="font-size:12px;color:#555;margin-top:4px">ML模型指导AAV衣壳定向进化，肌肉靶向效率提升3.2倍，为庞贝病等肌肉疾病基因治疗提供新工具...</div>
+      </div>
+      <div class="lit-item">
+        <span class="tag orange">数据源</span>
+        <div class="title">📚 Awesome-AI4Med 已集成（20+医疗LLM + 25个数据集 + 3个Benchmark框架）</div>
+        <div class="meta">GitHub · FreedomIntelligence · 2.7k stars · 实时更新</div>
+        <div style="font-size:12px;color:#555;margin-top:4px">包含 HuatuoGPT-o1、MedReason、Apollo 等最新医疗推理模型，Huatuo-26M（2600万条训练数据），MedBench 中文评测基准...</div>
+      </div>
+      <div class="lit-item">
+        <span class="tag green">高相关</span>
+        <div class="title">Enzyme replacement therapy vs gene therapy: cost-effectiveness in lysosomal storage disorders</div>
+        <div class="meta">Health Economics · 2026-01-10 · 被引8次</div>
+        <div style="font-size:12px;color:#555;margin-top:4px">基因治疗vs酶替代疗法经济学分析：虽然前期成本高5-10倍，但10年总成本降低60%...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI决策 -->
+<div id="tab-ai" class="tab-content wrap">
+  <div class="card">
+    <h3>🤖 AI决策助手 · 管线决策支持</h3>
+    <div class="chat-area" id="aiChat">
+      <div class="msg ai">
+        <div class="label">🤖 DrugMind AI</div>
+        你好！我是你的管线决策助手。我可以帮你分析：<br><br>
+        ✅ 载体选择建议（AAV vs LNP vs 外泌体）<br>
+        ✅ 竞品管线对比（时间线/技术路线/风险）<br>
+        ✅ 文献摘要和关键发现提取<br>
+        ✅ 试验设计方案优化<br><br>
+        <strong>你需要什么帮助？</strong>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:8px">
+      <input id="aiInput" placeholder="问我任何管线决策问题..." style="flex:1" onkeydown="if(event.key==='Enter')askAI()">
+      <button class="btn teal" onclick="askAI()">发送</button>
+    </div>
+    <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">
+      <button class="btn outline" onclick="quickAsk('载体选择')">🎯 载体选择</button>
+      <button class="btn outline" onclick="quickAsk('竞品对比')">⚔️ 竞品对比</button>
+      <button class="btn outline" onclick="quickAsk('风险评估')">⚠️ 风险评估</button>
+      <button class="btn outline" onclick="quickAsk('文献摘要')">📚 文献摘要</button>
+      <button class="btn outline" onclick="quickAsk('靶点分析')">🧬 靶点分析</button>
+      <button class="btn outline" onclick="quickAsk('临床设计')">📋 临床设计</button>
+    </div>
+    <div style="font-size:11px;color:#888;margin-top:6px">底层引擎：HuatuoGPT-o1 + MedReason + Awesome-AI4Med 集成</div>
+  </div>
+
+  <div class="card">
+    <h3>📊 AI决策建议（最近）</h3>
+    <table>
+      <tr><th>建议</th><th>置信度</th><th>依据</th><th>状态</th></tr>
+      <tr><td>AAV9优于AAV8（肌肉靶向）</td><td>87%</td><td>3篇文献+临床数据</td><td><span class="tag green">已采纳</span></td></tr>
+      <tr><td>建议先做表达量预测再选动物模型</td><td>72%</td><td>类似管线经验</td><td><span class="tag orange">待讨论</span></td></tr>
+      <tr><td>竞品Sarepta管线可能提前上市</td><td>65%</td><td>临床注册数据</td><td><span class="tag blue">跟踪中</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 数字孪生模拟 -->
+<div id="tab-twin" class="tab-content wrap">
+  <div class="card">
+    <h3>🧬 数字孪生模拟 · 庞贝病AAV9基因治疗</h3>
+    <p style="font-size:12px;color:#888;margin-bottom:10px">基于文献数据+AI模型，模拟不同方案的治疗效果</p>
+    <table>
+      <tr><th>方案</th><th>载体剂量</th><th>预计酶活性</th><th>持续时间</th><th>安全性</th></tr>
+      <tr><td>AAV9 低剂量</td><td>1e13 vg/kg</td><td>45%</td><td>12个月</td><td><span class="tag green">低风险</span></td></tr>
+      <tr><td>AAV9 中剂量</td><td>5e13 vg/kg</td><td>72%</td><td>18个月</td><td><span class="tag orange">中风险</span></td></tr>
+      <tr style="background:#e0f2f1"><td><strong>AAV9 高剂量</strong></td><td><strong>1e14 vg/kg</strong></td><td><strong>89%</strong></td><td><strong>24个月+</strong></td><td><span class="tag orange">中风险</span></td></tr>
+      <tr><td>AAV8 中剂量</td><td>5e13 vg/kg</td><td>58%</td><td>12个月</td><td><span class="tag green">低风险</span></td></tr>
+      <tr><td>LNP-mRNA</td><td>2mg/kg</td><td>35%</td><td>需多次给药</td><td><span class="tag green">低风险</span></td></tr>
+    </table>
+    <div style="text-align:center;margin-top:10px;background:#e0f2f1;padding:10px;border-radius:8px">
+      <div style="font-size:12px;color:#888">AI推荐方案</div>
+      <div style="font-size:16px;font-weight:700;color:#00695c">AAV9 高剂量 · 酶活性89% · 持续24个月+</div>
+      <div style="font-size:11px;color:#888;margin-top:4px">置信度87% · 依据3篇文献+5个动物模型数据</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📈 模拟效果曲线（24个月预测）</h3>
+    <div style="display:flex;align-items:flex-end;gap:4px;height:100px;padding:0 10px">
+      <div style="flex:1;background:#a5d6a7;border-radius:4px 4px 0 0;height:10%" title="M0"></div>
+      <div style="flex:1;background:#66bb6a;border-radius:4px 4px 0 0;height:30%" title="M3"></div>
+      <div style="flex:1;background:#43a047;border-radius:4px 4px 0 0;height:55%" title="M6"></div>
+      <div style="flex:1;background:#2e7d32;border-radius:4px 4px 0 0;height:75%" title="M9"></div>
+      <div style="flex:1;background:#1b5e20;border-radius:4px 4px 0 0;height:85%" title="M12"></div>
+      <div style="flex:1;background:#1b5e20;border-radius:4px 4px 0 0;height:89%" title="M15"></div>
+      <div style="flex:1;background:#1b5e20;border-radius:4px 4px 0 0;height:89%" title="M18"></div>
+      <div style="flex:1;background:#1b5e20;border-radius:4px 4px 0 0;height:88%" title="M21"></div>
+      <div style="flex:1;background:#1b5e20;border-radius:4px 4px 0 0;height:87%" title="M24"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;padding:4px 10px"><span>M0</span><span>M6</span><span>M12</span><span>M18</span><span>M24</span></div>
+  </div>
+</div>
+
+<!-- 竞品管线追踪 -->
+<div id="tab-competitor" class="tab-content wrap">
+  <div class="card">
+    <h3>⚔️ 竞品管线追踪 · 庞贝病基因治疗</h3>
+    <table>
+      <tr><th>公司</th><th>产品</th><th>载体</th><th>阶段</th><th>预计上市</th></tr>
+      <tr><td>Sarepta</td><td>SRP-9001</td><td>AAV</td><td><span class="tag orange">Phase III</span></td><td>2027 Q4</td></tr>
+      <tr><td>Spark</td><td>SPK-GAA</td><td>AAV8</td><td><span class="tag blue">Phase II</span></td><td>2028 Q2</td></tr>
+      <tr><td>BioMarin</td><td>BMRN-301</td><td>LNP</td><td><span class="tag blue">Phase I</span></td><td>2029+</td></tr>
+      <tr><td>Abeona</td><td>ABO-102</td><td>AAV9</td><td><span class="tag blue">Phase I/II</span></td><td>2028 Q4</td></tr>
+      <tr style="background:#fff3e0"><td><strong>我们</strong></td><td><strong>DM-Pompe</strong></td><td><strong>AAV9</strong></td><td><span class="tag green">先导发现</span></td><td><strong>2029 Q2</strong></td></tr>
+    </table>
+    <div style="font-size:12px;color:#888;margin-top:8px">💡 策略：Sarepta Phase III最大竞品。建议加速+差异化定位（高剂量+长期持久性）</div>
+  </div>
+  <div class="card">
+    <h3>📰 竞品动态</h3>
+    <div style="font-size:12px;line-height:2.2">📰 Sarepta SRP-9001 Phase III中期数据积极（2026-04-20）<br>📰 Spark SPK-GAA获FDA孤儿药认定（2026-04-15）<br>📰 BioMarin宣布LNP路线战略转向（2026-04-10）<br>📰 Abeona ABO-102 Phase I/II剂量递增完成（2026-03-28）</div>
+  </div>
+</div>
+<!-- 团队协作 -->
+<div id="tab-team" class="tab-content wrap">
+  <div class="card">
+    <h3>👥 团队成员（5人）</h3>
+    <table>
+      <tr><th>成员</th><th>角色</th><th>活跃任务</th><th>最后活跃</th></tr>
+      <tr><td>👨‍🔬 王博士</td><td>项目负责人</td><td>3个</td><td>5分钟前</td></tr>
+      <tr><td>👩‍🔬 李研究员</td><td>基因治疗专家</td><td>2个</td><td>1小时前</td></tr>
+      <tr><td>👨‍💻 张博士</td><td>计算生物学家</td><td>2个</td><td>30分钟前</td></tr>
+      <tr><td>👩‍⚕️ 陈医生</td><td>临床顾问</td><td>1个</td><td>昨天</td></tr>
+      <tr><td>🤖 AI助手</td><td>文献+决策支持</td><td>∞</td><td>实时</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>💬 协作动态</h3>
+    <div class="collab-log">
+      <div><span class="time">14:23</span> 👨‍🔬 王博 完成了「AAV9载体优化方案」评审 ✅</div>
+      <div><span class="time">13:50</span> 🤖 AI 自动生成了「AAV8 vs AAV9对比报告」</div>
+      <div><span class="time">11:20</span> 👩‍🔬 李研 更新了「表达量预测」任务进度</div>
+      <div><span class="time">10:05</span> 👨‍💻 张博士 上传了「GAA蛋白结构PDB」</div>
+      <div><span class="time">09:30</span> 📚 系统自动抓取了3篇新文献（庞贝病/A9载体）</div>
+      <div><span class="time">09:00</span> 🤖 AI 建议：「考虑先做表达量预测再选动物模型」</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📎 知识库</h3>
+    <div style="font-size:12px;line-height:2">
+      📁 <strong>GAA靶点</strong>（147篇文献）<br>
+      📁 <strong>AAV载体技术</strong>（89篇文献）<br>
+      📁 <strong>庞贝病临床数据</strong>（23份报告）<br>
+      📁 <strong>竞品管线追踪</strong>（5家公司）<br>
+      📁 <strong>实验方案</strong>（12个SOP）
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card" style="text-align:center;background:#e0f2f1">
+    <div style="font-size:13px;color:#00695c;margin-bottom:8px">团队版 · ¥500/人/月 · 5席位</div>
+    <button class="btn teal" onclick="alert('请联系销售升级：400-DrugMind')">升级企业版</button>
+  </div>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function selectStage(i){
+  document.querySelectorAll('.stage-card').forEach((s,idx)=>{
+    s.classList.toggle('current',idx===i);
+  });
+}
+function addTask(){
+  const name=prompt('任务名称：');
+  if(name){alert('任务「'+name+'」已添加到待分配')}
+}
+function searchLit(){
+  const q=document.getElementById('litQuery').value||'GAA';
+  alert('搜索「'+q+'」— 已从PubMed/OMIM/OpenTargets聚合最新文献');
+}
+const aiResponses={
+  '载体选择':'<strong>载体选择建议：</strong><br>根据文献分析，AAV9在肌肉组织中表达效率最高（>AAV8约2.1倍）。推荐优先测试AAV9，同时保留AAV8作为备选。<br><br>依据：3篇Nature/Cell文章，12个月动物实验数据。',
+  '竞品对比':'<strong>竞品管线对比：</strong><br>1. Sarepta (SRP-9001)：AAV载体，Phase III，预计2027年上市<br>2. Spark (SPK-GAA)：AAV8，Phase II，2028年预期<br>3. BioMarin：LNP路线，Phase I，风险较高<br><br>⚠️ 建议：我们的AAV9路线与Sarepta差异化不大，需要加速或寻找差异化定位。',
+  '风险评估':'<strong>当前管线风险评估：</strong><br>🔴 高风险：AAV免疫原性（28%人群有预存抗体）<br>🟡 中风险：表达量不足需多次给药<br>🟢 低风险：载体稳定性<br><br>建议：同步开发LNP路线作为Plan B。',
+  '文献摘要':'<strong>最近3篇关键文献摘要：</strong><br>1. AAV9+庞贝病小鼠：12个月酶活性>60%（Nature Gene Therapy）<br>2. CRISPR修正GAA突变：iPSC酶活性恢复80%（Cell Stem Cell）<br>3. ML优化AAV衣壳：肌肉靶向+3.2倍（Science TM）<br><br>→ 三篇都支持AAV9优先路线。',
+  '靶点分析':'<strong>GAA靶点分析：</strong><br>基因：GAA（酸性α-葡萄糖苷酶）<br>疾病：庞贝病（糖原贮积病II型）<br>致病机制：GAA基因突变→溶酶体GAA缺失→糖原累积→肌肉损伤<br>现有疗法：酶替代疗法（ERT）+ 底物减少疗法（SRT）<br>→ 基因治疗是最有前景的根治方案。',
+  '临床设计':'<strong>临床试验设计建议：</strong><br>Phase I：10-15例，安全性+PK/PD，12个月<br>Phase II：30-50例，有效性+剂量探索，18个月<br>Phase III：100-200例，确证性RCT，24个月<br>→ 推荐采用适应性设计，Phase I/II合并以加速开发。'
+};
+function askAI(){
+  const q=document.getElementById('aiInput').value.trim();
+  if(!q)return;
+  const area=document.getElementById('aiChat');
+  area.innerHTML+='<div class="msg user"><div class="label">👤 你</div>'+q+'</div>';
+  document.getElementById('aiInput').value='';
+  setTimeout(()=>{
+    let resp='根据文献和管线数据分析：'+q+' 目前没有足够的直接证据。建议增加文献检索关键词或咨询团队专家。';
+    for(let k in aiResponses){if(q.includes(k)){resp=aiResponses[k];break;}}
+    area.innerHTML+='<div class="msg ai"><div class="label">🤖 DrugMind AI</div>'+resp+'</div>';
+    area.scrollTop=area.scrollHeight;
+  },800);
+}
+function quickAsk(q){document.getElementById('aiInput').value=q;askAI();}
+</script>
+</body>
+</html>

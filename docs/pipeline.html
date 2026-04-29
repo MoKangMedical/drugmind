@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drug Pipeline -- DrugMind AI Drug Discovery</title>
+<meta name="description" content="DrugMind AI-driven drug development pipeline from target discovery to IND filing. Interactive visualization of each phase.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.pipeline-hero{padding:140px 2rem 60px;text-align:center}
+.pipeline-hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin-bottom:1rem}
+.pipeline-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pipeline-hero p{color:var(--dim);font-size:1.15rem;max-width:600px;margin:0 auto}
+
+/* Interactive Timeline */
+.timeline-section{max-width:1200px;margin:0 auto;padding:0 2rem 3rem}
+.timeline-nav{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
+.timeline-btn{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:0.8rem 1.2rem;cursor:pointer;transition:all 0.3s;
+  display:flex;align-items:center;gap:0.6rem;font-family:inherit;color:var(--dim);
+  font-size:0.85rem;font-weight:600;min-width:140px;justify-content:center;
+}
+.timeline-btn:hover{border-color:var(--accent);color:var(--text)}
+.timeline-btn.active{background:rgba(99,102,241,0.1);border-color:var(--accent);color:var(--accent2)}
+.timeline-btn .num{
+  width:24px;height:24px;border-radius:50%;background:var(--bg2);
+  display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;
+}
+.timeline-btn.active .num{background:var(--accent);color:#fff}
+.timeline-connector{width:24px;display:flex;align-items:center;justify-content:center;color:var(--border)}
+
+/* Phase Detail */
+.phase-detail{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:2.5rem;position:relative;overflow:hidden;display:none;
+}
+.phase-detail.active{display:block;animation:fadeInUp 0.4s ease}
+.phase-detail::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gradient)}
+.phase-header{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem}
+.phase-num{
+  width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:1.3rem;font-weight:800;color:#fff;background:var(--accent);
+}
+.phase-title h2{font-size:1.4rem;font-weight:700;color:var(--text)}
+.phase-title p{color:var(--dim);font-size:0.9rem}
+
+.step-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-bottom:1.5rem}
+.step-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;transition:all 0.3s;
+}
+.step-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--glow)}
+.step-card h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text)}
+.step-card p{color:var(--dim);font-size:0.85rem;line-height:1.6}
+.step-tools{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.8rem}
+.tool-tag{
+  background:rgba(99,102,241,0.1);color:var(--accent2);
+  padding:0.2rem 0.6rem;border-radius:6px;font-size:0.75rem;font-weight:500;
+}
+
+/* Charts Section */
+.charts-section{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.chart-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:2rem;
+}
+.chart-card h3{font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text)}
+.chart-card.full-width{grid-column:1/-1}
+
+/* Funnel */
+.funnel-section{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+.funnel-container{max-width:700px;margin:0 auto}
+.funnel-stage{
+  display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;cursor:pointer;
+  transition:all 0.3s;
+}
+.funnel-stage:hover{transform:translateX(4px)}
+.funnel-bar{
+  height:48px;border-radius:8px;display:flex;align-items:center;
+  padding:0 1.5rem;transition:all 0.3s;position:relative;overflow:hidden;
+}
+.funnel-bar::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05));
+}
+.funnel-label{font-weight:600;font-size:0.9rem;min-width:160px;text-align:right}
+.funnel-value{font-weight:800;font-size:1.1rem;margin-left:auto;position:relative;z-index:1}
+.funnel-pct{font-size:0.8rem;color:var(--dim);min-width:60px}
+
+/* CTA */
+.cta-section{text-align:center;padding:4rem 2rem;background:var(--bg2)}
+.cta-section h2{font-size:2rem;font-weight:700;margin-bottom:1rem}
+.cta-section p{color:var(--dim);margin-bottom:2rem}
+.nav-links a[href="pipeline.html"]{color:var(--accent2)!important}
+
+@media(max-width:768px){
+  .charts-grid{grid-template-columns:1fr}
+  .timeline-nav{gap:2px}
+  .timeline-btn{min-width:auto;padding:0.6rem 0.8rem;font-size:0.75rem}
+  .timeline-connector{display:none}
+}
+</style>
+</head>
+<body style="padding-top:56px!important" style="padding-top:56px!important"><nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <a href="https://mokangmedical.github.io/opc-homepage/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:15px">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#ng1)" stroke-width="2.5"/><path d="M10 16h12M16 10v12" stroke="url(#ng1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="ng1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs></svg>
+    <span style="background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">DrugMind — AI Drug Design Platform</span>
+  </a>
+  <div style="display:flex;gap:6px;align-items:center">
+    <a href="https://mokangmedical.github.io/opc-homepage/" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">生态首页</a>
+    <a href="https://github.com/DrugMind — AI Drug Design Platform" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px">GitHub</a>
+    <a href="https://mokangmedical.github.io/opc-alliance/" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:6px 16px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">OPC Hub</a>
+  </div>
+</nav>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="nav-logo-text">DrugMind</span>
+    <span class="nav-logo-badge">Digital Twin</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#features">Features</a>
+    <a href="pipeline.html" class="active">Pipeline</a>
+    <a href="agents.html">Agents</a>
+    <a href="api-docs.html">API</a>
+    <a href="index.html#pricing">Pricing</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <a class="nav-cta" href="index.html#pricing">Get Started</a>
+</nav>
+
+<section class="pipeline-hero">
+  <h1>AI-Driven <span>Drug Pipeline</span></h1>
+  <p>From target discovery to IND filing, 8 AI agents cover the entire drug development lifecycle. Each phase has specialized agent collaboration, reducing traditional 4-6 year cycles to 18-24 months.</p>
+</section>
+
+<!-- Interactive Timeline Navigation -->
+<div class="timeline-section">
+  <div class="timeline-nav">
+    <button class="timeline-btn active" data-phase="1" onclick="showPhase(1)">
+      <span class="num">1</span> Target Discovery
+    </button>
+    <div class="timeline-connector">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </div>
+    <button class="timeline-btn" data-phase="2" onclick="showPhase(2)">
+      <span class="num">2</span> Hit Identification
+    </button>
+    <div class="timeline-connector">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </div>
+    <button class="timeline-btn" data-phase="3" onclick="showPhase(3)">
+      <span class="num">3</span> Lead Optimization
+    </button>
+    <div class="timeline-connector">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </div>
+    <button class="timeline-btn" data-phase="4" onclick="showPhase(4)">
+      <span class="num">4</span> Preclinical & IND
+    </button>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase-detail active" id="phase-1">
+    <div class="phase-header">
+      <div class="phase-num">1</div>
+      <div class="phase-title">
+        <h2>Target Discovery & Validation</h2>
+        <p>AI-driven target mining from literature and multi-omics data to identify high-value targets</p>
+      </div>
+    </div>
+    <div class="step-cards">
+      <div class="step-card">
+        <h3>Literature Mining</h3>
+        <p>NLP engine scans PubMed, ClinicalTrials.gov and 20+ databases daily, automatically extracting gene-disease-drug triple relationships to build real-time knowledge graphs.</p>
+        <div class="step-tools"><span class="tool-tag">BioBERT</span><span class="tool-tag">PubMed API</span><span class="tool-tag">NER</span></div>
+      </div>
+      <div class="step-card">
+        <h3>Multi-Omics Integration</h3>
+        <p>Integrates genomics, transcriptomics, proteomics, and metabolomics data. Graph neural networks identify core disease pathways and potential intervention targets.</p>
+        <div class="step-tools"><span class="tool-tag">GNN</span><span class="tool-tag">TCGA</span><span class="tool-tag">GTEx</span></div>
+      </div>
+      <div class="step-card">
+        <h3>Druggability Assessment</h3>
+        <p>Based on AlphaFold2 structure prediction and pocket detection algorithms, evaluates target protein druggability and predicts feasibility across modalities (small molecule, antibody, PROTAC).</p>
+        <div class="step-tools"><span class="tool-tag">AlphaFold2</span><span class="tool-tag">fpocket</span><span class="tool-tag">PDB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-detail" id="phase-2">
+    <div class="phase-header">
+      <div class="phase-num">2</div>
+      <div class="phase-title">
+        <h2>Hit Identification</h2>
+        <p>Rapid screening of hit compounds from million-scale compound libraries</p>
+      </div>
+    </div>
+    <div class="step-cards">
+      <div class="step-card">
+        <h3>Virtual Screening</h3>
+        <p>Dual strategy combining structure-based (SBVS) and ligand-based (LBVS) screening. DrugCLIP deep learning model achieves rapid primary screening of 1M+ compounds daily.</p>
+        <div class="step-tools"><span class="tool-tag">DrugCLIP</span><span class="tool-tag">AutoDock Vina</span><span class="tool-tag">RDKit</span></div>
+      </div>
+      <div class="step-card">
+        <h3>AI Molecular Generation</h3>
+        <p>Transformer and diffusion model-based molecular generation engine designs novel structures satisfying multi-objective constraints (activity, druggability, synthetic feasibility).</p>
+        <div class="step-tools"><span class="tool-tag">REINVENT</span><span class="tool-tag">Diffusion</span><span class="tool-tag">SMILES</span></div>
+      </div>
+      <div class="step-card">
+        <h3>Molecular Docking</h3>
+        <p>Proprietary Glide-Style docking engine with deep learning scoring function. Accurate prediction of protein-ligand binding modes and free energy. Supports flexible and covalent docking.</p>
+        <div class="step-tools"><span class="tool-tag">Vina-GPU</span><span class="tool-tag">GNINA</span><span class="tool-tag">PyMOL</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-detail" id="phase-3">
+    <div class="phase-header">
+      <div class="phase-num">3</div>
+      <div class="phase-title">
+        <h2>Lead Optimization</h2>
+        <p>AI-guided multi-round iterative optimization balancing activity, selectivity, and drug-likeness</p>
+      </div>
+    </div>
+    <div class="step-cards">
+      <div class="step-card">
+        <h3>ADMET Prediction</h3>
+        <p>Five-dimensional prediction covering absorption, distribution, metabolism, excretion, and toxicity. Ensemble model trained on 200+ ADMET datasets. Covers hERG, CYP450, Ames and key endpoints.</p>
+        <div class="step-tools"><span class="tool-tag">ADMETlab</span><span class="tool-tag">pkCSM</span><span class="tool-tag">SwissADME</span></div>
+      </div>
+      <div class="step-card">
+        <h3>SAR Analysis</h3>
+        <p>Automated structure-activity relationship analysis identifying key pharmacophores and toxicophores. AI recommends next modification directions, reducing trial-and-error costs.</p>
+        <div class="step-tools"><span class="tool-tag">Scaffold Analysis</span><span class="tool-tag">Matched Molecular Pairs</span></div>
+      </div>
+      <div class="step-card">
+        <h3>Retrosynthesis Planning</h3>
+        <p>AI retrosynthetic analysis automatically plans optimal synthesis routes. Evaluates synthetic feasibility (SA Score) and cost, recommending commercial reagent suppliers.</p>
+        <div class="step-tools"><span class="tool-tag">ASKCOS</span><span class="tool-tag">Retro*</span><span class="tool-tag">Reaxys</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-detail" id="phase-4">
+    <div class="phase-header">
+      <div class="phase-num">4</div>
+      <div class="phase-title">
+        <h2>Preclinical Research & IND Filing</h2>
+        <p>Bridging from in vitro to in vivo, from animal to human studies</p>
+      </div>
+    </div>
+    <div class="step-cards">
+      <div class="step-card">
+        <h3>Toxicology Prediction</h3>
+        <p>AI predicts acute, chronic, reproductive, and genotoxicity across multiple dimensions. Integrates Tox21/ToxCast data to reduce animal study risks.</p>
+        <div class="step-tools"><span class="tool-tag">Tox21</span><span class="tool-tag">ProTox</span><span class="tool-tag">DEREK</span></div>
+      </div>
+      <div class="step-card">
+        <h3>IND Document Generation</h3>
+        <p>Automatically generates CMC, pharmacology-toxicology, and clinical protocol documentation for IND filing. ReguBot Agent ensures FDA/NMPA regulatory compliance.</p>
+        <div class="step-tools"><span class="tool-tag">eCTD</span><span class="tool-tag">FDA IND</span><span class="tool-tag">NMPA</span></div>
+      </div>
+      <div class="step-card">
+        <h3>CMC Process Development</h3>
+        <p>AI-assisted formulation optimization, process parameter design, and stability prediction. Digital twin simulates scale-up manufacturing, reducing process development time.</p>
+        <div class="step-tools"><span class="tool-tag">QbD</span><span class="tool-tag">PAT</span><span class="tool-tag">Digital Twin</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Compound Funnel Visualization -->
+<section class="funnel-section">
+  <div class="section-header">
+    <div class="section-label">Compound Progression</div>
+    <h2>Typical Compound Funnel</h2>
+    <p>From millions of compounds to a single clinical candidate</p>
+  </div>
+  <div class="funnel-container">
+    <div class="funnel-stage" onmouseenter="highlightFunnel(this)" onmouseleave="resetFunnel(this)">
+      <div class="funnel-label">Virtual Library</div>
+      <div class="funnel-bar" style="width:100%;background:rgba(99,102,241,0.3)">
+        <span class="funnel-value">5,000,000</span>
+      </div>
+      <div class="funnel-pct">100%</div>
+    </div>
+    <div class="funnel-stage" onmouseenter="highlightFunnel(this)" onmouseleave="resetFunnel(this)">
+      <div class="funnel-label">Docking Filter</div>
+      <div class="funnel-bar" style="width:72%;background:rgba(99,102,241,0.35)">
+        <span class="funnel-value">50,000</span>
+      </div>
+      <div class="funnel-pct">1.0%</div>
+    </div>
+    <div class="funnel-stage" onmouseenter="highlightFunnel(this)" onmouseleave="resetFunnel(this)">
+      <div class="funnel-label">ADMET Filter</div>
+      <div class="funnel-bar" style="width:48%;background:rgba(139,92,246,0.35)">
+        <span class="funnel-value">5,000</span>
+      </div>
+      <div class="funnel-pct">0.1%</div>
+    </div>
+    <div class="funnel-stage" onmouseenter="highlightFunnel(this)" onmouseleave="resetFunnel(this)">
+      <div class="funnel-label">Lead Optimization</div>
+      <div class="funnel-bar" style="width:30%;background:rgba(139,92,246,0.4)">
+        <span class="funnel-value">500</span>
+      </div>
+      <div class="funnel-pct">0.01%</div>
+    </div>
+    <div class="funnel-stage" onmouseenter="highlightFunnel(this)" onmouseleave="resetFunnel(this)">
+      <div class="funnel-label">Preclinical</div>
+      <div class="funnel-bar" style="width:18%;background:rgba(16,185,129,0.35)">
+        <span class="funnel-value">50</span>
+      </div>
+      <div class="funnel-pct">0.001%</div>
+    </div>
+    <div class="funnel-stage" onmouseenter="highlightFunnel(this)" onmouseleave="resetFunnel(this)">
+      <div class="funnel-label">IND Candidate</div>
+      <div class="funnel-bar" style="width:10%;background:rgba(16,185,129,0.5)">
+        <span class="funnel-value">3-5</span>
+      </div>
+      <div class="funnel-pct">0.0001%</div>
+    </div>
+  </div>
+</section>
+
+<!-- Charts -->
+<section class="charts-section">
+  <div class="section-header">
+    <div class="section-label">Pipeline Analytics</div>
+    <h2>Performance Data & Insights</h2>
+    <p>Interactive charts showing pipeline metrics and timelines</p>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Time Per Pipeline Phase (Traditional vs DrugMind)</h3>
+      <canvas id="timeComparison"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Success Rate by Phase</h3>
+      <canvas id="successRate"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Monthly Compound Throughput</h3>
+      <canvas id="throughput"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Cost Breakdown by Phase</h3>
+      <canvas id="costBreakdown"></canvas>
+    </div>
+    <div class="chart-card full-width">
+      <h3>Pipeline Stage Distribution -- Active Projects</h3>
+      <canvas id="projectDist" style="max-height:300px"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Start Your AI Drug Discovery Journey</h2>
+  <p>DrugMind has helped multiple pharma companies reduce R&D cycles by 40% and costs by 60%</p>
+  <a class="btn btn-primary" href="index.html#pricing" style="margin-right:1rem">Start Free Trial</a>
+  <a class="btn btn-secondary" href="api-docs.html">API Documentation</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="nav-logo-text">DrugMind</span>
+      </a>
+      <p>AI-powered drug discovery platform. Multi-agent collaboration to accelerate drug development.</p>
+    </div>
+    <div><h4>Product</h4><ul class="footer-links"><li><a href="index.html#features">Features</a></li><li><a href="pipeline.html">Pipeline</a></li><li><a href="index.html#pricing">Pricing</a></li></ul></div>
+    <div><h4>Resources</h4><ul class="footer-links"><li><a href="api-docs.html">API Docs</a></li><li><a href="index.html#cases">Case Studies</a></li><li><a href="https://github.com/DrugMind — AI Drug Design Platform/DrugMind">GitHub</a></li></ul></div>
+    <div><h4>Company</h4><ul class="footer-links"><li><a href="https://mokangmedical.github.io/opc-homepage/">OPC Alliance</a></li><li><a href="https://github.com/DrugMind — AI Drug Design Platform">GitHub Org</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 DrugMind — AI Drug Design Platform. DrugMind -- AI Drug Discovery Platform.</div>
+</footer>
+
+<script>
+// Nav
+window.addEventListener('scroll', function() {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile nav toggle
+document.getElementById('navToggle').addEventListener('click', function() {
+  document.querySelector('.nav-links').classList.toggle('open');
+});
+
+// Phase switching
+function showPhase(n) {
+  document.querySelectorAll('.phase-detail').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.timeline-btn').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('phase-' + n).classList.add('active');
+  document.querySelector('.timeline-btn[data-phase="' + n + '"]').classList.add('active');
+}
+
+// Funnel hover effects
+function highlightFunnel(el) {
+  el.querySelector('.funnel-bar').style.boxShadow = 'var(--glow-lg)';
+  el.querySelector('.funnel-bar').style.transform = 'scale(1.02)';
+}
+function resetFunnel(el) {
+  el.querySelector('.funnel-bar').style.boxShadow = 'none';
+  el.querySelector('.funnel-bar').style.transform = 'scale(1)';
+}
+
+// Charts
+document.addEventListener('DOMContentLoaded', function() {
+  var gridColor = 'rgba(255,255,255,0.05)';
+  var dimColor = '#71717a';
+  var labelColor = '#a1a1aa';
+
+  // Time Comparison - Horizontal Bar
+  new Chart(document.getElementById('timeComparison').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Target Discovery', 'Hit Identification', 'Lead Optimization', 'Preclinical', 'IND Filing'],
+      datasets: [
+        {
+          label: 'Traditional (months)',
+          data: [18, 24, 30, 24, 12],
+          backgroundColor: 'rgba(100,116,139,0.4)',
+          borderColor: 'rgba(100,116,139,0.6)',
+          borderWidth: 1
+        },
+        {
+          label: 'DrugMind (months)',
+          data: [3, 4, 8, 10, 4],
+          backgroundColor: 'rgba(99,102,241,0.5)',
+          borderColor: '#6366f1',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: labelColor, font: { size: 11 } } }
+      },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: dimColor } },
+        y: { grid: { display: false }, ticks: { color: labelColor } }
+      }
+    }
+  });
+
+  // Success Rate - Doughnut
+  new Chart(document.getElementById('successRate').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Target-to-Hit', 'Hit-to-Lead', 'Lead-to-Candidate', 'Preclinical-to-IND', 'IND Approved'],
+      datasets: [{
+        data: [92, 78, 65, 58, 52],
+        backgroundColor: [
+          'rgba(99,102,241,0.7)',
+          'rgba(139,92,246,0.7)',
+          'rgba(6,182,212,0.7)',
+          'rgba(16,185,129,0.7)',
+          'rgba(245,158,11,0.7)'
+        ],
+        borderColor: '#141b2d',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: labelColor, font: { size: 10 }, padding: 12 }
+        }
+      }
+    }
+  });
+
+  // Throughput - Area Chart
+  new Chart(document.getElementById('throughput').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        {
+          label: 'Docking Runs',
+          data: [4200, 4800, 5100, 5800, 6200, 7100, 7800, 8200, 9100, 9800, 10200, 11000],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99,102,241,0.1)',
+          fill: true,
+          tension: 0.4
+        },
+        {
+          label: 'ADMET Predictions',
+          data: [2100, 2400, 2800, 3200, 3500, 3900, 4200, 4800, 5100, 5600, 6000, 6500],
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139,92,246,0.1)',
+          fill: true,
+          tension: 0.4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: labelColor, font: { size: 11 } } }
+      },
+      scales: {
+        y: { grid: { color: gridColor }, ticks: { color: dimColor } },
+        x: { grid: { display: false }, ticks: { color: labelColor } }
+      }
+    }
+  });
+
+  // Cost Breakdown - Stacked Bar
+  new Chart(document.getElementById('costBreakdown').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Phase 1: Target', 'Phase 2: Hit', 'Phase 3: Lead', 'Phase 4: Preclinical'],
+      datasets: [
+        {
+          label: 'Compute',
+          data: [15, 35, 25, 20],
+          backgroundColor: 'rgba(99,102,241,0.6)'
+        },
+        {
+          label: 'Data & Licensing',
+          data: [20, 15, 10, 12],
+          backgroundColor: 'rgba(139,92,246,0.6)'
+        },
+        {
+          label: 'Personnel',
+          data: [40, 30, 45, 35],
+          backgroundColor: 'rgba(6,182,212,0.6)'
+        },
+        {
+          label: 'Wet Lab',
+          data: [25, 20, 20, 33],
+          backgroundColor: 'rgba(16,185,129,0.6)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: labelColor, font: { size: 11 } } }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: labelColor, font: { size: 10 } } },
+        y: { stacked: true, grid: { color: gridColor }, ticks: { color: dimColor, callback: function(v) { return v + '%'; } } }
+      }
+    }
+  });
+
+  // Project Distribution - Polar Area
+  new Chart(document.getElementById('projectDist').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Oncology', 'CNS', 'Cardiovascular', 'Rare Disease', 'Immunology', 'Infectious', 'Metabolic'],
+      datasets: [
+        {
+          label: 'Target Discovery',
+          data: [12, 8, 5, 15, 7, 4, 6],
+          backgroundColor: 'rgba(99,102,241,0.6)'
+        },
+        {
+          label: 'Hit Identification',
+          data: [8, 5, 3, 10, 4, 3, 4],
+          backgroundColor: 'rgba(139,92,246,0.6)'
+        },
+        {
+          label: 'Lead Optimization',
+          data: [5, 3, 2, 6, 2, 2, 2],
+          backgroundColor: 'rgba(6,182,212,0.6)'
+        },
+        {
+          label: 'Preclinical',
+          data: [3, 1, 1, 3, 1, 1, 1],
+          backgroundColor: 'rgba(16,185,129,0.6)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: labelColor, font: { size: 11 } } }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: labelColor } },
+        y: { stacked: true, grid: { color: gridColor }, ticks: { color: dimColor }, title: { display: true, text: 'Active Projects', color: dimColor } }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

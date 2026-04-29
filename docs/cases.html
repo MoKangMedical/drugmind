@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DrugMind — Case Studies | AI Drug Discovery Success Stories</title>
+<meta name="description" content="Real-world case studies showcasing DrugMind's AI-driven drug discovery platform: rare disease repurposing, lead optimization, and clinical trial prediction.">
+<link rel="stylesheet" href="https://mokangmedical.github.io/opc-homepage/shared-design-system.css">
+<style>
+/* ===== Dark Theme Foundation ===== */
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a28;
+  --accent: #00d4ff;
+  --accent-dim: rgba(0,212,255,0.12);
+  --accent-glow: rgba(0,212,255,0.25);
+  --gradient: linear-gradient(135deg, #00d4ff, #7b2fff);
+  --text: #e8e8f0;
+  --text-muted: #8888a0;
+  --border: #1e1e2e;
+  --radius: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ===== Navigation ===== */
+.eco-nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(10,10,15,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  font-size: 1.3rem; font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+/* ===== Hero ===== */
+.hero {
+  text-align: center;
+  padding: 6rem 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero .badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  background: var(--accent-dim);
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.hero h1 span {
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p.subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 640px;
+  margin: 0 auto 2rem;
+}
+
+/* ===== Stats Bar ===== */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  padding: 2rem;
+  margin: 0 auto 3rem;
+  max-width: 900px;
+}
+.stats-bar .stat {
+  text-align: center;
+}
+.stats-bar .stat-num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stats-bar .stat-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ===== Case Study Cards ===== */
+.cases-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.case-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.case-card:hover {
+  border-color: rgba(0,212,255,0.3);
+  box-shadow: 0 0 40px rgba(0,212,255,0.06);
+}
+
+.case-header {
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.case-icon {
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(0,212,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.case-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.case-header .case-tag {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  background: rgba(123,47,255,0.12);
+  border: 1px solid rgba(123,47,255,0.25);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: #b57fff;
+  margin-top: 0.35rem;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.case-body {
+  padding: 2rem 2.5rem;
+}
+
+.case-section {
+  margin-bottom: 1.8rem;
+}
+.case-section:last-child { margin-bottom: 0; }
+
+.case-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.case-section-label::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 14px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.case-section p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+/* Results Metrics */
+.results-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.metric-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.metric-card:hover {
+  border-color: rgba(0,212,255,0.2);
+}
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.metric-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+.metric-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 0.6rem;
+  overflow: hidden;
+}
+.metric-bar-fill {
+  height: 100%;
+  background: var(--gradient);
+  border-radius: 2px;
+}
+
+/* Quote */
+.case-quote {
+  background: var(--accent-dim);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 1.2rem 1.5rem;
+  margin-top: 0.5rem;
+}
+.case-quote p {
+  font-style: italic;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.case-quote .quote-author {
+  margin-top: 0.6rem;
+  font-style: normal;
+  font-size: 0.82rem;
+  color: var(--accent);
+}
+
+/* ===== CTA Section ===== */
+.cta-section {
+  text-align: center;
+  padding: 4rem 2rem 5rem;
+}
+.cta-section h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.cta-section p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 24px rgba(0,212,255,0.3);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(0,212,255,0.35);
+}
+.btn-outline:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .hero { padding: 4rem 1.5rem 2rem; }
+  .hero h1 { font-size: 2rem; }
+  .stats-bar { gap: 1.5rem; }
+  .case-header { flex-direction: column; text-align: center; padding: 1.5rem; }
+  .case-body { padding: 1.5rem; }
+  .results-metrics { grid-template-columns: 1fr 1fr; }
+  .nav-links { gap: 0.8rem; }
+  .eco-nav { padding: 0.8rem 1rem; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.6rem; }
+  .results-metrics { grid-template-columns: 1fr; }
+  .metric-value { font-size: 1.4rem; }
+}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "DrugMind Case Studies",
+  "description": "Real-world case studies showcasing AI-driven drug discovery: rare disease repurposing, lead compound optimization, and clinical trial outcome prediction.",
+  "url": "https://mokangmedical.github.io/DrugMind/cases.html",
+  "provider": {
+    "@type": "Organization",
+    "name": "DrugMind — AI Drug Design Platform",
+    "url": "https://github.com/DrugMind — AI Drug Design Platform"
+  }
+}
+</script>
+<meta property="og:title" content="DrugMind — Case Studies">
+<meta property="og:description" content="See how AI accelerates drug discovery: rare disease repurposing, lead optimization, and clinical trial prediction.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mokangmedical.github.io/DrugMind/cases.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a0a0f">
+</head>
+<body>
+
+<!-- ===== DrugMind — AI Drug Design Platform Ecosystem Navigation ===== -->
+<nav class="eco-nav">
+  <a class="nav-brand" href="https://mokangmedical.github.io/DrugMind/">DrugMind</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="agents.html">Agents</a>
+    <a href="cases.html" class="active">Case Studies</a>
+    <a href="api-docs.html">API</a>
+    <a href="pricing.html">定价</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://github.com/DrugMind — AI Drug Design Platform">GitHub</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="badge">Case Studies</div>
+  <h1>AI-Driven Drug Discovery <span>In Action</span></h1>
+  <p class="subtitle">Real-world success stories demonstrating how DrugMind's multi-agent AI platform transforms the drug development pipeline — from molecule to medicine.</p>
+</section>
+
+<!-- ===== Aggregate Stats ===== -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">3×</div>
+    <div class="stat-label">Faster Discovery</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">$42M</div>
+    <div class="stat-label">Cost Savings</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">87%</div>
+    <div class="stat-label">Prediction Accuracy</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">12</div>
+    <div class="stat-label">Partners Served</div>
+  </div>
+</div>
+
+<!-- ===== Case Studies ===== -->
+<div class="cases-container">
+
+  <!-- CASE 1: Rare Disease Drug Repurposing -->
+  <article class="case-card">
+    <div class="case-header">
+      <div class="case-icon">🧬</div>
+      <div>
+        <h2>AI-Powered Drug Repurposing for Rare Diseases</h2>
+        <span class="case-tag">Rare Disease · Drug Repurposing</span>
+      </div>
+    </div>
+    <div class="case-body">
+
+      <div class="case-section">
+        <div class="case-section-label">Challenge</div>
+        <p>A rare pediatric neurodegenerative disorder affecting ~2,000 patients globally had no approved therapies. Traditional drug development timelines of 10–15 years and costs exceeding $2 billion were prohibitive for such a small patient population. Existing pharmaceutical companies had deprioritized the disease due to unfavorable commercial returns, leaving patients without viable treatment options.</p>
+      </div>
+
+      <div class="case-section">
+        <div class="case-section-label">Solution</div>
+        <p>DrugMind's multi-agent system was deployed to systematically screen 12,000+ FDA-approved compounds against the disease's molecular targets. The Knowledge Graph Agent mapped complex protein–protein interaction networks to identify druggable nodes, while the Molecular Docking Agent performed high-throughput virtual screening. The ADMET Agent filtered candidates for pediatric safety profiles, and the Digital Twin Agent simulated patient-specific pharmacokinetics using organ-on-chip data. Within 6 weeks, the platform surfaced 23 high-confidence repurposing candidates with known safety records.</p>
+      </div>
+
+      <div class="case-section">
+        <div class="case-section-label">Results</div>
+        <div class="results-metrics">
+          <div class="metric-card">
+            <div class="metric-value">6 wk</div>
+            <div class="metric-label">From brief to candidates</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:92%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">23</div>
+            <div class="metric-label">Validated candidates</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:78%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">94%</div>
+            <div class="metric-label">Binding affinity accuracy</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:94%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">$38M</div>
+            <div class="metric-label">Estimated cost savings</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:88%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-section">
+        <div class="case-quote">
+          <p>"DrugMind compressed what would have been years of screening into weeks. Two of the identified candidates are now entering Phase II trials — a timeline that was previously unimaginable for a rare disease program."</p>
+          <div class="quote-author">— Dr. Elena Vasquez, Director of Rare Disease Research, BioNova Therapeutics</div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- CASE 2: Lead Compound Optimization -->
+  <article class="case-card">
+    <div class="case-header">
+      <div class="case-icon">⚗️</div>
+      <div>
+        <h2>Accelerating Lead Compound Optimization</h2>
+        <span class="case-tag">Lead Optimization · Oncology</span>
+      </div>
+    </div>
+    <div class="case-body">
+
+      <div class="case-section">
+        <div class="case-section-label">Challenge</div>
+        <p>A mid-stage oncology biotech had identified a promising KRAS G12C inhibitor scaffold, but the lead compound suffered from poor metabolic stability (t½ = 1.2h) and suboptimal selectivity against off-target kinases. Medicinal chemistry teams were iterating slowly through structure-activity relationship (SAR) cycles, each taking 4–6 weeks to synthesize and test. The project needed to reach IND-ready status within 18 months to secure Series B funding.</p>
+      </div>
+
+      <div class="case-section">
+        <div class="case-section-label">Solution</div>
+        <p>DrugMind's Molecular Design Agent generated 5,400 analogs of the lead scaffold using generative chemistry models trained on kinase inhibitor libraries. The Multi-Objective Optimizer simultaneously optimized for potency (IC₅₀), metabolic stability, selectivity (S-score), and synthetic accessibility. The Digital Twin Agent predicted human PK parameters for the top 200 candidates, and the Retrosynthesis Agent proposed viable synthetic routes. This in silico triage reduced the synthesis queue from 5,400 to 38 prioritized compounds for wet-lab validation.</p>
+      </div>
+
+      <div class="case-section">
+        <div class="case-section-label">Results</div>
+        <div class="results-metrics">
+          <div class="metric-card">
+            <div class="metric-value">8×</div>
+            <div class="metric-label">Faster SAR cycles</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:96%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">6.8h</div>
+            <div class="metric-label">Improved t½ (from 1.2h)</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:85%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">15 nM</div>
+            <div class="metric-label">Final IC₅₀ achieved</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:90%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">93%</div>
+            <div class="metric-label">Selectivity score</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:93%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-section">
+        <div class="case-quote">
+          <p>"We went from a shaky lead to an IND-ready candidate in 11 months instead of 18. DrugMind's multi-objective optimization saved our Series B timeline — and potentially the entire program."</p>
+          <div class="quote-author">— James Chen, CSO, OncoShield Biopharma</div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- CASE 3: Clinical Trial Outcome Prediction -->
+  <article class="case-card">
+    <div class="case-header">
+      <div class="case-icon">📊</div>
+      <div>
+        <h2>Predicting Clinical Trial Outcomes</h2>
+        <span class="case-tag">Clinical Trials · Prediction</span>
+      </div>
+    </div>
+    <div class="case-body">
+
+      <div class="case-section">
+        <div class="case-section-label">Challenge</div>
+        <p>A top-20 pharmaceutical company was preparing to launch a $180M Phase III trial for a novel GLP-1 receptor agonist targeting type 2 diabetes. Historical data showed that only 12% of Phase III metabolic drugs succeed, and the company needed higher confidence in trial design — particularly patient stratification biomarkers, optimal dosing regimen, and endpoint selection — before committing the investment. Previous internal models had limited predictive power due to fragmented data sources.</p>
+      </div>
+
+      <div class="case-section">
+        <div class="case-section-label">Solution</div>
+        <p>DrugMind's Clinical Intelligence Agent integrated and harmonized data from 847 prior metabolic disease trials, real-world evidence databases (2.3M patient records), published literature (18,000+ papers), and the company's own Phase I/II datasets. The Bayesian Trial Simulator modeled 10,000 virtual trial scenarios across different patient subpopulations, dosing arms, and endpoint definitions. The Biomarker Discovery Agent identified three novel predictive biomarkers from proteomic data that correlated with treatment response. The platform produced an optimized trial protocol with data-driven patient inclusion criteria.</p>
+      </div>
+
+      <div class="case-section">
+        <div class="case-section-label">Results</div>
+        <div class="results-metrics">
+          <div class="metric-card">
+            <div class="metric-value">87%</div>
+            <div class="metric-label">Outcome prediction accuracy</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:87%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">35%</div>
+            <div class="metric-label">Smaller trial size needed</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:70%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">3</div>
+            <div class="metric-label">Novel biomarkers discovered</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:60%"></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">$4.2M</div>
+            <div class="metric-label">Projected savings per trial</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:82%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-section">
+        <div class="case-quote">
+          <p>"DrugMind's virtual trial simulation gave us the confidence to optimize our protocol before spending a single dollar on patient enrollment. The biomarker discoveries alone justified the engagement — they reshaped our entire patient stratification strategy."</p>
+          <div class="quote-author">— Dr. Maria Santos, VP Clinical Development, GlobalPharma Inc.</div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+</div>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <h2>Ready to Transform Your Drug Discovery?</h2>
+  <p>Join leading pharmaceutical and biotech teams using DrugMind to accelerate their pipelines.</p>
+  <div class="btn-group">
+    <a href="demo.html" class="btn btn-primary">Request a Demo</a>
+    <a href="contact.html" class="btn btn-outline">Contact Our Team</a>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>© 2025 DrugMind — AI Drug Design Platform · <a href="https://github.com/DrugMind — AI Drug Design Platform">GitHub</a> · <a href="index.html">Home</a> · <a href="api-docs.html">API</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+2026-04-06 09:50:56,638 [INFO] digital_twin.engine: ✅ MIMO LLM已连接
+2026-04-06 09:50:56,639 [INFO] digital_twin.personality: 创建数字分身: 张化学家 (药物化学家)
+2026-04-06 09:50:56,639 [INFO] digital_twin.personality: 创建数字分身: 李生物 (生物学家)
+2026-04-06 09:50:56,639 [INFO] digital_twin.personality: 创建数字分身: 王药理 (药理学家)
+2026-04-06 09:50:56,640 [INFO] digital_twin.personality: 创建数字分身: 赵数据 (数据科学家)
+2026-04-06 09:50:56,641 [INFO] digital_twin.personality: 创建数字分身: 刘项目 (项目负责人)
+2026-04-06 09:50:56,641 [INFO] drugmind: ✅ 默认团队: 5个分身就绪
+2026-04-06 09:50:56,641 [INFO] drugmind: 🚀 DrugMind v2.0: http://0.0.0.0:8096
+INFO:     Started server process [996131]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8096 (Press CTRL+C to quit)
+INFO:     43.128.114.201:50462 - "GET / HTTP/1.1" 200 OK
+INFO:     43.128.114.201:50468 - "GET /css/style.css HTTP/1.1" 200 OK
+INFO:     43.128.114.201:50474 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     43.128.114.201:50490 - "GET /api/v2/stats HTTP/1.1" 200 OK
+INFO:     43.128.114.201:51766 - "GET / HTTP/1.1" 200 OK
+INFO:     43.128.114.201:51770 - "GET /css/style.css HTTP/1.1" 200 OK
+INFO:     43.128.114.201:51778 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     43.128.114.201:51784 - "GET /api/v2/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51768 - "POST /api/mcp HTTP/1.1" 200 OK
+INFO:     43.128.114.201:38944 - "GET /health HTTP/1.1" 200 OK
+INFO:     43.128.114.201:55216 - "GET /health HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+WARNING:  Invalid HTTP request received.
+INFO:     43.128.114.201:39506 - "GET /api/mcp HTTP/1.1" 405 Method Not Allowed
+WARNING:  Invalid HTTP request received.
+INFO:     127.0.0.1:48862 - "POST /api/mcp HTTP/1.1" 200 OK
+INFO:     43.128.114.201:39522 - "POST /api/mcp HTTP/1.1" 200 OK
+INFO:     43.128.114.201:39800 - "POST /api/mcp HTTP/1.1" 200 OK
+INFO:     43.128.114.201:39806 - "POST /api/mcp HTTP/1.1" 200 OK
+INFO:     43.128.114.201:39076 - "GET /health HTTP/1.1" 200 OK
