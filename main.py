@@ -48,32 +48,34 @@ def cmd_serve(args):
         ('project_lead', '刘项目'),
     ]:
         twin.create_twin(role_id, name)
-    logger.info("✅ 默认团队: 5个分身就绪")
+    logger.info("默认团队: 5个分身就绪")
 
-    logger.info(f"🚀 DrugMind v2.0: http://{args.host}:{args.port}")
+    logger.info(f"DrugMind v2.0: http://{args.host}:{args.port}")
     uvicorn.run(app, host=args.host, port=args.port)
 
 
 def cmd_test(args):
-    print("🧪 DrugMind v2.0 测试\n")
+    print("DrugMind v2.0 测试\n")
     try:
         from llm import test_connection
         r = test_connection()
-        print(f"  MIMO: {'✅' if r['status']=='ok' else '❌'}")
+        provider = r.get("provider", "LLM")
+        model = r.get("model", "")
+        print(f"  {provider}: {'OK' if r['status']=='ok' else 'FAIL'} {model}")
     except Exception as e:
-        print(f"  MIMO: ❌ {e}")
+        print(f"  LLM: FAIL {e}")
 
     twin, disc, kanban, tracker, users, hub, sm = get_engines(use_llm=False)
-    print(f"  引擎: ✅ 数字分身/协作/项目/化合物/用户/社区")
+    print("  引擎: OK 数字分身/协作/项目/化合物/用户/社区")
 
     try:
         from drug_modeling.admet_bridge import ADMETBridge
         r = ADMETBridge().predict("CCO")
-        print(f"  RDKit: ✅ MW={r.get('mw')}")
+        print(f"  RDKit: OK MW={r.get('mw')}")
     except Exception as e:
-        print(f"  RDKit: ⚠️ {e}")
+        print(f"  RDKit: WARN {e}")
 
-    print("\n✅ 全部通过")
+    print("\n全部通过")
 
 
 def cmd_roles(args):
